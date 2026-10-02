@@ -6,6 +6,19 @@ Google Play. Work through it in order; tick boxes as you go.
 - Package name (never change it): `com.jorgelillo.christmascountdown`
 - Last bundle in the repo: `app/release/app-release.aab` (versionCode 1, Aug 2021)
 
+## Status (2026-10-02)
+
+- ✅ Phases 1–4 done: app runs on an API 36 emulator, upload key verified
+  (serial `2a72affc`, matches the 2021 bundle), signed `versionCode 2` bundle built.
+- ⏳ **Blocked on Google Play support.** Support emailed that the developer
+  account is reactivated and a new update must be submitted for review, but
+  the Console still shows "Developer profile and all apps removed" (removed
+  19 Sep 2024 for missing account verifications) and every release/listing
+  action is locked. Identity verification shows as completed. Replied to
+  support asking whether anything else is needed; waiting for their answer.
+- Next once unlocked: Phase 5 (app content, store listing, upload bundle).
+  Check whether the dashboard requires a closed test before production.
+
 ---
 
 ## Phase 1 — Modernise the project ✅ (done in code)
