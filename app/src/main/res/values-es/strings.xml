@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cuenta atrás para Navidad</string>
+    <string name="countdown">¡Quedan solo</string>
+    <string name="countdownleft">para Navidad!</string>
+    <string name="christmas_msg">¡¡Feliz Navidad!!</string>
+    <string name="label_days">Días</string>
+    <string name="label_hours">Horas</string>
+    <string name="label_minutes">Minutos</string>
+    <string name="label_seconds">Segundos</string>
+</resources>
