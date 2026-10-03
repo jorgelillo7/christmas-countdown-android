@@ -12,6 +12,11 @@ Google Play. Work through it in order; tick boxes as you go.
 **v2 is live on Google Play (October 2026).** v3 (Kotlin + Compose rewrite) is in progress.
 The history below records how the relaunch went.
 
+**Privacy policy URL:** https://jorgelillo7.github.io/privacy/christmas-countdown/
+(served from the `jorgelillo7/jorgelillo7.github.io` repo, so it survives renaming this repo).
+- [ ] Update the URL in Play Console → Policy → App content → Privacy policy.
+- [ ] After that, delete this repo's old `gh-pages` branch (old URL).
+
 ### Relaunch log (2026-10-02)
 
 - ✅ Phases 1–4 done: app runs on an API 36 emulator, upload key verified

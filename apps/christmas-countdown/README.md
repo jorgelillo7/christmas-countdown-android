@@ -70,4 +70,4 @@ python3 tools/generate_store_assets.py
 See [PLAY_STORE_RELAUNCH.md](PLAY_STORE_RELAUNCH.md) for the Play Console checklist and
 history.
 
-Privacy policy: https://jorgelillo7.github.io/christmas-countdown-android/privacy-policy.html
+Privacy policy: https://jorgelillo7.github.io/privacy/christmas-countdown/

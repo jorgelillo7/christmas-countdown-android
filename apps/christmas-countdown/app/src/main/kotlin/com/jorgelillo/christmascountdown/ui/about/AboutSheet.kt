@@ -25,7 +25,7 @@ import com.jorgelillo.christmascountdown.BuildConfig
 import com.jorgelillo.christmascountdown.R
 import com.jorgelillo.christmascountdown.ui.theme.ChristmasColors
 
-const val PRIVACY_POLICY_URL = "https://jorgelillo7.github.io/christmas-countdown-android/privacy-policy.html"
+const val PRIVACY_POLICY_URL = "https://jorgelillo7.github.io/privacy/christmas-countdown/"
 const val PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.jorgelillo.christmascountdown"
 
 @OptIn(ExperimentalMaterial3Api::class)
