@@ -50,6 +50,23 @@ python3 tools/generate_icon.py
 
 ## 📦 Publishing
 
+Everything uploaded to the Play listing is tracked in [`store/`](store), in the
+[fastlane supply](https://docs.fastlane.tools/actions/supply/) layout:
+
+```
+store/metadata/android/<en-US|es-ES>/
+├── title.txt, short_description.txt, full_description.txt
+├── changelogs/<versionCode>.txt        release notes
+└── images/                             icon, featureGraphic, phoneScreenshots/
+store/raw/<locale>/                     raw emulator screenshots used for the framed images
+```
+
+Regenerate the framed screenshots and feature graphic after new raw captures:
+
+```bash
+python3 tools/generate_store_assets.py
+```
+
 See [PLAY_STORE_RELAUNCH.md](PLAY_STORE_RELAUNCH.md) for the Play Console checklist and
 history.
 
