@@ -1,0 +1,56 @@
+<div align="center">
+
+<img src="store/play-icon-512.png" width="112" alt="Christmas Countdown icon" />
+
+# 🎄 Christmas Countdown
+
+**Days, hours, minutes and seconds until Christmas — with an advent calendar, a home-screen widget and carols.**
+
+[![Google Play](https://img.shields.io/badge/Google%20Play-Get%20it-414141?logo=googleplay&logoColor=white)](https://play.google.com/store/apps/details?id=com.jorgelillo.christmascountdown)
+
+</div>
+
+## ✨ Features
+
+- ⏱️ **Live countdown** to the next Christmas, with real time left (daylight saving included)
+- 🌙 **Sleeps mode** — count the nights left, the way kids do
+- 🎁 **Advent calendar** — 24 shuffled doors, one unlocks each day of December
+- 🏠 **Home-screen widget** built with Jetpack Glance
+- 🎶 **Carols** played by an on-device music-box synthesiser (no audio files shipped)
+- ❄️ **Falling snow** drawn with Compose Canvas
+- 📤 **Share** the countdown with friends
+- 🌍 English and Spanish · 🚫 no ads, no tracking, no data collected
+
+## 🏗️ Architecture
+
+| Module | What lives there |
+|---|---|
+| `domain` | Pure Kotlin: countdown and advent rules, carol scores, music-box synthesiser. Unit tested. |
+| `app` | Compose UI (MVVM: `ViewModel` + `StateFlow`), DataStore settings, Glance widget, audio playback. |
+| `:core:designsystem` | Shared theme (`LilloTheme`) and components (`GlassCard`, `GradientBackground`). |
+
+```
+app/src/main/kotlin/com/jorgelillo/christmascountdown/
+├── MainActivity.kt                 Splash screen, edge-to-edge, theme
+├── ChristmasCountdownApplication   App-wide singletons (manual DI)
+├── data/SettingsRepository         DataStore: sleeps mode, music, opened doors per year
+├── music/MusicBoxPlayer            Streams synthesised carols through AudioTrack
+├── ui/                             ChristmasApp shell, countdown, advent and about screens
+└── widget/CountdownWidget          Glance home-screen widget
+```
+
+## 🎨 Icon
+
+All launcher and store icons are generated from a single geometry definition:
+
+```bash
+pip3 install pillow
+python3 tools/generate_icon.py
+```
+
+## 📦 Publishing
+
+See [PLAY_STORE_RELAUNCH.md](PLAY_STORE_RELAUNCH.md) for the Play Console checklist and
+history.
+
+Privacy policy: https://jorgelillo7.github.io/christmas-countdown-android/privacy-policy.html

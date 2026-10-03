@@ -1,0 +1,86 @@
+<resources>
+    <string name="app_name">Christmas Countdown</string>
+
+    <!-- Navigation -->
+    <string name="tab_countdown">Countdown</string>
+    <string name="tab_advent">Advent</string>
+
+    <!-- Countdown -->
+    <string name="countdown_title">Time until Christmas</string>
+    <string name="sleeps_title">Sleeps until Christmas</string>
+    <string name="unit_days">Days</string>
+    <string name="unit_hours">Hours</string>
+    <string name="unit_minutes">Min</string>
+    <string name="unit_seconds">Sec</string>
+    <plurals name="sleeps_left">
+        <item quantity="one">sleep left</item>
+        <item quantity="other">sleeps left</item>
+    </plurals>
+    <string name="mode_time">Time</string>
+    <string name="mode_sleeps">Sleeps</string>
+    <string name="christmas_day_title">Merry Christmas!</string>
+    <string name="christmas_day_body">It\'s finally here. Enjoy it with the people you love.</string>
+
+    <!-- Actions -->
+    <string name="action_share">Share</string>
+    <string name="action_music_on">Play carols</string>
+    <string name="action_music_off">Stop carols</string>
+    <string name="action_about">About</string>
+    <plurals name="share_text">
+        <item quantity="one">Only %1$d day until Christmas! 🎄</item>
+        <item quantity="other">Only %1$d days until Christmas! 🎄</item>
+    </plurals>
+    <string name="share_text_christmas">Merry Christmas! 🎄</string>
+    <string name="share_chooser">Share countdown</string>
+
+    <!-- Advent -->
+    <string name="advent_title">Advent calendar</string>
+    <string name="advent_subtitle_season">A new door every day until Christmas Eve.</string>
+    <string name="advent_subtitle_locked">The calendar opens on 1 December. Come back then!</string>
+    <string name="advent_door">Day %1$d</string>
+    <string name="advent_door_locked">Door %1$d is still locked</string>
+    <string name="advent_close">Close</string>
+
+    <!-- About -->
+    <string name="about_title">Christmas Countdown</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_body">No ads, no tracking and no data collected. Made with care by Jorge Lillo.</string>
+    <string name="about_privacy">Privacy policy</string>
+    <string name="about_rate">Rate on Google Play</string>
+
+    <!-- Widget -->
+    <string name="widget_name">Christmas countdown</string>
+    <string name="widget_description">Days or sleeps until Christmas on your home screen.</string>
+    <plurals name="widget_days">
+        <item quantity="one">day to go</item>
+        <item quantity="other">days to go</item>
+    </plurals>
+    <string name="widget_christmas">Merry Christmas!</string>
+
+    <string-array name="advent_entries">
+        <item>Write your letter to Santa or the Three Wise Men. Dream big!</item>
+        <item>\"Jingle Bells\" was the first song ever played in space, on Gemini 6 in December 1965.</item>
+        <item>Cut out paper snowflakes and stick them on a window.</item>
+        <item>Christmas trees became fashionable in Britain after an 1848 picture of Queen Victoria and Prince Albert around one.</item>
+        <item>Movie night: a Christmas film, a blanket and hot chocolate.</item>
+        <item>Spain\'s Christmas lottery, \"El Gordo\", has been drawn every year since 1812.</item>
+        <item>Bake Christmas cookies and share a few with a neighbour.</item>
+        <item>Every snowflake has six arms because ice crystals are hexagonal.</item>
+        <item>Call or message someone you haven\'t spoken to in a while.</item>
+        <item>The poinsettia is named after Joel Poinsett, who brought it from Mexico to the United States.</item>
+        <item>Make a decoration from pine cones, ribbon or anything you find on a walk.</item>
+        <item>In Catalonia, children feed the \"Caga Tió\", a wooden log that \"gives\" sweets on Christmas.</item>
+        <item>Donate a toy, a book or some food to someone who needs it.</item>
+        <item>\"Silent Night\" was first sung on Christmas Eve 1818 in Oberndorf, Austria.</item>
+        <item>Learn to say it in other languages: Joyeux Noël, Buon Natale, Feliz Natal, Frohe Weihnachten!</item>
+        <item>In Spain, people eat twelve grapes at midnight on New Year\'s Eve, one per chime.</item>
+        <item>Go for an evening walk to see the Christmas lights.</item>
+        <item>Rudolph the red-nosed reindeer was created in 1939 by Robert L. May for a store booklet.</item>
+        <item>Wrap presents while listening to carols. Tap the music note to play some!</item>
+        <item>The first tinsel, made in Germany around 1610, was real shredded silver.</item>
+        <item>Write a thank-you note to someone who made your year better.</item>
+        <item>NORAD has tracked Santa since 1955, all thanks to a misprinted phone number.</item>
+        <item>Board game night! Losers make the hot chocolate.</item>
+        <item>Tonight\'s the night! Leave cookies and milk for Santa, and a carrot for the reindeer. 🎅</item>
+    </string-array>
+</resources>

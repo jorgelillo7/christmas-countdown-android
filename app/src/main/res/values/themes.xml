@@ -1,9 +1,0 @@
-<resources>
-    <!-- Full-screen theme: the background image is drawn edge-to-edge behind the system bars. -->
-    <style name="Theme.ChristmasCountdown" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/christmas_red</item>
-        <item name="colorPrimaryDark">@color/christmas_red_dark</item>
-        <item name="colorAccent">@color/christmas_gold</item>
-        <item name="android:windowBackground">@color/christmas_red_dark</item>
-    </style>
-</resources>

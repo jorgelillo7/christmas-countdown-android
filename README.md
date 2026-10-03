@@ -1,65 +1,91 @@
 <div align="center">
 
-# 🎄 Christmas Countdown
+# 📱 Lillo Android Apps
 
-**Days, hours, minutes and seconds until Christmas — ticking live on your phone.**
+**A home for small, polished Android apps — built with Kotlin, Jetpack Compose and shared building blocks.**
 
-![Android](https://img.shields.io/badge/Android-6.0%2B-3DDC84?logo=android&logoColor=white)
-![Target SDK](https://img.shields.io/badge/targetSdk-36%20(Android%2016)-blue)
-![Java](https://img.shields.io/badge/Java-17-ED8B00?logo=openjdk&logoColor=white)
+![Kotlin](https://img.shields.io/badge/Kotlin-2.3-7F52FF?logo=kotlin&logoColor=white)
+![Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?logo=jetpackcompose&logoColor=white)
 ![AGP](https://img.shields.io/badge/AGP-8.13-02303A?logo=gradle&logoColor=white)
-![Google Play](https://img.shields.io/badge/Google%20Play-available-414141?logo=googleplay&logoColor=white)
+![Target SDK](https://img.shields.io/badge/targetSdk-36-3DDC84?logo=android&logoColor=white)
 
 </div>
 
 ---
 
-## ✨ Features
+## 🧩 Apps
 
-- ⏱️ **Live countdown** to the next 25th of December, updated every second
-- 🔁 **Never goes stale** — on Christmas Day it wishes you *Merry Christmas*,
-  and from the 26th it starts counting towards next year
-- 🌍 **English & Spanish** (*¡Quedan solo… para Navidad!*)
-- 📱 **Edge-to-edge** full-screen design, ready for Android 16
-- 🪶 **Tiny**: no internet permission, no data collected, ~1 MB bundle
+| App | Status | Folder |
+|---|---|---|
+| 🎄 [Christmas Countdown](apps/christmas-countdown) | [On Google Play](https://play.google.com/store/apps/details?id=com.jorgelillo.christmascountdown) | `apps/christmas-countdown` |
 
-## 🚀 Getting started
+## 🗂️ Repository layout
 
-**Requirements:** Android Studio 2025.2+ (bundled JDK 21) and Android SDK 36.
-
-```bash
-git clone <this repo>
-cd ChristmasCountdown
+```
+build-logic/                       Gradle convention plugins: shared Android/Kotlin/Compose config
+gradle/libs.versions.toml          Single source of truth for every dependency version
+core/
+└── designsystem/                  :core:designsystem — theme and Compose components shared by all apps
+apps/
+└── christmas-countdown/
+    ├── app/                       :apps:christmas-countdown:app — Android app (UI, widget, resources)
+    ├── domain/                    :apps:christmas-countdown:domain — pure Kotlin business logic
+    ├── store/                     Play Store assets
+    └── tools/                     App-specific scripts (e.g. icon generator)
 ```
 
-Open the folder in Android Studio, let Gradle sync, pick an emulator and press **Run ▶**.
+### Principles
 
-From the command line (uses Android Studio's JDK):
+- **Each app is a self-contained folder** under `apps/`, with its own `app` and `domain` modules.
+- **Domain modules are pure Kotlin** (no `android.*`): fast to test and easy to move to another
+  build system later.
+- **Shared code lives in `core/`, but only once a second app needs it.** No empty modules "just
+  in case".
+- **Configuration is written once** in `build-logic` convention plugins and the version catalog.
+
+## 🚀 Building
+
+Requirements: Android Studio 2025.2+ (bundled JDK 21) and Android SDK 36.
 
 ```bash
 export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
 
-./gradlew testDebugUnitTest   # run the unit tests
-./gradlew installDebug        # install on a running emulator/device
-./gradlew bundleRelease       # build the Play Store bundle (.aab)
+./gradlew test                                             # unit tests for every module
+./gradlew :apps:christmas-countdown:app:installDebug       # run on a device or emulator
+./gradlew :apps:christmas-countdown:app:bundleRelease      # Play Store bundle
 ```
 
-## 🗂️ Project structure
+## ➕ Adding a new app (e.g. a roulette)
 
-```
-app/src/main/java/com/jorgelillo/christmascountdown/
-├── MainActivity.java        # UI: renders the countdown once per second
-└── ChristmasCountdown.java  # Pure date logic (no Android types), unit tested
-app/src/main/res/
-├── layout/activity_main.xml
-├── values/        # English strings, colours, styles
-└── values-es/     # Spanish strings
-```
+1. Create `apps/roulette/domain/build.gradle.kts`:
+   ```kotlin
+   plugins { alias(libs.plugins.jorgelillo.jvm.library) }
+   ```
+2. Create `apps/roulette/app/build.gradle.kts`:
+   ```kotlin
+   plugins {
+       alias(libs.plugins.jorgelillo.android.application)
+       alias(libs.plugins.jorgelillo.android.compose)
+   }
+   android {
+       namespace = "com.jorgelillo.roulette"
+       defaultConfig { applicationId = "com.jorgelillo.roulette"; versionCode = 1; versionName = "1.0" }
+   }
+   dependencies {
+       implementation(projects.apps.roulette.domain)
+       implementation(projects.core.designsystem)
+   }
+   ```
+3. Register both modules in `settings.gradle.kts`.
+4. Wrap the UI in `LilloTheme(colorScheme = …)` with the app's own palette.
 
-## 🔐 Release signing
+SDK levels, Java version, desugaring and Compose setup come from the convention plugins, so a
+new app needs no extra Gradle configuration.
 
-Release builds are signed using a git-ignored `keystore.properties` in the
-project root:
+## 🔐 Signing
+
+Each app reads its release signing values from a git-ignored
+`apps/<app>/keystore.properties`:
 
 ```properties
 storeFile=/absolute/path/to/upload-key.jks
@@ -68,21 +94,8 @@ keyAlias=...
 keyPassword=...
 ```
 
-Never commit it, nor the keystore.
+## 🧭 Roadmap
 
-## 📦 Publishing
-
-See **[PLAY_STORE_RELAUNCH.md](PLAY_STORE_RELAUNCH.md)** for the step-by-step
-checklist to publish a new version on Google Play.
-
-## 🙏 Credits
-
-Originally based on the
-[android-coffee.com Christmas countdown tutorial](https://android-coffee.com/tutorial-how-many-days-left-until-christmas-app-in-android-studio-1-4/),
-modernised in 2026.
-
-<div align="center">
-
-Made with ❤️ and ☕ by **Jorge Lillo** · 🎅 *Ho ho ho!*
-
-</div>
+- **Now:** one repo, Gradle, more apps added as folders under `apps/`.
+- **Later:** possible move into a larger monorepo. The pure Kotlin domain modules are the parts
+  designed to migrate first.
