@@ -14,7 +14,7 @@
 
 - ⏱️ **Live countdown** to the next Christmas, with real time left (daylight saving included)
 - 🌙 **Sleeps mode** — count the nights left, the way kids do
-- 🎁 **Advent calendar** — 24 shuffled doors, one unlocks each day of December
+- 🎁 **Advent calendar** — 24 doors, one unlocks each day of December; the layout is reshuffled every year (same for everyone within a year)
 - 🏠 **Home-screen widget** built with Jetpack Glance
 - 🎶 **Carols** played by an on-device music-box synthesiser (no audio files shipped)
 - ❄️ **Falling snow** drawn with Compose Canvas

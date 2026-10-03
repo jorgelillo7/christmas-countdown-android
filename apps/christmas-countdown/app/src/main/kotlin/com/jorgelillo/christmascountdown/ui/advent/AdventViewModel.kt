@@ -16,6 +16,7 @@ import java.time.LocalDate
 
 data class AdventUiState(
     val unlockedDoors: Int,
+    val doorOrder: List<Int>,
     val openedDoors: Set<Int> = emptySet(),
 ) {
     val isSeason: Boolean get() = unlockedDoors > 0
@@ -26,9 +27,14 @@ class AdventViewModel(
     private val today: LocalDate = LocalDate.now(),
 ) : ViewModel() {
 
+    private val initialState = AdventUiState(
+        unlockedDoors = AdventCalendar.unlockedDoors(today),
+        doorOrder = AdventCalendar.doorOrder(today.year),
+    )
+
     val uiState: StateFlow<AdventUiState> = settings.openedDoors(today.year)
-        .map { AdventUiState(AdventCalendar.unlockedDoors(today), it) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), AdventUiState(AdventCalendar.unlockedDoors(today)))
+        .map { initialState.copy(openedDoors = it) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialState)
 
     fun canOpen(door: Int): Boolean = AdventCalendar.canOpen(door, today)
 

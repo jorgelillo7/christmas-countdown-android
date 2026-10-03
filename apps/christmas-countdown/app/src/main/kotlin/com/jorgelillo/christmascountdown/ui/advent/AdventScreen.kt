@@ -45,12 +45,6 @@ import com.jorgelillo.christmascountdown.R
 import com.jorgelillo.christmascountdown.ui.theme.ChristmasColors
 import com.jorgelillo.core.designsystem.GlassCard
 
-/** Doors are shuffled like a real advent calendar; the order is fixed so it never changes. */
-private val DOOR_ORDER = listOf(
-    13, 5, 21, 2, 17, 9, 24, 11, 3, 19, 7, 15,
-    1, 22, 10, 6, 18, 4, 14, 23, 8, 20, 12, 16,
-)
-
 private enum class DoorState { Locked, Openable, Opened }
 
 @Composable
@@ -86,7 +80,7 @@ fun AdventScreen(
                 }
             }
         }
-        items(DOOR_ORDER, key = { it }) { door ->
+        items(state.doorOrder, key = { it }) { door ->
             val doorState = when {
                 door in state.openedDoors -> DoorState.Opened
                 canOpen(door) -> DoorState.Openable
