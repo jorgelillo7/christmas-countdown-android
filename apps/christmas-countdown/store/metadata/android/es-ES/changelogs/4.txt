@@ -1,0 +1,3 @@
+Actualización interna:
+- Actualizada a las últimas herramientas y librerías de Android
+- Pequeñas mejoras de rendimiento y estabilidad

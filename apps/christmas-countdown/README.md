@@ -44,8 +44,9 @@ app/src/main/kotlin/com/jorgelillo/christmascountdown/
 All launcher and store icons are generated from a single geometry definition:
 
 ```bash
-pip3 install pillow
-python3 tools/generate_icon.py
+# from the repo root
+scripts/setup-python.sh   # once
+.venv/bin/python apps/christmas-countdown/tools/generate_icon.py
 ```
 
 ## 📦 Publishing
@@ -64,10 +65,11 @@ store/raw/<locale>/                     raw emulator screenshots used for the fr
 Regenerate the framed screenshots and feature graphic after new raw captures:
 
 ```bash
-python3 tools/generate_store_assets.py
+# from the repo root
+.venv/bin/python apps/christmas-countdown/tools/generate_store_assets.py
 ```
 
-See [PLAY_STORE_RELAUNCH.md](PLAY_STORE_RELAUNCH.md) for the Play Console checklist and
-history.
+See [OPERATIONS.md](OPERATIONS.md) for every command, [docs/relaunch-2026.md](docs/relaunch-2026.md) for the relaunch history and the
+[publishing guide](../../docs/publishing-on-google-play.md).
 
 Privacy policy: https://jorgelillo7.github.io/privacy/christmas-countdown/

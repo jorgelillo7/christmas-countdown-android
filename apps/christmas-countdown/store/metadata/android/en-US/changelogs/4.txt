@@ -1,0 +1,3 @@
+Under-the-hood update:
+- Updated to the latest Android tools and libraries
+- Small performance and stability improvements
