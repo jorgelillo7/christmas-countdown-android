@@ -1,0 +1,83 @@
+<resources>
+    <string name="app_name">Cuenta atrás para Navidad</string>
+
+    <string name="tab_countdown">Cuenta atrás</string>
+    <string name="tab_advent">Adviento</string>
+
+    <string name="countdown_title">Tiempo hasta Navidad</string>
+    <string name="sleeps_title">Noches hasta Navidad</string>
+    <string name="unit_days">Días</string>
+    <string name="unit_hours">Horas</string>
+    <string name="unit_minutes">Min</string>
+    <string name="unit_seconds">Seg</string>
+    <plurals name="sleeps_left">
+        <item quantity="one">noche más</item>
+        <item quantity="other">noches más</item>
+        <item quantity="many">noches más</item>
+    </plurals>
+    <string name="mode_time">Tiempo</string>
+    <string name="mode_sleeps">Noches</string>
+    <string name="christmas_day_title">¡Feliz Navidad!</string>
+    <string name="christmas_day_body">Por fin ha llegado. Disfrútala con los que más quieres.</string>
+
+    <string name="action_share">Compartir</string>
+    <string name="action_music_on">Poner villancicos</string>
+    <string name="action_music_off">Parar villancicos</string>
+    <string name="action_about">Información</string>
+    <plurals name="share_text">
+        <item quantity="one">¡Solo queda %1$d día para Navidad! 🎄</item>
+        <item quantity="other">¡Solo quedan %1$d días para Navidad! 🎄</item>
+        <item quantity="many">¡Solo quedan %1$d días para Navidad! 🎄</item>
+    </plurals>
+    <string name="share_text_christmas">¡Feliz Navidad! 🎄</string>
+    <string name="share_chooser">Compartir cuenta atrás</string>
+
+    <string name="advent_title">Calendario de adviento</string>
+    <string name="advent_subtitle_season">Una puerta nueva cada día hasta Nochebuena.</string>
+    <string name="advent_subtitle_locked">El calendario se abre el 1 de diciembre. ¡Vuelve entonces!</string>
+    <string name="advent_door">Día %1$d</string>
+    <string name="advent_door_locked">La puerta %1$d aún está cerrada</string>
+    <string name="advent_close">Cerrar</string>
+
+    <string name="about_title">Cuenta atrás para Navidad</string>
+    <string name="about_version">Versión %1$s</string>
+    <string name="about_body">Sin anuncios, sin rastreo y sin recoger datos. Hecha con cariño por Jorge Lillo.</string>
+    <string name="about_privacy">Política de privacidad</string>
+    <string name="about_rate">Valorar en Google Play</string>
+
+    <string name="widget_name">Cuenta atrás de Navidad</string>
+    <string name="widget_description">Días o noches hasta Navidad en tu pantalla de inicio.</string>
+    <plurals name="widget_days">
+        <item quantity="one">día</item>
+        <item quantity="other">días</item>
+        <item quantity="many">días</item>
+    </plurals>
+    <string name="widget_christmas">¡Feliz Navidad!</string>
+
+    <string-array name="advent_entries">
+        <item>Escribe tu carta a Papá Noel o a los Reyes Magos. ¡Sueña a lo grande!</item>
+        <item>\"Jingle Bells\" fue la primera canción que sonó en el espacio, en la Gemini 6, en diciembre de 1965.</item>
+        <item>Recorta copos de nieve de papel y pégalos en una ventana.</item>
+        <item>El árbol de Navidad se puso de moda en Reino Unido tras un grabado de 1848 de la reina Victoria y el príncipe Alberto junto a uno.</item>
+        <item>Noche de peli: una película navideña, una manta y chocolate caliente.</item>
+        <item>El sorteo de \"El Gordo\" de Navidad se celebra todos los años desde 1812.</item>
+        <item>Haz galletas navideñas y comparte unas cuantas con algún vecino.</item>
+        <item>Todos los copos de nieve tienen seis brazos porque los cristales de hielo son hexagonales.</item>
+        <item>Llama o escribe a alguien con quien hace tiempo que no hablas.</item>
+        <item>La flor de Pascua se llama \"poinsettia\" en inglés por Joel Poinsett, que la llevó de México a Estados Unidos.</item>
+        <item>Haz un adorno con piñas, cintas o lo que encuentres en un paseo.</item>
+        <item>En Cataluña los niños dan de comer al \"Caga Tió\", un tronco que en Navidad \"regala\" dulces.</item>
+        <item>Dona un juguete, un libro o algo de comida a quien lo necesite.</item>
+        <item>\"Noche de paz\" se cantó por primera vez la Nochebuena de 1818 en Oberndorf, Austria.</item>
+        <item>Aprende a decirlo en otros idiomas: Joyeux Noël, Buon Natale, Feliz Natal, Frohe Weihnachten.</item>
+        <item>En España tomamos doce uvas a medianoche en Nochevieja, una por campanada.</item>
+        <item>Sal a pasear de noche para ver las luces de Navidad.</item>
+        <item>Rudolph, el reno de la nariz roja, lo creó Robert L. May en 1939 para un folleto de unos grandes almacenes.</item>
+        <item>Envuelve regalos escuchando villancicos. ¡Toca la nota musical para ponerlos!</item>
+        <item>El primer espumillón, hecho en Alemania hacia 1610, era de plata de verdad.</item>
+        <item>Escribe una nota de agradecimiento a alguien que te ha alegrado el año.</item>
+        <item>El NORAD sigue a Papá Noel desde 1955, todo por un número de teléfono mal impreso.</item>
+        <item>¡Noche de juegos de mesa! Quien pierda prepara el chocolate.</item>
+        <item>¡Esta noche es la noche! Deja leche y galletas para Papá Noel y una zanahoria para los renos. 🎅</item>
+    </string-array>
+</resources>
