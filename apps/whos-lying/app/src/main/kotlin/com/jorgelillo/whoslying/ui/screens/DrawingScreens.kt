@@ -43,6 +43,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -50,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jorgelillo.whoslying.R
 import com.jorgelillo.whoslying.domain.Game
+import com.jorgelillo.whoslying.domain.Match
 import com.jorgelillo.whoslying.domain.Role
 import com.jorgelillo.whoslying.ui.DrawStroke
 import com.jorgelillo.whoslying.ui.InkColors
@@ -66,6 +68,7 @@ fun DrawingScreen(
     strokes: SnapshotStateList<DrawStroke>,
     discussionSeconds: Int,
     onVote: () -> Unit,
+    onTimeUp: () -> Unit,
     onRevealAll: () -> Unit,
     onQuit: () -> Unit,
 ) {
@@ -91,7 +94,7 @@ fun DrawingScreen(
         )
         if (discussionSeconds > 0) {
             Spacer(Modifier.height(8.dp))
-            key(alive.size) { TimerBar(discussionSeconds) }
+            key(alive.size) { TimerBar(discussionSeconds, onTimeUp) }
         }
         Spacer(Modifier.height(10.dp))
         Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
@@ -158,16 +161,20 @@ private fun DrawingCanvas(strokes: SnapshotStateList<DrawStroke>, ink: Color, mo
     ) { drawStrokes(strokes) }
 }
 
-/** Countdown as a shrinking bar. Tap to pause or resume; beeps once at zero. */
+/** Countdown as a shrinking bar. Tap to pause or resume; at zero it beeps and the vote is forced. */
 @Composable
-private fun TimerBar(seconds: Int) {
+private fun TimerBar(seconds: Int, onTimeUp: () -> Unit) {
     var left by rememberSaveable { mutableIntStateOf(seconds) }
     var paused by rememberSaveable { mutableStateOf(false) }
+    val timeUp by rememberUpdatedState(onTimeUp)
     LaunchedEffect(paused) {
         while (!paused && left > 0) {
             delay(1_000)
             left--
-            if (left == 0) beep()
+            if (left == 0) {
+                beep()
+                timeUp()
+            }
         }
     }
     val color = when {
@@ -203,7 +210,15 @@ fun DrawingPreview(strokes: List<DrawStroke>, modifier: Modifier = Modifier) {
 /** Running scores across games, with the points the last game gave. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScoresSheet(players: List<String>, scores: Map<String, Int>, lastPoints: Map<String, Int>, onReset: () -> Unit, onDismiss: () -> Unit) {
+fun ScoresSheet(
+    players: List<String>,
+    scores: Map<String, Int>,
+    lastPoints: Map<String, Int>,
+    roundsPlayed: Int,
+    rounds: Int,
+    onReset: () -> Unit,
+    onDismiss: () -> Unit,
+) {
     var confirmReset by rememberSaveable { mutableStateOf(false) }
     ModalBottomSheet(onDismissRequest = onDismiss, containerColor = Neon.Card) {
         Column(
@@ -211,6 +226,13 @@ fun ScoresSheet(players: List<String>, scores: Map<String, Int>, lastPoints: Map
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text(stringResource(R.string.scores_title), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Black)
+            Text(
+                if (rounds > 0) pluralStringResource(R.plurals.scores_rounds_left, Match.remaining(roundsPlayed, rounds), Match.remaining(roundsPlayed, rounds))
+                else stringResource(R.string.scores_rounds_free, roundsPlayed),
+                color = Neon.Amber,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.testTag("rounds_left"),
+            )
             Text(stringResource(R.string.scores_rules), color = Neon.Muted, style = MaterialTheme.typography.bodySmall)
             val ranking = (players + scores.keys).distinct().sortedByDescending { scores[it] ?: 0 }
             ranking.forEachIndexed { i, player ->

@@ -15,6 +15,7 @@ import com.jorgelillo.whoslying.data.StateRepository
 import com.jorgelillo.whoslying.domain.Elimination
 import com.jorgelillo.whoslying.domain.Game
 import com.jorgelillo.whoslying.domain.GameSettings
+import com.jorgelillo.whoslying.domain.Match
 import com.jorgelillo.whoslying.domain.Rules
 import com.jorgelillo.whoslying.domain.Scoring
 import com.jorgelillo.whoslying.domain.WordPack
@@ -53,6 +54,9 @@ class GameViewModel(private val repository: StateRepository, language: String) :
     /** Points the last finished game gave, to show next to the totals. */
     var lastPoints: Map<String, Int> by mutableStateOf(emptyMap())
         private set
+
+    /** The discussion timer ran out this round: the group must vote. */
+    var voteForced by mutableStateOf(false)
 
     private var scoredGame: Game? = null
 
@@ -113,10 +117,12 @@ class GameViewModel(private val repository: StateRepository, language: String) :
     fun startGame(): Boolean {
         val s = saved.value ?: return false
         if (!Rules.canStart(s.players.size, s.settings)) return false
+        if (Match.isOver(s.roundsPlayed, s.settings.rounds)) resetScores()
         val (pack, entry) = WordPicker.pick(selectedPacks(s), s.recentWords, Random.Default)
         game = Game.deal(s.players, s.settings, pack, entry, Random.Default)
         lastElimination = null
         lastPoints = emptyMap()
+        voteForced = false
         strokes.clear()
         revision++
         update { it.copy(recentWords = (listOf(entry.word) + (it.recentWords - entry.word)).take(WordPicker.RECENT_MEMORY)) }
@@ -124,6 +130,7 @@ class GameViewModel(private val repository: StateRepository, language: String) :
     }
 
     fun eliminate(player: String) {
+        voteForced = false
         lastElimination = game?.eliminate(player)
         changed()
     }
@@ -143,7 +150,8 @@ class GameViewModel(private val repository: StateRepository, language: String) :
         changed()
     }
 
-    fun resetScores() = update { it.copy(scores = emptyMap()) }
+    /** Starts a new match: scores and rounds back to zero. */
+    fun resetScores() = update { it.copy(scores = emptyMap(), roundsPlayed = 0) }
 
     /** Bumps [revision] and, once per game, adds the winners' points to the running scores. */
     private fun changed() {
@@ -153,8 +161,12 @@ class GameViewModel(private val repository: StateRepository, language: String) :
         scoredGame = current
         val points = Scoring.points(current)
         lastPoints = points
-        if (points.isNotEmpty()) {
-            update { s -> s.copy(scores = s.scores + points.mapValues { (player, p) -> (s.scores[player] ?: 0) + p }) }
+        if (!Match.counts(current.outcome)) return
+        update { s ->
+            s.copy(
+                scores = s.scores + points.mapValues { (player, p) -> (s.scores[player] ?: 0) + p },
+                roundsPlayed = s.roundsPlayed + 1,
+            )
         }
     }
 

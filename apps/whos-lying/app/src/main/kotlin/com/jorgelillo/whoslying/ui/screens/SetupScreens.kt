@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import com.jorgelillo.whoslying.R
 import com.jorgelillo.whoslying.domain.GameMode
 import com.jorgelillo.whoslying.domain.GameSettings
+import com.jorgelillo.whoslying.domain.Match
 import com.jorgelillo.whoslying.domain.Rules
 import com.jorgelillo.whoslying.domain.WordPack
 import com.jorgelillo.whoslying.ui.theme.Neon
@@ -252,19 +253,45 @@ fun SetupScreen(
             SettingRow("🎨 " + stringResource(R.string.setup_drawing), stringResource(R.string.setup_drawing_desc)) {
                 NeonSwitch(settings.drawing, "drawing") { v -> onChange { it.copy(drawing = v) } }
             }
-            SettingRow(stringResource(R.string.setup_timer), stringResource(R.string.setup_timer_desc)) {
-                val step = TIMER_OPTIONS.indexOf(settings.discussionSeconds).coerceAtLeast(0)
-                IconButton(onClick = { onChange { it.copy(discussionSeconds = TIMER_OPTIONS[step - 1]) } }, enabled = step > 0, modifier = Modifier.testTag("timer_minus")) {
+            val recommendedRounds = Match.recommendedRounds(playerCount)
+            SettingRow(
+                "🏆 " + stringResource(R.string.setup_rounds),
+                stringResource(R.string.setup_rounds_desc) + " · " + stringResource(R.string.setup_recommended, "$recommendedRounds"),
+            ) {
+                val step = Match.ROUND_OPTIONS.indexOf(settings.rounds).coerceAtLeast(0)
+                IconButton(onClick = { onChange { it.copy(rounds = Match.ROUND_OPTIONS[step - 1]) } }, enabled = step > 0, modifier = Modifier.testTag("rounds_minus")) {
+                    Text("−", style = MaterialTheme.typography.headlineSmall)
+                }
+                Text(
+                    if (settings.rounds == 0) "∞" else "${settings.rounds}",
+                    color = if (settings.rounds == recommendedRounds) Neon.Turquoise else Neon.Ink,
+                    style = MaterialTheme.typography.titleLarge,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.width(40.dp).testTag("rounds"),
+                )
+                IconButton(onClick = { onChange { it.copy(rounds = Match.ROUND_OPTIONS[step + 1]) } }, enabled = step < Match.ROUND_OPTIONS.lastIndex, modifier = Modifier.testTag("rounds_plus")) {
+                    Text("+", style = MaterialTheme.typography.headlineSmall)
+                }
+            }
+            val recommendedTimer = Rules.recommendedTimer(playerCount)
+            SettingRow(
+                "⏱️ " + stringResource(R.string.setup_timer),
+                stringResource(R.string.setup_timer_desc) + " · " +
+                    stringResource(R.string.setup_recommended, stringResource(R.string.setup_timer_minutes, recommendedTimer / 60)),
+            ) {
+                val step = Rules.TIMER_OPTIONS.indexOf(settings.discussionSeconds).coerceAtLeast(0)
+                IconButton(onClick = { onChange { it.copy(discussionSeconds = Rules.TIMER_OPTIONS[step - 1]) } }, enabled = step > 0, modifier = Modifier.testTag("timer_minus")) {
                     Text("−", style = MaterialTheme.typography.headlineSmall)
                 }
                 Text(
                     if (settings.discussionSeconds == 0) stringResource(R.string.setup_timer_off)
                     else stringResource(R.string.setup_timer_minutes, settings.discussionSeconds / 60),
+                    color = if (settings.discussionSeconds == recommendedTimer) Neon.Turquoise else Neon.Ink,
                     style = MaterialTheme.typography.titleMedium,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.width(56.dp),
+                    modifier = Modifier.width(64.dp).testTag("timer_value"),
                 )
-                IconButton(onClick = { onChange { it.copy(discussionSeconds = TIMER_OPTIONS[step + 1]) } }, enabled = step < TIMER_OPTIONS.lastIndex, modifier = Modifier.testTag("timer_plus")) {
+                IconButton(onClick = { onChange { it.copy(discussionSeconds = Rules.TIMER_OPTIONS[step + 1]) } }, enabled = step < Rules.TIMER_OPTIONS.lastIndex, modifier = Modifier.testTag("timer_plus")) {
                     Text("+", style = MaterialTheme.typography.headlineSmall)
                 }
             }
@@ -308,8 +335,7 @@ fun SetupScreen(
     }
 }
 
-/** Discussion timer choices, in seconds; 0 is off. */
-private val TIMER_OPTIONS = listOf(0, 60, 120, 180, 300)
+
 
 @Composable
 private fun SettingRow(title: String, subtitle: String?, control: @Composable () -> Unit) {

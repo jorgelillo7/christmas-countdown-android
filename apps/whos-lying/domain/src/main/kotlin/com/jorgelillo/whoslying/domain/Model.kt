@@ -48,6 +48,8 @@ data class GameSettings(
      * impostors get no word (like BLIND), only the category hint if enabled.
      */
     val drawing: Boolean = false,
+    /** Games in a match; scores decide a winner after the last one. 0 means no limit. */
+    val rounds: Int = Match.DEFAULT_ROUNDS,
 )
 
 /** What one player sees when it's their turn to look at the phone. */

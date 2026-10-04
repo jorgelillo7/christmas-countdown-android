@@ -22,6 +22,8 @@ data class SavedState(
     val recentWords: List<String> = emptyList(),
     /** Running points per player across games, until the group resets them. */
     val scores: Map<String, Int> = emptyMap(),
+    /** Games finished in the current match. */
+    val roundsPlayed: Int = 0,
 )
 
 /** The whole saved state as one JSON document in DataStore. */

@@ -111,8 +111,8 @@
     <string name="rules_short">Reglas</string>
     <string name="modes_short">Modos</string>
     <string name="setup_which_mode">¿Qué modo elegimos?</string>
-    <string name="setup_timer">Tiempo para debatir</string>
-    <string name="setup_timer_desc">Cuenta atrás antes de cada votación</string>
+    <string name="setup_timer">Tiempo</string>
+    <string name="setup_timer_desc">Cuenta atrás antes de votar</string>
     <string name="setup_timer_off">No</string>
     <string name="setup_timer_minutes">%1$d min</string>
     <string name="setup_unplayed">Palabras por salir: %1$d de %2$d</string>
@@ -141,7 +141,7 @@
     <string name="modes_hint_title">Pista de categoría</string>
     <string name="modes_hint">En A ciegas, El Despistado y el modo dibujo, quien no tiene palabra ve de qué paquete sale. Quítala para una partida más difícil.</string>
     <string name="modes_timer_title">Tiempo para debatir</string>
-    <string name="modes_timer">Una cuenta atrás opcional antes de cada votación, para que nadie se eternice. Pita al acabar.</string>
+    <string name="modes_timer">Una cuenta atrás opcional antes de cada votación, para que nadie se eternice. Al acabar, pita y se pasa directamente a votar.</string>
 
     <!-- Selector de paquetes -->
     <string name="pick_packs_title">Elegir paquetes</string>
@@ -207,9 +207,26 @@
     <string name="modes_drawing_title">Modo dibujo (en cualquier modo)</string>
     <string name="modes_drawing">En vez de decir pistas, dibujáis la palabra entre todos en el mismo lienzo: pasaos el móvil y cada uno añade un trazo o un detalle. Los impostores no reciben palabra (solo la categoría, si la pista está activada) y tienen que tirarse el farol. Luego se vota igual, y al final podéis compartir la obra de arte.</string>
     <string name="modes_scores_title">Puntos</string>
-    <string name="modes_scores">Puntúan todos los del bando ganador, aunque los hayan eliminado: civiles 5 puntos, impostores y Despistado 15. Los puntos se suman partida a partida; toca 🏆 al final para ver la clasificación.</string>
+    <string name="modes_scores">Puntúan todos los del bando ganador, aunque los hayan eliminado: civiles 5 puntos, impostores y Despistado 15. Los puntos se suman durante la partida (10 rondas por defecto, cámbialo en la configuración); toca 🏆 para ver la clasificación y, tras la última ronda, el podio corona al ganador.</string>
     <string name="scores_title">Clasificación</string>
     <string name="scores_rules">Los civiles ganan 5 puntos; los impostores y el Despistado, 15.</string>
     <string name="scores_reset">Poner el marcador a cero</string>
     <string name="scores_reset_confirm">Toca otra vez para borrarlo</string>
+
+    <!-- Rondas y podio -->
+    <string name="setup_rounds">Rondas</string>
+    <string name="setup_rounds_desc">Gana quien sume más puntos</string>
+    <plurals name="scores_rounds_left">
+        <item quantity="one">Queda %d ronda</item>
+        <item quantity="many">Quedan %d rondas</item>
+        <item quantity="other">Quedan %d rondas</item>
+    </plurals>
+    <string name="scores_rounds_free">Sin límite de rondas · %1$d jugadas</string>
+    <string name="result_see_winner">🏆 Ver quién gana</string>
+    <string name="podium_winner">¡%1$s gana la partida!</string>
+    <string name="podium_tie">¡Empate! %1$s</string>
+    <string name="podium_nobody">Nadie ha puntuado… ¡revancha!</string>
+    <string name="podium_new_match">Nueva partida</string>
+    <string name="time_up">¡Se acabó\nel tiempo!</string>
+    <string name="setup_recommended">Recomendado: %1$s</string>
 </resources>

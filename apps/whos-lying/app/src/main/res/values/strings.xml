@@ -120,8 +120,8 @@
     <string name="rules_short">Rules</string>
     <string name="modes_short">Modes</string>
     <string name="setup_which_mode">Which mode should we play?</string>
-    <string name="setup_timer">Discussion time</string>
-    <string name="setup_timer_desc">Countdown before each vote</string>
+    <string name="setup_timer">Time</string>
+    <string name="setup_timer_desc">Countdown before voting</string>
     <string name="setup_timer_off">Off</string>
     <string name="setup_timer_minutes">%1$d min</string>
     <string name="setup_unplayed">Words still to come: %1$d of %2$d</string>
@@ -150,7 +150,7 @@
     <string name="modes_hint_title">Category hint</string>
     <string name="modes_hint">In Blind, The Drifter and drawing mode, players without a word see which pack it comes from. Turn it off for a harder game.</string>
     <string name="modes_timer_title">Discussion time</string>
-    <string name="modes_timer">An optional countdown before each vote, so nobody drags it out. It beeps when time\'s up.</string>
+    <string name="modes_timer">An optional countdown before each vote, so nobody drags it out. When time\'s up it beeps and you go straight to the vote.</string>
 
     <!-- Pack picker -->
     <string name="pick_packs_title">Choose packs</string>
@@ -213,9 +213,25 @@
     <string name="modes_drawing_title">Drawing mode (any mode)</string>
     <string name="modes_drawing">Instead of saying clues, you draw the word together on one canvas: pass the phone and each adds a stroke or a detail. Impostors get no word (just the category, if the hint is on) and have to bluff. Then vote as usual, and share the masterpiece at the end.</string>
     <string name="modes_scores_title">Scores</string>
-    <string name="modes_scores">Every player on the winning side scores, even if voted out: civilians 5 points, impostors and the Drifter 15. Points add up game after game; tap 🏆 at the end to see the ranking.</string>
+    <string name="modes_scores">Every player on the winning side scores, even if voted out: civilians 5 points, impostors and the Drifter 15. Points add up over the match (10 rounds by default, change it in setup); tap 🏆 to see the ranking, and after the last round the podium crowns the winner.</string>
     <string name="scores_title">Ranking</string>
     <string name="scores_rules">Civilians win 5 points, impostors and the Drifter 15.</string>
     <string name="scores_reset">Reset scores</string>
     <string name="scores_reset_confirm">Tap again to reset</string>
+
+    <!-- Match rounds and podium -->
+    <string name="setup_rounds">Rounds</string>
+    <string name="setup_rounds_desc">Most points wins</string>
+    <plurals name="scores_rounds_left">
+        <item quantity="one">%d round left</item>
+        <item quantity="other">%d rounds left</item>
+    </plurals>
+    <string name="scores_rounds_free">No round limit · %1$d played</string>
+    <string name="result_see_winner">🏆 See who won</string>
+    <string name="podium_winner">%1$s wins the match!</string>
+    <string name="podium_tie">It\'s a tie: %1$s!</string>
+    <string name="podium_nobody">Nobody scored… rematch!</string>
+    <string name="podium_new_match">New match</string>
+    <string name="time_up">Time\'s up!</string>
+    <string name="setup_recommended">Recommended: %1$s</string>
 </resources>

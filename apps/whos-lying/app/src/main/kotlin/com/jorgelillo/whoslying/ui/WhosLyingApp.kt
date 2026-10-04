@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.jorgelillo.whoslying.R
 import com.jorgelillo.whoslying.WhosLyingApplication
+import com.jorgelillo.whoslying.domain.Match
 import com.jorgelillo.whoslying.domain.WordPack
 import com.jorgelillo.whoslying.ui.screens.CountdownScreen
 import com.jorgelillo.whoslying.ui.screens.DebateScreen
@@ -31,11 +32,13 @@ import com.jorgelillo.whoslying.ui.screens.PackEditScreen
 import com.jorgelillo.whoslying.ui.screens.PackPickerScreen
 import com.jorgelillo.whoslying.ui.screens.PacksScreen
 import com.jorgelillo.whoslying.ui.screens.PlayersScreen
+import com.jorgelillo.whoslying.ui.screens.PodiumScreen
 import com.jorgelillo.whoslying.ui.screens.ResultScreen
 import com.jorgelillo.whoslying.ui.screens.RevealScreen
 import com.jorgelillo.whoslying.ui.screens.ScoresSheet
 import com.jorgelillo.whoslying.ui.screens.SettingsSheet
 import com.jorgelillo.whoslying.ui.screens.SetupScreen
+import com.jorgelillo.whoslying.ui.screens.TimeUpScreen
 import com.jorgelillo.whoslying.ui.screens.VotingScreen
 
 private const val NEW = "new"
@@ -98,6 +101,7 @@ fun WhosLyingApp(app: WhosLyingApplication) {
                     strokes = vm.strokes,
                     discussionSeconds = state.settings.discussionSeconds,
                     onVote = { nav.navigate("vote") },
+                    onTimeUp = { vm.voteForced = true; nav.navigate("time_up") },
                     onRevealAll = vm::revealAll,
                     onQuit = { nav.goHome() },
                 )
@@ -107,16 +111,21 @@ fun WhosLyingApp(app: WhosLyingApplication) {
                     alive = alive,
                     discussionSeconds = state.settings.discussionSeconds,
                     onVote = { nav.navigate("vote") },
+                    onTimeUp = { vm.voteForced = true; nav.navigate("time_up") },
                     onRevealAll = vm::revealAll,
                     onQuit = { nav.goHome() },
                 )
             }
+        }
+        composable("time_up") {
+            TimeUpScreen(onDone = { nav.navigate("vote") { popUpTo("time_up") { inclusive = true } } })
         }
         composable("vote") {
             val game = vm.game ?: return@composable LaunchedEffect(Unit) { nav.goHome() }
             VotingScreen(
                 game = game,
                 alive = remember(vm.revision) { game.alive.map { it.player }.toSet() },
+                forced = vm.voteForced,
                 onConfirm = { player ->
                     vm.eliminate(player)
                     nav.navigate("expose") { popUpTo("debate") }
@@ -147,9 +156,22 @@ fun WhosLyingApp(app: WhosLyingApplication) {
                 drawing = vm.strokes,
                 onShareDrawing = { shareDrawing(context, vm.strokes, caption) },
                 onScores = { showScores = true },
+                roundsLeft = state.settings.rounds.takeIf { it > 0 }?.let { Match.remaining(state.roundsPlayed, it) },
+                onSeeWinner = { nav.navigate("podium") { popUpTo("setup") } },
                 onReport = null,
                 onPlayAgain = { if (vm.startGame()) nav.navigate("reveal") { popUpTo("setup") } },
                 onHome = { nav.goHome() },
+            )
+        }
+        composable("podium") {
+            PodiumScreen(
+                players = state.players,
+                scores = state.scores,
+                onNewMatch = {
+                    vm.resetScores()
+                    nav.popBackStack("setup", inclusive = false)
+                },
+                onHome = { vm.resetScores(); nav.goHome() },
             )
         }
         composable("pick_packs") {
@@ -184,7 +206,7 @@ fun WhosLyingApp(app: WhosLyingApplication) {
     if (showHowTo) HowToSheet(onDismiss = { showHowTo = false })
     if (showAbout) SettingsSheet(onHowTo = { showHowTo = true }, onModes = { showModes = true }, onDismiss = { showAbout = false })
     if (showModes) ModesSheet(onDismiss = { showModes = false })
-    if (showScores) ScoresSheet(state.players, state.scores, vm.lastPoints, onReset = vm::resetScores, onDismiss = { showScores = false })
+    if (showScores) ScoresSheet(state.players, state.scores, vm.lastPoints, state.roundsPlayed, state.settings.rounds, onReset = vm::resetScores, onDismiss = { showScores = false })
 }
 
 private fun NavHostController.goHome() {

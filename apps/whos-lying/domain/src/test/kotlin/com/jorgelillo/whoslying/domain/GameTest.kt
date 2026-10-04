@@ -143,6 +143,23 @@ class GameTest {
     }
 
     @Test
+    fun matchEndsAfterTheChosenRoundsAndTiesShareTheWin() {
+        assertFalse(Match.isOver(9, 10))
+        assertTrue(Match.isOver(10, 10))
+        assertFalse(Match.isOver(99, 0))
+        assertEquals(3, Match.remaining(7, 10))
+        assertFalse(Match.counts(Outcome.EndedEarly))
+        assertTrue(Match.counts(Outcome.NoCivilians))
+        assertEquals(listOf("Ana", "Bea"), Match.leaders(mapOf("Bea" to 20, "Ana" to 20, "Carlos" to 5)))
+        assertTrue(Match.leaders(mapOf("Ana" to 0)).isEmpty())
+        assertEquals(10, Match.recommendedRounds(4))
+        assertEquals(5, Match.recommendedRounds(10))
+        assertTrue(Match.recommendedRounds(24) in Match.ROUND_OPTIONS)
+        assertEquals(240, Rules.recommendedTimer(4))
+        assertTrue((3..24).all { Rules.recommendedTimer(it) in Rules.TIMER_OPTIONS })
+    }
+
+    @Test
     fun pickerAvoidsRecentWords() {
         val (_, entry) = WordPicker.pick(listOf(pack), recent = listOf("Playa"), random = Random(1))
         assertEquals("Cine", entry.word)

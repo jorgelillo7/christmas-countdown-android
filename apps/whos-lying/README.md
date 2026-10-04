@@ -17,9 +17,9 @@
 - 📦 21 built-in packs, 600+ words per language (Spanish, English), each with two similar words, written for this app; multi-select grid
 - 📝 **Your own packs:** one word per line, `word / similar / similar…` (similar words are optional; the impostor gets one at random)
 - 🔁 No word repeats until ~90% of the chosen packs were played, then the oldest come back first; setup shows how many are left
-- ⏱️ Optional discussion timer before each vote (1–5 min, tap to pause, beeps at zero)
+- ⏱️ Optional discussion timer (1–24 min, recommended ~1 min per player): tap to pause; at zero it beeps, shows "Time's up!" and forces the vote
 - 🎨 **Drawing mode** (with any mode): clues are drawn together on one canvas (7 inks, undo, clear) instead of said; the drawing is shown and shareable at the end
-- 🏆 **Scores** across games: winners score (civilians 5, impostors/drifter 15), ranking on the result screen
+- 🏆 **Matches**: 3/5/7/10 rounds or no limit (recommended by group size); winners score (civilians 5, impostors/drifter 15), ranking with rounds left, final podium with confetti
 - 📘 In-app guide to every mode (home → Modes, or "Which mode?" in setup)
 - ⚙️ Settings: in-app language (Android 13+), share with friends, rate, privacy
 - 🚫 No ads, no accounts, no network, no data collected

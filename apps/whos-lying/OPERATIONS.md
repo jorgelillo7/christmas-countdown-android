@@ -24,6 +24,7 @@ UI test tags (usable with `scripts/tap-text.sh`, dialogs included): `play`, `how
 `language_system|es|en`, `share`, `rate`, `privacy`, `player_name`, `add_player`, `continue`, `mode_classic|blind|drifter`, `impostors_plus|minus`,
 `hint`, `chaos`, `start`, `tap_to_reveal` (the curtain: swipe it up, e.g. `adb shell input swipe 540 1700 540 700 800`), `secret_word`, `hide`, `go_vote`, `timer`, `debate_out`, `vote_<player>`,
 `confirm_vote`, `back_to_debate`, `exposing`, `eliminated`, `keep_playing`, `result_title`,
+`rounds_plus|minus`, `rounds`, `timer_value`, `time_up`, `rounds_left`, `see_winner`, `podium_title`, `new_match`,
 `drawing`, `canvas`, `ink_0..6`, `undo`, `clear`, `share_drawing`, `scores`, `scores_sheet`, `reset_scores`,
 `guess_text`, `guess`, `reveal_all`, `play_again`, `home`, `new_pack`, `pack_name`, `pack_words`,
 `save_pack`, `back`.
