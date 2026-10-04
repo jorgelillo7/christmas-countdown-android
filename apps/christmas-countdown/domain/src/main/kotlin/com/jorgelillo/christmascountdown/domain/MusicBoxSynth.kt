@@ -7,7 +7,8 @@ import kotlin.math.sin
 
 /**
  * Renders a [Melody] to 16-bit mono PCM with a simple music-box timbre.
- * The buffer loops seamlessly: ringing notes that run past the end wrap around to the start.
+ * With [loop] the buffer repeats seamlessly (ringing notes past the end wrap around to the start);
+ * without it the buffer is extended so the last notes ring out naturally.
  */
 object MusicBoxSynth {
 
@@ -15,11 +16,12 @@ object MusicBoxSynth {
     private const val RING_SECONDS = 1.2
     private const val ATTACK_SECONDS = 0.004
 
-    fun render(melody: Melody, sampleRate: Int = DEFAULT_SAMPLE_RATE): ShortArray {
+    fun render(melody: Melody, sampleRate: Int = DEFAULT_SAMPLE_RATE, loop: Boolean = true): ShortArray {
         val secondsPerBeat = 60.0 / melody.bpm
-        val length = (melody.totalBeats * secondsPerBeat * sampleRate).toInt()
-        val mix = FloatArray(length)
         val ringSamples = (RING_SECONDS * sampleRate).toInt()
+        val melodyLength = (melody.totalBeats * secondsPerBeat * sampleRate).toInt()
+        val length = if (loop) melodyLength else melodyLength + ringSamples
+        val mix = FloatArray(length)
         val attackSamples = (ATTACK_SECONDS * sampleRate).toInt()
 
         var beat = 0.0

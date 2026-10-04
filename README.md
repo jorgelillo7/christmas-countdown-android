@@ -4,9 +4,9 @@
 
 **A home for small, polished Android apps — built with Kotlin, Jetpack Compose and shared building blocks.**
 
-![Kotlin](https://img.shields.io/badge/Kotlin-2.3-7F52FF?logo=kotlin&logoColor=white)
+![Kotlin](https://img.shields.io/badge/Kotlin-2.4-7F52FF?logo=kotlin&logoColor=white)
 ![Compose](https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?logo=jetpackcompose&logoColor=white)
-![AGP](https://img.shields.io/badge/AGP-8.13-02303A?logo=gradle&logoColor=white)
+![AGP](https://img.shields.io/badge/AGP-9.4-02303A?logo=gradle&logoColor=white)
 ![Target SDK](https://img.shields.io/badge/targetSdk-36-3DDC84?logo=android&logoColor=white)
 
 </div>
@@ -22,6 +22,9 @@
 ## 🗂️ Repository layout
 
 ```
+docs/                              Guides: publishing on Google Play, toolchain, adding an app
+scripts/                           Shared scripts: env, emulator, screenshots, bundle verification
+branding/                          Developer profile images (Play Console) and their generator
 build-logic/                       Gradle convention plugins: shared Android/Kotlin/Compose config
 gradle/libs.versions.toml          Single source of truth for every dependency version
 core/
@@ -30,8 +33,10 @@ apps/
 └── christmas-countdown/
     ├── app/                       :apps:christmas-countdown:app — Android app (UI, widget, resources)
     ├── domain/                    :apps:christmas-countdown:domain — pure Kotlin business logic
-    ├── store/                     Play Store assets
-    └── tools/                     App-specific scripts (e.g. icon generator)
+    ├── store/                     Play Store listing: texts and images per language
+    ├── tools/                     App-specific scripts (icon, store assets, smoke test)
+    ├── docs/                      App history
+    └── OPERATIONS.md              Every command to run, test and release the app
 ```
 
 ### Principles
@@ -45,42 +50,24 @@ apps/
 
 ## 🚀 Building
 
-Requirements: Android Studio 2025.2+ (bundled JDK 21) and Android SDK 36.
+Requirements: Android Studio 2026.2+ and Android SDK 37. See [docs/toolchain.md](docs/toolchain.md).
 
 ```bash
-export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+source scripts/env.sh                                      # Android Studio's JDK, adb, SDK paths
 
 ./gradlew test                                             # unit tests for every module
 ./gradlew :apps:christmas-countdown:app:installDebug       # run on a device or emulator
 ./gradlew :apps:christmas-countdown:app:bundleRelease      # Play Store bundle
 ```
 
-## ➕ Adding a new app (e.g. a roulette)
+## ➕ Adding a new app
 
-1. Create `apps/roulette/domain/build.gradle.kts`:
-   ```kotlin
-   plugins { alias(libs.plugins.jorgelillo.jvm.library) }
-   ```
-2. Create `apps/roulette/app/build.gradle.kts`:
-   ```kotlin
-   plugins {
-       alias(libs.plugins.jorgelillo.android.application)
-       alias(libs.plugins.jorgelillo.android.compose)
-   }
-   android {
-       namespace = "com.jorgelillo.roulette"
-       defaultConfig { applicationId = "com.jorgelillo.roulette"; versionCode = 1; versionName = "1.0" }
-   }
-   dependencies {
-       implementation(projects.apps.roulette.domain)
-       implementation(projects.core.designsystem)
-   }
-   ```
-3. Register both modules in `settings.gradle.kts`.
-4. Wrap the UI in `LilloTheme(colorScheme = …)` with the app's own palette.
+Two Gradle files of a few lines each, plus registering them in `settings.gradle.kts`.
+Full recipe (modules, icon, privacy policy, store assets): [docs/adding-a-new-app.md](docs/adding-a-new-app.md).
 
-SDK levels, Java version, desugaring and Compose setup come from the convention plugins, so a
-new app needs no extra Gradle configuration.
+## 📚 Docs
+
+Start at [docs/README.md](docs/README.md): publishing checklist, toolchain notes, lessons learned.
 
 ## 🔐 Signing
 

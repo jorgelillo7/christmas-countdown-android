@@ -13,7 +13,7 @@ Cambia a "noches" y cuenta las noches que faltan, como hacen los peques. En las 
 Añade el widget y mira los días (o noches) que faltan sin abrir la app.
 
 🎶 VILLANCICOS
-Toca la nota musical para escuchar villancicos clásicos como Jingle Bells y We Wish You a Merry Christmas, tocados por una caja de música.
+Toca la nota musical para escuchar cinco villancicos clásicos en orden aleatorio, tocados por una caja de música: Noche de paz, Jingle Bells, Oh árbol de Navidad, Joy to the World y We Wish You a Merry Christmas.
 
 ❄️ Y ADEMÁS
 • Nieve cayendo suavemente

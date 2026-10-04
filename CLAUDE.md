@@ -1,0 +1,94 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## What this repo is
+
+A Gradle multi-project hosting several small Android apps published on Google Play. Each app is a
+self-contained folder under `apps/<app>/`; shared Compose code lives in `core/`; shared build
+configuration lives in `build-logic/`. Human docs are in `docs/` (start at `docs/README.md`);
+each app has its own `apps/<app>/OPERATIONS.md` with the exact commands for that app.
+
+Apps today: `christmas-countdown` (`com.jorgelillo.christmascountdown`, live on Play). More will
+follow (a roulette is next); write code, docs and scripts so they work for any app.
+
+## Environment
+
+Always `source scripts/env.sh` before running Gradle from a terminal: it points `JAVA_HOME` at
+Android Studio's bundled JDK (the shell's default Homebrew JDK is too new for Gradle) and exports
+`ADB`/`ANDROID_HOME`.
+
+The machine has 8 GB RAM: emulator + Android Studio + Gradle don't fit together. Stop the emulator
+(`scripts/emulator.sh stop`) during long builds and run emulator scripts in the foreground
+(background jobs get killed under memory pressure).
+
+## Commands
+
+Module paths follow the folders: `:apps:<app>:app`, `:apps:<app>:domain`, `:core:<name>`.
+
+```bash
+./gradlew test                                            # every unit test in the repo
+./gradlew :apps:<app>:domain:test --tests '*SomeTest.someMethod*'   # single test
+./gradlew :apps:<app>:app:lintDebug                       # lint (kept at 0 warnings)
+./gradlew :apps:<app>:app:installDebug                    # run on emulator/phone
+./gradlew :apps:<app>:app:bundleRelease                   # Play bundle (signed if apps/<app>/keystore.properties exists)
+
+scripts/emulator.sh start|stop|date MMDDhhmmYYYY|date auto|demo on|off
+scripts/screenshot.sh <out.png>                           # dismisses "isn't responding" dialogs first
+scripts/tap-text.sh "<label>"                             # tap by on-screen text (use instead of coordinates)
+scripts/verify-bundle.sh <aab>                            # signature, versionCode, permissions, native libs
+apps/<app>/tools/smoke_test.sh                            # release APK on emulator (per app)
+```
+
+Asset generators (icons, store graphics, developer profile) are Python + Pillow:
+`scripts/setup-python.sh` once, then `.venv/bin/python <script>`. Generated images are committed;
+regenerate them instead of editing by hand.
+
+Project skills in `.claude/skills/`: `upgrade-android-deps` (toolchain/dependency upgrades) and
+`release-android-app` (build, verify and ship a new version of an app).
+
+## Build architecture
+
+- **Version catalog** `gradle/libs.versions.toml` is the single source of truth for every version,
+  including `compileSdk`/`targetSdk`/`minSdk`, which the convention plugins read from it.
+- **Convention plugins** in `build-logic/convention` (included build): `jorgelillo.android.application`,
+  `jorgelillo.android.library`, `jorgelillo.android.compose`, `jorgelillo.jvm.library`. They set
+  SDK levels, Java 17 target and core library desugaring, so module build files only declare
+  namespace, app id/version, signing and dependencies.
+- **AGP 9 has Kotlin built in**: never apply `org.jetbrains.kotlin.android`. The Compose compiler
+  plugin is still needed (applied by the compose convention plugin).
+- AndroidX versions are chained to compileSdk/AGP (e.g. Compose 1.12+ needs compileSdk 37 and
+  AGP 9.1+). If `checkDebugAarMetadata` fails, bump the platform/AGP, not a single library.
+- Type-safe project accessors are on: `implementation(projects.apps.<appCamel>.domain)`,
+  `implementation(projects.core.designsystem)`. New modules must be included in `settings.gradle.kts`.
+
+## App architecture (conventions for every app)
+
+- `:apps:<app>:domain` is **pure Kotlin, no `android.*`**: all business rules live here, unit
+  tested with `kotlin.test`. This keeps them portable (a later move into the `lillorepo` Bazel
+  monorepo starts with these modules).
+- `:apps:<app>:app`: Compose + Material 3, MVVM (`ViewModel` + `StateFlow`, collected with
+  `collectAsStateWithLifecycle`). No DI framework: app-wide singletons live on the app's
+  `Application` subclass and reach ViewModels through `viewModelFactory` companions.
+- `:core:designsystem` holds `LilloTheme` (each app passes its own `ColorScheme`) and shared
+  components (`GlassCard`, `GradientBackground`). Move code here only once a second app needs it.
+- Strings ship in English (`values/`) and Spanish (`values-es/`); keep both in sync, including
+  plurals (Spanish needs `one`/`many`/`other`).
+- Snapshot tests pin anything users already see that is derived algorithmically (e.g. Christmas
+  Countdown's yearly advent door order); don't change those algorithms.
+
+## Releasing (any app)
+
+- **Always test the release build** (`apps/<app>/tools/smoke_test.sh`), not just debug: R8 strict
+  full mode (AGP 9 default) once stripped WorkManager's `WorkDatabase_Impl` constructor and the app
+  crashed on start. Any app using WorkManager/Glance/Room needs the `RoomDatabase` keep rule
+  (see `apps/christmas-countdown/app/proguard-rules.pro`).
+- Signing reads `apps/<app>/keystore.properties` (git-ignored, values trimmed). Never commit it or
+  any `.jks`; check `git status` for filename variants (a leading-space copy once slipped in).
+- Each release bumps `versionCode` in `apps/<app>/app/build.gradle.kts` and adds
+  `apps/<app>/store/metadata/android/{en-US,es-ES}/changelogs/<versionCode>.txt`.
+- Store listing texts/images live in `apps/<app>/store/metadata/android/<locale>/` (fastlane
+  supply layout). Publish the listing together with the release that adds what it describes.
+- `targetSdk` must meet Google Play's current requirement (API 36 since Aug 2026).
+- Privacy policies are served from the separate repo `jorgelillo7/jorgelillo7.github.io`
+  (`/privacy/<app>/`), never from this repo, so renaming this repo can't break them.

@@ -16,3 +16,6 @@ local.properties
 
 # Kotlin 2.x compiler session and error files
 .kotlin/
+
+# Local Python environment for the asset generators
+/.venv/

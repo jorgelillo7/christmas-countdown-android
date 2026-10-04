@@ -4,7 +4,9 @@ import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioTrack
 import com.jorgelillo.christmascountdown.domain.Carols
+import com.jorgelillo.christmascountdown.domain.Melody
 import com.jorgelillo.christmascountdown.domain.MusicBoxSynth
+import com.jorgelillo.christmascountdown.domain.ShuffledPlaylist
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -12,28 +14,29 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 /**
- * Plays the carols in a seamless loop. The audio is synthesised on the device the first time it
- * is needed (no audio files in the APK) and streamed in small chunks.
+ * Plays the carols one after another in shuffled order, forever. Each carol is synthesised on
+ * the device the first time it comes up (no audio files in the APK) and streamed in small chunks.
  */
 class MusicBoxPlayer(private val scope: CoroutineScope) {
 
     private val sampleRate = MusicBoxSynth.DEFAULT_SAMPLE_RATE
     private val chunkSize = sampleRate / 10
-    private var pcm: ShortArray? = null
+    private val playlist = ShuffledPlaylist(Carols.all)
+    private val rendered = mutableMapOf<Melody, ShortArray>()
+    private val gap = ShortArray(sampleRate)   // one second of silence between carols
     private var job: Job? = null
 
     fun play() {
         if (job?.isActive == true) return
         job = scope.launch(Dispatchers.Default) {
-            val data = pcm ?: render().also { pcm = it }
             val track = createTrack()
             try {
                 track.play()
-                var position = 0
                 while (isActive) {
-                    val count = minOf(chunkSize, data.size - position)
-                    track.write(data, position, count)
-                    position = (position + count) % data.size
+                    val carol = playlist.next()
+                    val pcm = rendered.getOrPut(carol) { MusicBoxSynth.render(carol, sampleRate, loop = false) }
+                    stream(track, pcm)
+                    stream(track, gap)
                 }
             } finally {
                 track.pause()
@@ -48,11 +51,14 @@ class MusicBoxPlayer(private val scope: CoroutineScope) {
         job = null
     }
 
-    private fun render(): ShortArray {
-        val gap = ShortArray(sampleRate / 2)
-        return Carols.all
-            .flatMap { listOf(MusicBoxSynth.render(it, sampleRate), gap) }
-            .fold(ShortArray(0)) { acc, part -> acc + part }
+    /** Writes [pcm] in small chunks so stop() takes effect within ~100 ms. */
+    private fun CoroutineScope.stream(track: AudioTrack, pcm: ShortArray) {
+        var position = 0
+        while (isActive && position < pcm.size) {
+            val count = minOf(chunkSize, pcm.size - position)
+            track.write(pcm, position, count)
+            position += count
+        }
     }
 
     private fun createTrack(): AudioTrack {

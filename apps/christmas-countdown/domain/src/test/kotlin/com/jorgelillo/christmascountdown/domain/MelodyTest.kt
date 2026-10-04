@@ -19,8 +19,18 @@ class MelodyTest {
 
     @Test
     fun carolsFillWholeBars() {
-        assertEquals(0.0, Carols.jingleBells.totalBeats % 4)
-        assertEquals(0.0, Carols.weWishYouAMerryChristmas.totalBeats % 3)
+        // A loop that ends mid-bar sounds off; every score must fill whole bars of its meter.
+        for (carol in Carols.all) {
+            assertEquals(0.0, carol.totalBeats % carol.beatsPerBar, carol.title)
+        }
+    }
+
+    @Test
+    fun carolsStayInAMusicBoxRange() {
+        for (carol in Carols.all) {
+            val pitches = carol.notes.mapNotNull { it.midi }
+            assertTrue(pitches.min() >= 72 && pitches.max() <= 89, "${carol.title}: ${pitches.min()}..${pitches.max()}")
+        }
     }
 
     @Test
@@ -31,5 +41,13 @@ class MelodyTest {
         assertEquals(expected, pcm.size)
         val peak = pcm.maxOf { abs(it.toInt()) }
         assertTrue(peak in 20_000..Short.MAX_VALUE.toInt(), "peak was $peak")
+    }
+
+    @Test
+    fun nonLoopingRenderLetsTheLastNoteRingOut() {
+        val melody = Carols.silentNight
+        val looped = MusicBoxSynth.render(melody, sampleRate = 8_000)
+        val single = MusicBoxSynth.render(melody, sampleRate = 8_000, loop = false)
+        assertTrue(single.size > looped.size)
     }
 }

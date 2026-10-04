@@ -13,16 +13,14 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 private val JAVA_VERSION = JavaVersion.VERSION_17
 private val JVM_TARGET = JvmTarget.JVM_17
 
-/** SDK levels, Java level and core library desugaring shared by every Android module. */
-internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, *, *, *, *, *>) {
+/** SDK levels, Java level and core library desugaring shared by every Android module (Kotlin is built into AGP 9). */
+internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension) {
     commonExtension.apply {
         compileSdk = libs.intVersion("compileSdk")
         defaultConfig.minSdk = libs.intVersion("minSdk")
-        compileOptions {
-            sourceCompatibility = JAVA_VERSION
-            targetCompatibility = JAVA_VERSION
-            isCoreLibraryDesugaringEnabled = true
-        }
+        compileOptions.sourceCompatibility = JAVA_VERSION
+        compileOptions.targetCompatibility = JAVA_VERSION
+        compileOptions.isCoreLibraryDesugaringEnabled = true
     }
     extensions.configure<KotlinAndroidProjectExtension> {
         compilerOptions.jvmTarget.set(JVM_TARGET)

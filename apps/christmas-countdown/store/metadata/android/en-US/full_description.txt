@@ -13,7 +13,7 @@ Switch to "sleeps" and count the nights left, just like kids do. In the last two
 Add the widget and see the days (or sleeps) left without opening the app.
 
 🎶 CHRISTMAS CAROLS
-Tap the music note to play classic carols like Jingle Bells and We Wish You a Merry Christmas, played by a music box.
+Tap the music note to play five classic carols in random order, played by a music box: Silent Night, Jingle Bells, O Christmas Tree, Joy to the World and We Wish You a Merry Christmas.
 
 ❄️ AND MORE
 • Gently falling snow

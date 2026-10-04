@@ -26,9 +26,20 @@
     <string name="action_music_on">Play carols</string>
     <string name="action_music_off">Stop carols</string>
     <string name="action_about">About</string>
-    <plurals name="share_text">
-        <item quantity="one">Only %1$d day until Christmas! 🎄</item>
-        <item quantity="other">Only %1$d days until Christmas! 🎄</item>
+    <plurals name="share_days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="share_hours">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <string name="share_text_time_two">Christmas in %1$s and %2$s! 🎄</string>
+    <string name="share_text_time_one">Christmas in %1$s! 🎄</string>
+    <string name="share_text_time_soon">Christmas in less than an hour! 🎄</string>
+    <plurals name="share_text_sleeps">
+        <item quantity="one">Only %d sleep until Christmas! 🎄</item>
+        <item quantity="other">Only %d sleeps until Christmas! 🎄</item>
     </plurals>
     <string name="share_text_christmas">Merry Christmas! 🎄</string>
     <string name="share_chooser">Share countdown</string>
