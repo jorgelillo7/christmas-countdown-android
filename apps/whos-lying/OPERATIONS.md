@@ -18,8 +18,8 @@ Package: `com.jorgelillo.whoslying` (minSdk 24: navigation-compose needs it).
 | Smoke test (release build, emulator running) | `apps/whos-lying/tools/smoke_test.sh` |
 | Regenerate icons | `.venv/bin/python apps/whos-lying/tools/generate_icon.py` |
 
-UI test tags (usable with `scripts/tap-text.sh`, dialogs included): `play`, `how_to`, `packs`,
-`about`, `player_name`, `add_player`, `continue`, `mode_classic|blind|drifter`, `impostors_plus|minus`,
+UI test tags (usable with `scripts/tap-text.sh`, dialogs included): `play`, `how_to`, `modes`,
+`packs`, `about`, `modes_info`, `modes_sheet`, `timer_plus|minus`, `timer`, `unplayed`, `player_name`, `add_player`, `continue`, `mode_classic|blind|drifter`, `impostors_plus|minus`,
 `hint`, `chaos`, `start`, `tap_to_reveal`, `secret_word`, `hide`, `confirm_vote`, `keep_playing`,
 `guess_text`, `guess`, `reveal_all`, `play_again`, `home`, `new_pack`, `pack_name`, `pack_words`,
 `save_pack`, `back`.

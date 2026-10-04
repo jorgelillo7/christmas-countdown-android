@@ -60,12 +60,13 @@ import com.jorgelillo.whoslying.domain.WordPack
 import com.jorgelillo.whoslying.ui.theme.Neon
 
 @Composable
-fun HomeScreen(onPlay: () -> Unit, onHowTo: () -> Unit, onPacks: () -> Unit, onAbout: () -> Unit) {
+fun HomeScreen(onPlay: () -> Unit, onHowTo: () -> Unit, onModes: () -> Unit, onPacks: () -> Unit, onAbout: () -> Unit) {
     Page(title = null, onBack = null, bottom = {
         BigButton(stringResource(R.string.play), onPlay, Modifier.testTag("play"))
         Spacer(Modifier.height(12.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            HomeChip("📖", stringResource(R.string.how_to_play), onHowTo, Modifier.weight(1f).testTag("how_to"))
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            HomeChip("📖", stringResource(R.string.rules_short), onHowTo, Modifier.weight(1f).testTag("how_to"))
+            HomeChip("🎭", stringResource(R.string.modes_short), onModes, Modifier.weight(1f).testTag("modes"))
             HomeChip("🗂️", stringResource(R.string.packs_short), onPacks, Modifier.weight(1f).testTag("packs"))
         }
         TextButton(onClick = onAbout, modifier = Modifier.align(Alignment.CenterHorizontally).testTag("about")) {
@@ -94,17 +95,16 @@ fun HomeScreen(onPlay: () -> Unit, onHowTo: () -> Unit, onPacks: () -> Unit, onA
 
 @Composable
 private fun HomeChip(emoji: String, label: String, onClick: () -> Unit, modifier: Modifier) {
-    Row(
+    Column(
         modifier
             .clip(MaterialTheme.shapes.large)
             .background(Neon.Card)
             .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 14.dp),
-        verticalAlignment = Alignment.CenterVertically,
+            .padding(horizontal = 8.dp, vertical = 12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(emoji)
-        Spacer(Modifier.width(10.dp))
-        Text(label, fontWeight = FontWeight.SemiBold, maxLines = 1)
+        Text(emoji, style = MaterialTheme.typography.titleLarge)
+        Text(label, fontWeight = FontWeight.SemiBold, maxLines = 1, modifier = Modifier.padding(top = 4.dp))
     }
 }
 
@@ -184,7 +184,10 @@ fun SetupScreen(
     playerCount: Int,
     settings: GameSettings,
     packs: List<WordPack>,
+    /** Words not played yet in the selected packs, out of how many. */
+    unplayed: Pair<Int, Int>,
     onChange: ((GameSettings) -> GameSettings) -> Unit,
+    onModesInfo: () -> Unit,
     onStart: () -> Unit,
     onBack: () -> Unit,
 ) {
@@ -202,6 +205,9 @@ fun SetupScreen(
         },
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
+            TextButton(onClick = onModesInfo, modifier = Modifier.align(Alignment.End).testTag("modes_info")) {
+                Text("ⓘ  " + stringResource(R.string.setup_which_mode), color = Neon.Turquoise)
+            }
             listOf(
                 Triple(GameMode.CLASSIC, R.string.mode_classic to R.string.mode_classic_desc, "🎭"),
                 Triple(GameMode.BLIND, R.string.mode_blind to R.string.mode_blind_desc, "🙈"),
@@ -247,6 +253,22 @@ fun SetupScreen(
             SettingRow(stringResource(R.string.setup_chaos), stringResource(R.string.setup_chaos_desc)) {
                 NeonSwitch(settings.chaos, "chaos") { v -> onChange { it.copy(chaos = v) } }
             }
+            SettingRow(stringResource(R.string.setup_timer), stringResource(R.string.setup_timer_desc)) {
+                val step = TIMER_OPTIONS.indexOf(settings.discussionSeconds).coerceAtLeast(0)
+                IconButton(onClick = { onChange { it.copy(discussionSeconds = TIMER_OPTIONS[step - 1]) } }, enabled = step > 0, modifier = Modifier.testTag("timer_minus")) {
+                    Text("−", style = MaterialTheme.typography.headlineSmall)
+                }
+                Text(
+                    if (settings.discussionSeconds == 0) stringResource(R.string.setup_timer_off)
+                    else stringResource(R.string.setup_timer_minutes, settings.discussionSeconds / 60),
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.width(56.dp),
+                )
+                IconButton(onClick = { onChange { it.copy(discussionSeconds = TIMER_OPTIONS[step + 1]) } }, enabled = step < TIMER_OPTIONS.lastIndex, modifier = Modifier.testTag("timer_plus")) {
+                    Text("+", style = MaterialTheme.typography.headlineSmall)
+                }
+            }
 
             Text(stringResource(R.string.setup_packs), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp))
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -262,10 +284,18 @@ fun SetupScreen(
                     }
                 }
             }
+            val (left, total) = unplayed
+            Text(stringResource(R.string.setup_unplayed, left, total), style = MaterialTheme.typography.bodySmall, color = Neon.Muted, modifier = Modifier.padding(top = 12.dp).testTag("unplayed"))
+            if (left * 10 < total) {
+                Text(stringResource(R.string.setup_running_out), style = MaterialTheme.typography.bodySmall, color = Neon.Amber, modifier = Modifier.padding(top = 4.dp))
+            }
             Spacer(Modifier.height(16.dp))
         }
     }
 }
+
+/** Discussion timer choices, in seconds; 0 is off. */
+private val TIMER_OPTIONS = listOf(0, 60, 120, 180, 300)
 
 @Composable
 private fun SettingRow(title: String, subtitle: String?, control: @Composable () -> Unit) {

@@ -15,9 +15,12 @@ enum class GameMode {
     DRIFTER,
 }
 
-/** One secret: the civilians' word and, for CLASSIC/DRIFTER, the impostor's similar word. */
+/**
+ * One secret: the civilians' word and, for CLASSIC/DRIFTER, similar words for the impostor (one is
+ * picked per game, so a repeated word still plays differently).
+ */
 @Serializable
-data class Entry(val word: String, val decoy: String? = null)
+data class Entry(val word: String, val decoys: List<String> = emptyList())
 
 @Serializable
 data class WordPack(
@@ -38,6 +41,8 @@ data class GameSettings(
     val chaos: Boolean = false,
     /** Empty means "all packs". */
     val packIds: Set<String> = emptySet(),
+    /** Discussion countdown before each vote; 0 means no timer. */
+    val discussionSeconds: Int = 0,
 )
 
 /** What one player sees when it's their turn to look at the phone. */

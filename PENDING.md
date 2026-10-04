@@ -36,7 +36,8 @@ Lines are pruned as items ship. What has **shipped** lives in `apps/<app>/releas
 | 👤 | Play a real game with friends: word pairs, flow, readability | You · `./gradlew :apps:whos-lying:app:installDebug` |
 | 🔨 | Upload key, privacy page `privacy/whos-lying/`, store screenshots, Play Console | v1 feeling right after real games |
 | ⏳ | Open-source license (GPL-3.0 was the candidate) | Your decision · not licensed for now |
-| ⏳ | More packs / sharing packs between phones (QR or text) | Feedback after real use |
+| 🔨 | Grow built-in packs to ~15 × 40 pairs per language, 2–3 similar words each | Your screenshots of the categories people like |
+| ⏳ | Sharing packs between phones (QR or text) | Feedback after real use |
 
 ## repo
 

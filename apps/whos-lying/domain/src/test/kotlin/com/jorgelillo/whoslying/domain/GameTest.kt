@@ -12,7 +12,7 @@ import kotlin.test.assertTrue
 class GameTest {
 
     private val players = listOf("Ana", "Bea", "Carlos", "Dani", "Eva")
-    private val pack = WordPack("p", "Lugares", "🗺️", listOf(Entry("Playa", "Piscina"), Entry("Cine", "Teatro")))
+    private val pack = WordPack("p", "Lugares", "🗺️", listOf(Entry("Playa", listOf("Piscina")), Entry("Cine", listOf("Teatro"))))
 
     private fun deal(settings: GameSettings, seed: Int = 1, who: List<String> = players) =
         Game.deal(who, settings, pack, pack.entries.first(), Random(seed))
@@ -60,7 +60,7 @@ class GameTest {
 
     @Test
     fun eliminatedDrifterGuessesWithAccentsAndCaseIgnored() {
-        val game = Game.deal(players, GameSettings(GameMode.DRIFTER), pack, Entry("Café", "Té"), Random(3))
+        val game = Game.deal(players, GameSettings(GameMode.DRIFTER), pack, Entry("Café", listOf("Té")), Random(3))
         val drifter = game.cards.single { it.role == Role.DRIFTER }.player
         assertTrue(game.eliminate(drifter).drifterMustGuess)
         assertTrue(game.guess("  cafe "))
@@ -115,6 +115,41 @@ class GameTest {
     }
 
     @Test
+    fun noWordRepeatsUntilAlmostAllWerePlayed() {
+        val big = WordPack("big", "Big", "🔢", (1..100).map { Entry("w$it", listOf("d$it")) })
+        val recent = mutableListOf<String>()
+        repeat(90) { round ->
+            val (_, entry) = WordPicker.pick(listOf(big), recent, Random(round))
+            assertFalse(entry.word in recent, "repeated ${entry.word} after $round games")
+            recent.add(0, entry.word)
+        }
+        assertEquals(10 to 100, WordPicker.unplayed(listOf(big), recent))
+        // From here on, the oldest words come back first, never the ones just played.
+        repeat(50) { round ->
+            val (_, entry) = WordPicker.pick(listOf(big), recent, Random(1_000 + round))
+            assertFalse(entry.word in recent.take(89), "${entry.word} came back too soon")
+            recent.remove(entry.word)
+            recent.add(0, entry.word)
+        }
+    }
+
+    @Test
+    fun impostorGetsOneOfSeveralSimilarWords() {
+        val entry = Entry("Playa", listOf("Piscina", "Lago", "Río"))
+        val decoys = (0 until 60).map { seed ->
+            Game.deal(players, GameSettings(GameMode.CLASSIC), pack, entry, Random(seed)).cards.single { it.role == Role.IMPOSTOR }.word
+        }.toSet()
+        assertEquals(setOf("Piscina", "Lago", "Río"), decoys)
+    }
+
+    @Test
+    fun parsesSeveralSimilarWordsPerLine() {
+        val entries = WordPacks.parseEntries("Playa / Piscina / lago / Playa\n\n  Cine  \nplaya / Mar")
+        assertEquals(listOf(Entry("Playa", listOf("Piscina", "lago")), Entry("Cine")), entries)
+        assertEquals("Playa / Piscina / lago", WordPacks.toLine(entries.first()))
+    }
+
+    @Test
     fun builtInPacksAreWellFormed() {
         for (language in listOf("es", "en")) {
             val packs = WordPacks.builtIn(language)
@@ -122,7 +157,10 @@ class GameTest {
             for (p in packs) {
                 assertEquals(20, p.entries.size, p.name)
                 assertEquals(p.entries.size, p.entries.map { Rules.normalize(it.word) }.toSet().size, "duplicates in ${p.name}")
-                p.entries.forEach { assertNotEquals(Rules.normalize(it.word), Rules.normalize(it.decoy!!)) }
+                p.entries.forEach { e ->
+                    assertTrue(e.decoys.isNotEmpty(), "no similar word for ${e.word}")
+                    e.decoys.forEach { assertNotEquals(Rules.normalize(e.word), Rules.normalize(it)) }
+                }
             }
         }
     }

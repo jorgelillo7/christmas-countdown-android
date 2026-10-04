@@ -47,6 +47,12 @@ class GameViewModel(private val repository: StateRepository, language: String) :
 
     fun allPacks(state: SavedState): List<WordPack> = builtInPacks + state.customPacks
 
+    /** Packs the next game draws from: the selected ones, or all of them. */
+    fun selectedPacks(state: SavedState): List<WordPack> =
+        allPacks(state).filter { state.settings.packIds.isEmpty() || it.id in state.settings.packIds }.ifEmpty { builtInPacks }
+
+    fun unplayed(state: SavedState): Pair<Int, Int> = WordPicker.unplayed(selectedPacks(state), state.recentWords)
+
     // --- Players and settings -------------------------------------------------------------------
 
     fun addPlayer(name: String) = update { s ->
@@ -81,12 +87,11 @@ class GameViewModel(private val repository: StateRepository, language: String) :
     fun startGame(): Boolean {
         val s = saved.value ?: return false
         if (!Rules.canStart(s.players.size, s.settings)) return false
-        val packs = allPacks(s).filter { s.settings.packIds.isEmpty() || it.id in s.settings.packIds }.ifEmpty { builtInPacks }
-        val (pack, entry) = WordPicker.pick(packs, s.recentWords, Random.Default)
+        val (pack, entry) = WordPicker.pick(selectedPacks(s), s.recentWords, Random.Default)
         game = Game.deal(s.players, s.settings, pack, entry, Random.Default)
         lastElimination = null
         revision++
-        update { it.copy(recentWords = (listOf(entry.word) + it.recentWords).take(WordPicker.RECENT_MEMORY)) }
+        update { it.copy(recentWords = (listOf(entry.word) + (it.recentWords - entry.word)).take(WordPicker.RECENT_MEMORY)) }
         return true
     }
 

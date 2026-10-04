@@ -113,7 +113,7 @@ class Game private constructor(
             val shuffled = players.indices.shuffled(random)
             val impostorIdx = shuffled.take(impostors).toSet()
             val drifterIdx = shuffled.drop(impostors).take(drifters).toSet()
-            val decoy = entry.decoy ?: pack.entries.map { it.word }.filter { it != entry.word }.randomOrNull(random)
+            val decoy = entry.decoys.randomOrNull(random) ?: pack.entries.map { it.word }.filter { it != entry.word }.randomOrNull(random)
 
             val cards = players.mapIndexed { i, name ->
                 val role = when (i) {
@@ -141,14 +141,33 @@ class Game private constructor(
     }
 }
 
-/** Picks the next secret word, avoiding words used in recent games. */
+/**
+ * Picks the next secret word. A word doesn't come back until about 90% of the chosen packs have
+ * been played; after that, the ones played longest ago come first.
+ */
 object WordPicker {
-    const val RECENT_MEMORY = 40
+    /** Played words remembered across games, newest first. */
+    const val RECENT_MEMORY = 3000
+
+    /** Share of the pool kept available once almost everything was played. */
+    private const val FRESH_SHARE = 10
 
     fun pick(packs: List<WordPack>, recent: List<String>, random: Random): Pair<WordPack, Entry> {
         val all = packs.flatMap { pack -> pack.entries.map { pack to it } }
         require(all.isNotEmpty()) { "No words" }
-        val fresh = all.filterNot { (_, entry) -> entry.word in recent }
-        return (fresh.ifEmpty { all }).random(random)
+        val avoid = avoided(all.map { it.second.word }, recent)
+        return all.filterNot { (_, entry) -> entry.word in avoid }.ifEmpty { all }.random(random)
+    }
+
+    /** How many words of [packs] haven't been played yet, out of how many. */
+    fun unplayed(packs: List<WordPack>, recent: List<String>): Pair<Int, Int> {
+        val words = packs.flatMap { pack -> pack.entries.map { it.word } }.toSet()
+        return (words - recent.toSet()).size to words.size
+    }
+
+    private fun avoided(pool: List<String>, recent: List<String>): Set<String> {
+        val inPool = pool.toSet()
+        val window = inPool.size - (inPool.size / FRESH_SHARE).coerceAtLeast(1)
+        return recent.filter { it in inPool }.distinct().take(window).toSet()
     }
 }

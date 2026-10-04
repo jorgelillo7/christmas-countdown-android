@@ -1,5 +1,9 @@
 package com.jorgelillo.whoslying.ui.screens
 
+import android.media.AudioManager
+import android.media.ToneGenerator
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -32,19 +36,20 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -196,6 +201,8 @@ fun CountdownScreen(starter: String, onDone: () -> Unit) {
 @Composable
 fun VoteScreen(
     game: Game,
+    /** Countdown before each vote; 0 hides the timer. */
+    discussionSeconds: Int,
     /** Players still in. Passed in (not read from the mutable [game]) so the list recomposes. */
     alive: Set<String>,
     elimination: Elimination?,
@@ -220,6 +227,11 @@ fun VoteScreen(
         Text(stringResource(R.string.vote_title), style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Black)
         Text(stringResource(R.string.vote_desc), color = Neon.Muted)
         Text(stringResource(R.string.vote_starter, game.starter), color = Neon.Amber, modifier = Modifier.padding(top = 6.dp, bottom = 16.dp))
+        if (discussionSeconds > 0) {
+            // Keyed by the players left, so every round of discussion gets the full time.
+            key(alive.size) { DiscussionTimer(discussionSeconds) }
+            Spacer(Modifier.height(16.dp))
+        }
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             items(game.cards, key = { it.player }) { card ->
                 val out = card.player !in alive
@@ -380,4 +392,63 @@ private fun roleColor(role: Role): Color = when (role) {
     Role.CIVILIAN -> Neon.Turquoise
     Role.IMPOSTOR -> Neon.Pink
     Role.DRIFTER -> Neon.Amber
+}
+
+/** Tap to pause or resume. Beeps once when time is up. */
+@Composable
+private fun DiscussionTimer(seconds: Int) {
+    var left by rememberSaveable { mutableIntStateOf(seconds) }
+    var paused by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(paused) {
+        while (!paused && left > 0) {
+            delay(1_000)
+            left--
+            if (left == 0) beep()
+        }
+    }
+    val color = when {
+        left == 0 -> Neon.Pink
+        left <= 10 -> Neon.Amber
+        else -> Neon.Turquoise
+    }
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.large)
+            .background(Neon.Card)
+            .border(2.dp, color, MaterialTheme.shapes.large)
+            .clickable(enabled = left > 0) { paused = !paused }
+            .padding(horizontal = 20.dp, vertical = 12.dp)
+            .testTag("timer"),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text("⏱️", fontSize = 28.sp)
+        Text(
+            "%d:%02d".format(left / 60, left % 60),
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Black,
+            color = color,
+            modifier = Modifier.padding(horizontal = 14.dp),
+        )
+        Text(
+            stringResource(
+                when {
+                    left == 0 -> R.string.timer_up
+                    paused -> R.string.timer_paused
+                    else -> R.string.timer_pause
+                },
+            ),
+            color = if (left == 0) Neon.Pink else Neon.Muted,
+            fontWeight = if (left == 0) FontWeight.Bold else null,
+            modifier = Modifier.weight(1f),
+        )
+    }
+}
+
+private fun beep() {
+    runCatching {
+        val tone = ToneGenerator(AudioManager.STREAM_NOTIFICATION, ToneGenerator.MAX_VOLUME)
+        tone.startTone(ToneGenerator.TONE_PROP_BEEP2, 600)
+        Handler(Looper.getMainLooper()).postDelayed({ tone.release() }, 1_000)
+    }
 }

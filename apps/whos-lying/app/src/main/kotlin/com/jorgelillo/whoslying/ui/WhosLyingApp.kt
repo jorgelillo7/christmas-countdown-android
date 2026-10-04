@@ -20,6 +20,7 @@ import com.jorgelillo.whoslying.ui.screens.AboutSheet
 import com.jorgelillo.whoslying.ui.screens.CountdownScreen
 import com.jorgelillo.whoslying.ui.screens.HomeScreen
 import com.jorgelillo.whoslying.ui.screens.HowToSheet
+import com.jorgelillo.whoslying.ui.screens.ModesSheet
 import com.jorgelillo.whoslying.ui.screens.PackEditScreen
 import com.jorgelillo.whoslying.ui.screens.PacksScreen
 import com.jorgelillo.whoslying.ui.screens.PlayersScreen
@@ -33,18 +34,21 @@ private const val NEW = "new"
 @Composable
 fun WhosLyingApp(app: WhosLyingApplication) {
     val language = LocalConfiguration.current.locales[0].language
-    val vm: GameViewModel = viewModel(factory = GameViewModel.factory(app.repository, language))
+    // Keyed by language so the built-in packs follow a language change while the app is open.
+    val vm: GameViewModel = viewModel(key = "game-$language", factory = GameViewModel.factory(app.repository, language))
     val saved by vm.saved.collectAsStateWithLifecycle()
     val state = saved ?: return // first disk read in progress (a few ms)
     val nav = rememberNavController()
     var showHowTo by rememberSaveable { mutableStateOf(false) }
     var showAbout by rememberSaveable { mutableStateOf(false) }
+    var showModes by rememberSaveable { mutableStateOf(false) }
 
     NavHost(nav, startDestination = "home") {
         composable("home") {
             HomeScreen(
                 onPlay = { nav.navigate("players") },
                 onHowTo = { showHowTo = true },
+                onModes = { showModes = true },
                 onPacks = { nav.navigate("packs") },
                 onAbout = { showAbout = true },
             )
@@ -57,7 +61,9 @@ fun WhosLyingApp(app: WhosLyingApplication) {
                 playerCount = state.players.size,
                 settings = state.settings,
                 packs = vm.allPacks(state),
+                unplayed = vm.unplayed(state),
                 onChange = vm::updateSettings,
+                onModesInfo = { showModes = true },
                 onStart = { if (vm.startGame()) nav.navigate("reveal") },
                 onBack = { nav.popBackStack() },
             )
@@ -75,6 +81,7 @@ fun WhosLyingApp(app: WhosLyingApplication) {
             LaunchedEffect(vm.revision) { if (game.isOver) nav.navigate("result") { popUpTo("setup") } }
             VoteScreen(
                 game = game,
+                discussionSeconds = state.settings.discussionSeconds,
                 alive = remember(vm.revision) { game.alive.map { it.player }.toSet() },
                 elimination = vm.lastElimination,
                 onVote = vm::eliminate,
@@ -113,6 +120,7 @@ fun WhosLyingApp(app: WhosLyingApplication) {
 
     if (showHowTo) HowToSheet(onDismiss = { showHowTo = false })
     if (showAbout) AboutSheet(onDismiss = { showAbout = false })
+    if (showModes) ModesSheet(onDismiss = { showModes = false })
 }
 
 private fun NavHostController.goHome() {

@@ -102,8 +102,8 @@
         <item quantity="other">%d words</item>
     </plurals>
     <string name="pack_name">Pack name</string>
-    <string name="pack_words_label">One per line: word / similar word</string>
-    <string name="pack_words_help">The similar word is optional: without it the impostor gets another word from the pack.</string>
+    <string name="pack_words_label">One per line: word / similar / similar…</string>
+    <string name="pack_words_help">Similar words are optional and you can add several (Beach / Pool / Lake): the impostor gets one at random. Without them, they get another word from the pack.</string>
     <string name="pack_save">Save</string>
     <string name="pack_delete">Delete pack</string>
     <string name="pack_need">Add a name and at least 3 words</string>
@@ -123,4 +123,40 @@
     <string name="about_body">Free forever: every pack, no ads, no subscriptions, no tracking. Made with care by Jorge Lillo.</string>
     <string name="about_privacy">Privacy policy</string>
     <string name="about_rate">Rate on Google Play</string>
+
+    <!-- Home shortcuts, discussion timer, word pool -->
+    <string name="rules_short">Rules</string>
+    <string name="modes_short">Modes</string>
+    <string name="setup_which_mode">Which mode should we play?</string>
+    <string name="setup_timer">Discussion time</string>
+    <string name="setup_timer_desc">Countdown before each vote</string>
+    <string name="setup_timer_off">Off</string>
+    <string name="setup_timer_minutes">%1$d min</string>
+    <string name="setup_unplayed">Words still to come: %1$d of %2$d</string>
+    <string name="setup_running_out">You\'ve played almost all of them: the oldest will come back. Add more packs or create your own.</string>
+    <string name="timer_pause">Tap to pause</string>
+    <string name="timer_paused">Paused · tap to resume</string>
+    <string name="timer_up">Time\'s up! Vote</string>
+
+    <!-- Game modes guide -->
+    <string name="modes_title">Game modes</string>
+    <string name="modes_intro">All modes play the same way: everyone sees their word in secret, gives one clue per turn, and you vote someone out. What changes is who gets what.</string>
+    <string name="modes_who_gets">Who gets what</string>
+    <string name="modes_how_win">How to win</string>
+    <string name="modes_tip">Tip</string>
+    <string name="modes_classic_who">Civilians get the word. The impostor gets a similar one (Beach vs. Pool) and isn\'t told they\'re the impostor: everyone sees the same screen.</string>
+    <string name="modes_classic_win">Civilians: vote out every impostor. Impostors: last until only one civilian is left, without realising it at first.</string>
+    <string name="modes_classic_tip">If the others\' clues don\'t quite fit your word… maybe you\'re the impostor. The best mode once the group knows the game. From 3 players.</string>
+    <string name="modes_blind_who">Civilians get the word. Impostors get nothing and know they\'re impostors. With the category hint they at least see the pack name.</string>
+    <string name="modes_blind_win">The same: civilians vote them all out, impostors survive until one civilian is left.</string>
+    <string name="modes_blind_tip">Impostor: listen before you speak and give vague clues. Civilians: not too obvious or they\'ll catch on. Great for first games and kids. From 3 players.</string>
+    <string name="modes_drifter_who">Like Classic, plus one Drifter with no word who knows it. The Drifter never starts the round.</string>
+    <string name="modes_drifter_win">If the Drifter is voted out, they get one last guess at the word: get it right and they win alone. If not, the game goes on. If they survive until one civilian is left, they win with the impostors.</string>
+    <string name="modes_drifter_tip">Civilians: careful with clues that give the word away. Drifter: pretend and piece it together from the clues. From 4 players.</string>
+    <string name="modes_chaos_title">Chaos (any mode)</string>
+    <string name="modes_chaos">About one game in three ignores the impostor count: there can be one, several… or everyone. Nobody knows how many there are, so trust no one.</string>
+    <string name="modes_hint_title">Category hint</string>
+    <string name="modes_hint">In Blind and The Drifter, players without a word see which pack it comes from. Turn it off for a harder game.</string>
+    <string name="modes_timer_title">Discussion time</string>
+    <string name="modes_timer">An optional countdown before each vote, so nobody drags it out. It beeps when time\'s up.</string>
 </resources>

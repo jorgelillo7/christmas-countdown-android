@@ -34,8 +34,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.jorgelillo.whoslying.R
-import com.jorgelillo.whoslying.domain.Entry
 import com.jorgelillo.whoslying.domain.WordPack
+import com.jorgelillo.whoslying.domain.WordPacks
 import com.jorgelillo.whoslying.ui.theme.Neon
 
 @Composable
@@ -91,9 +91,9 @@ private fun PackRow(pack: WordPack, onClick: (() -> Unit)?) {
 fun PackEditScreen(initial: WordPack, isNew: Boolean, onSave: (WordPack) -> Unit, onDelete: () -> Unit, onBack: () -> Unit) {
     var name by rememberSaveable { mutableStateOf(initial.name) }
     var text by rememberSaveable {
-        mutableStateOf(initial.entries.joinToString("\n") { e -> if (e.decoy != null) "${e.word} / ${e.decoy}" else e.word })
+        mutableStateOf(initial.entries.joinToString("\n", transform = WordPacks::toLine))
     }
-    val entries = parseEntries(text)
+    val entries = WordPacks.parseEntries(text)
     val valid = name.isNotBlank() && entries.size >= 3
 
     Page(
@@ -133,10 +133,3 @@ fun PackEditScreen(initial: WordPack, isNew: Boolean, onSave: (WordPack) -> Unit
         )
     }
 }
-
-/** "Playa / Piscina" → Entry(Playa, Piscina); "Playa" → Entry(Playa). Blank and duplicate lines are dropped. */
-fun parseEntries(text: String): List<Entry> = text.lines()
-    .map { line -> line.split("/").map { it.trim() } }
-    .filter { it.first().isNotEmpty() }
-    .map { parts -> Entry(parts[0], parts.getOrNull(1)?.takeIf { it.isNotEmpty() && it != parts[0] }) }
-    .distinctBy { it.word.lowercase() }
