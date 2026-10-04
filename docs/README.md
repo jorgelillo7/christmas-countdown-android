@@ -6,7 +6,7 @@ One entry per document. Runbooks first, then setup, then reference.
 
 | Doc | What's in it |
 |---|---|
-| [`operations.md`](operations.md) | Repo-wide runbook: prerequisites, build/test, shared scripts, release steps. Per-app commands live in `apps/<app>/operations.md` |
+| [`operations.md`](operations.md) | Repo-wide runbook: prerequisites, build/test, shared scripts, release steps. Per-app commands live in `apps/<app>/OPERATIONS.md` |
 | [`publishing-on-google-play.md`](publishing-on-google-play.md) | End-to-end Play checklist: account, signing, App content declarations, store listing, release tracks, review |
 | [`adding-a-new-app.md`](adding-a-new-app.md) | Folder layout, Gradle setup, icon, privacy policy and store assets for a new app |
 
@@ -26,7 +26,7 @@ One entry per document. Runbooks first, then setup, then reference.
 
 | App | Operations | Release notes |
 |---|---|---|
-| Christmas Countdown | [`operations.md`](../apps/christmas-countdown/operations.md) | [`release-notes.md`](../apps/christmas-countdown/release-notes.md) |
+| Christmas Countdown | [`OPERATIONS.md`](../apps/christmas-countdown/OPERATIONS.md) | [`release-notes.md`](../apps/christmas-countdown/release-notes.md) |
 
 Shared scripts: [`scripts/`](../scripts). Branding: [`branding/`](../branding).
 Claude Code skills: [`.claude/skills/`](../.claude/skills) — `upgrade-android-deps`, `release-android-app`.

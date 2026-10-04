@@ -6,7 +6,7 @@ description: Prepare and ship a new version of one of the apps in this repo to G
 # Release an app to Google Play
 
 Ask which app (`apps/<app>`) if there is more than one. Full background:
-`docs/publishing-on-google-play.md`. App-specific commands: `apps/<app>/operations.md`.
+`docs/publishing-on-google-play.md`. App-specific commands: `apps/<app>/OPERATIONS.md`.
 
 ## 1. Version
 
@@ -44,7 +44,7 @@ open -R apps/<app>/app/build/outputs/bundle/release/app-release.aab
 
 Check in the `verify-bundle.sh` output:
 - `versionCode` is the new one (a stale bundle from an earlier build is easy to upload by mistake).
-- Signature serial matches the app's upload key (see `apps/<app>/operations.md`). "NOT SIGNED"
+- Signature serial matches the app's upload key (see `apps/<app>/OPERATIONS.md`). "NOT SIGNED"
   means `apps/<app>/keystore.properties` is missing: the user must create it; never ask them to
   paste passwords into the chat.
 - New permissions vs. the previous release → the Data safety form may need updating.

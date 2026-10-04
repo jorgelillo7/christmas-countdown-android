@@ -1,7 +1,7 @@
 # Operations — repo-wide runbook
 
 Commands shared by every app. Per-app commands (module paths, release steps, signing) live in
-`apps/<app>/operations.md`; release history in `apps/<app>/release-notes.md`.
+`apps/<app>/OPERATIONS.md`; release history in `apps/<app>/release-notes.md`.
 
 ## Prerequisites
 

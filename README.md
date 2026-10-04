@@ -22,6 +22,7 @@
 ## 🗂️ Repository layout
 
 ```
+PENDING.md                         Open work, one line per item
 docs/                              Runbook (operations.md), Google Play guide, setup/toolchain, adding an app
 scripts/                           Shared scripts: env, emulator, screenshots, bundle verification
 branding/                          Developer profile images (Play Console) and their generator
@@ -35,7 +36,7 @@ apps/
     ├── domain/                    :apps:christmas-countdown:domain — pure Kotlin business logic
     ├── store/                     Play Store listing: texts and images per language
     ├── tools/                     App-specific scripts (icon, store assets, smoke test)
-    ├── operations.md              Every command to run, test and release the app
+    ├── OPERATIONS.md              Every command to run, test and release the app
     └── release-notes.md           Version history
 ```
 
