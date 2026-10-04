@@ -33,10 +33,10 @@ import com.jorgelillo.whoslying.ui.screens.PackPickerScreen
 import com.jorgelillo.whoslying.ui.screens.PacksScreen
 import com.jorgelillo.whoslying.ui.screens.PlayersScreen
 import com.jorgelillo.whoslying.ui.screens.PodiumScreen
+import com.jorgelillo.whoslying.ui.screens.RankingScreen
 import com.jorgelillo.whoslying.ui.screens.ReportSheet
 import com.jorgelillo.whoslying.ui.screens.ResultScreen
 import com.jorgelillo.whoslying.ui.screens.RevealScreen
-import com.jorgelillo.whoslying.ui.screens.ScoresSheet
 import com.jorgelillo.whoslying.ui.screens.SettingsSheet
 import com.jorgelillo.whoslying.ui.screens.SetupScreen
 import com.jorgelillo.whoslying.ui.screens.TimeUpScreen
@@ -55,7 +55,6 @@ fun WhosLyingApp(app: WhosLyingApplication) {
     var showHowTo by rememberSaveable { mutableStateOf(false) }
     var showAbout by rememberSaveable { mutableStateOf(false) }
     var showModes by rememberSaveable { mutableStateOf(false) }
-    var showScores by rememberSaveable { mutableStateOf(false) }
     var showReport by rememberSaveable { mutableStateOf(false) }
 
     NavHost(nav, startDestination = "home") {
@@ -157,12 +156,23 @@ fun WhosLyingApp(app: WhosLyingApplication) {
                 lastElimination = vm.lastElimination,
                 drawing = vm.strokes,
                 onShareDrawing = { shareDrawing(context, vm.strokes, caption) },
-                onScores = { showScores = true },
                 roundsLeft = state.settings.rounds.takeIf { it > 0 }?.let { Match.remaining(state.roundsPlayed, it) },
                 onSeeWinner = { nav.navigate("podium") { popUpTo("setup") } },
                 onReport = { showReport = true },
-                onPlayAgain = { if (vm.startGame()) nav.navigate("reveal") { popUpTo("setup") } },
+                onContinue = { nav.navigate("ranking") },
                 onHome = { nav.goHome() },
+            )
+        }
+        composable("ranking") {
+            RankingScreen(
+                players = state.players,
+                scores = state.scores,
+                lastPoints = vm.lastPoints,
+                roundsLeft = state.settings.rounds.takeIf { it > 0 }?.let { Match.remaining(state.roundsPlayed, it) },
+                roundsPlayed = state.roundsPlayed,
+                onNextRound = { if (vm.startGame()) nav.navigate("reveal") { popUpTo("setup") } },
+                onReset = vm::resetScores,
+                onBack = { nav.popBackStack() },
             )
         }
         composable("podium") {
@@ -218,7 +228,6 @@ fun WhosLyingApp(app: WhosLyingApplication) {
             onDismiss = { showReport = false },
         )
     }
-    if (showScores) ScoresSheet(state.players, state.scores, vm.lastPoints, state.roundsPlayed, state.settings.rounds, onReset = vm::resetScores, onDismiss = { showScores = false })
 }
 
 private fun NavHostController.goHome() {
