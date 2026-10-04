@@ -249,6 +249,9 @@ fun SetupScreen(
             SettingRow(stringResource(R.string.setup_chaos), stringResource(R.string.setup_chaos_desc)) {
                 NeonSwitch(settings.chaos, "chaos") { v -> onChange { it.copy(chaos = v) } }
             }
+            SettingRow("🎨 " + stringResource(R.string.setup_drawing), stringResource(R.string.setup_drawing_desc)) {
+                NeonSwitch(settings.drawing, "drawing") { v -> onChange { it.copy(drawing = v) } }
+            }
             SettingRow(stringResource(R.string.setup_timer), stringResource(R.string.setup_timer_desc)) {
                 val step = TIMER_OPTIONS.indexOf(settings.discussionSeconds).coerceAtLeast(0)
                 IconButton(onClick = { onChange { it.copy(discussionSeconds = TIMER_OPTIONS[step - 1]) } }, enabled = step > 0, modifier = Modifier.testTag("timer_minus")) {

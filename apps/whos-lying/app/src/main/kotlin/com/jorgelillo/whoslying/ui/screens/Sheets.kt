@@ -92,6 +92,8 @@ fun ModesSheet(onDismiss: () -> Unit) {
                 }
             }
             listOf(
+                Triple("🎨", R.string.modes_drawing_title, R.string.modes_drawing),
+                Triple("🏆", R.string.modes_scores_title, R.string.modes_scores),
                 Triple("🌀", R.string.modes_chaos_title, R.string.modes_chaos),
                 Triple("💡", R.string.modes_hint_title, R.string.modes_hint),
                 Triple("⏱️", R.string.modes_timer_title, R.string.modes_timer),

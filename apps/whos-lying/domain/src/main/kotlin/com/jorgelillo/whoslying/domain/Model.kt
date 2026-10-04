@@ -43,6 +43,8 @@ data class GameSettings(
     val packIds: Set<String> = emptySet(),
     /** Discussion countdown before each vote; 0 means no timer. */
     val discussionSeconds: Int = 0,
+    /** Clues are drawn together on one canvas instead of said out loud. Works with every mode. */
+    val drawing: Boolean = false,
 )
 
 /** What one player sees when it's their turn to look at the phone. */

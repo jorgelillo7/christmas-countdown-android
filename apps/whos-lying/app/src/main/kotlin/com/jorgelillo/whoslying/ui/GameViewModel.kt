@@ -2,6 +2,7 @@ package com.jorgelillo.whoslying.ui
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -15,6 +16,7 @@ import com.jorgelillo.whoslying.domain.Elimination
 import com.jorgelillo.whoslying.domain.Game
 import com.jorgelillo.whoslying.domain.GameSettings
 import com.jorgelillo.whoslying.domain.Rules
+import com.jorgelillo.whoslying.domain.Scoring
 import com.jorgelillo.whoslying.domain.WordPack
 import com.jorgelillo.whoslying.domain.WordPacks
 import com.jorgelillo.whoslying.domain.WordPicker
@@ -44,6 +46,15 @@ class GameViewModel(private val repository: StateRepository, language: String) :
 
     var lastElimination: Elimination? by mutableStateOf(null)
         private set
+
+    /** Drawing mode: the shared canvas of the game in progress, kept across rounds. */
+    val strokes = mutableStateListOf<DrawStroke>()
+
+    /** Points the last finished game gave, to show next to the totals. */
+    var lastPoints: Map<String, Int> by mutableStateOf(emptyMap())
+        private set
+
+    private var scoredGame: Game? = null
 
     fun allPacks(state: SavedState): List<WordPack> = builtInPacks + state.customPacks
 
@@ -105,6 +116,8 @@ class GameViewModel(private val repository: StateRepository, language: String) :
         val (pack, entry) = WordPicker.pick(selectedPacks(s), s.recentWords, Random.Default)
         game = Game.deal(s.players, s.settings, pack, entry, Random.Default)
         lastElimination = null
+        lastPoints = emptyMap()
+        strokes.clear()
         revision++
         update { it.copy(recentWords = (listOf(entry.word) + (it.recentWords - entry.word)).take(WordPicker.RECENT_MEMORY)) }
         return true
@@ -112,12 +125,12 @@ class GameViewModel(private val repository: StateRepository, language: String) :
 
     fun eliminate(player: String) {
         lastElimination = game?.eliminate(player)
-        revision++
+        changed()
     }
 
     fun guess(text: String): Boolean {
         val right = game?.guess(text) ?: false
-        revision++
+        changed()
         return right
     }
 
@@ -127,7 +140,22 @@ class GameViewModel(private val repository: StateRepository, language: String) :
 
     fun revealAll() {
         game?.reveal()
+        changed()
+    }
+
+    fun resetScores() = update { it.copy(scores = emptyMap()) }
+
+    /** Bumps [revision] and, once per game, adds the winners' points to the running scores. */
+    private fun changed() {
         revision++
+        val current = game ?: return
+        if (!current.isOver || scoredGame === current) return
+        scoredGame = current
+        val points = Scoring.points(current)
+        lastPoints = points
+        if (points.isNotEmpty()) {
+            update { s -> s.copy(scores = s.scores + points.mapValues { (player, p) -> (s.scores[player] ?: 0) + p }) }
+        }
     }
 
     private fun update(transform: (SavedState) -> SavedState) {

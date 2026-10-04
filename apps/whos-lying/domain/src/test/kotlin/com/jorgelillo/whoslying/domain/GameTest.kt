@@ -109,6 +109,29 @@ class GameTest {
     }
 
     @Test
+    fun winnersScoreWhetherEliminatedOrNot() {
+        val civiliansWin = deal(GameSettings(GameMode.CLASSIC))
+        val civilians = civiliansWin.cards.filter { it.role == Role.CIVILIAN }.map { it.player }
+        civiliansWin.eliminate(civiliansWin.cards.single { it.role == Role.IMPOSTOR }.player)
+        assertEquals(civilians.associateWith { Scoring.CIVILIAN_WIN }, Scoring.points(civiliansWin))
+
+        val impostorsWin = deal(GameSettings(GameMode.CLASSIC), who = listOf("Ana", "Bea", "Carlos"))
+        impostorsWin.eliminate(impostorsWin.cards.first { it.role == Role.CIVILIAN }.player)
+        val impostor = impostorsWin.cards.single { it.role == Role.IMPOSTOR }.player
+        assertEquals(mapOf(impostor to Scoring.INFILTRATOR_WIN), Scoring.points(impostorsWin))
+
+        val drifterGame = Game.deal(players, GameSettings(GameMode.DRIFTER), pack, Entry("Café", listOf("Té")), Random(3))
+        val drifter = drifterGame.cards.single { it.role == Role.DRIFTER }.player
+        drifterGame.eliminate(drifter)
+        drifterGame.guess("café")
+        assertEquals(mapOf(drifter to Scoring.INFILTRATOR_WIN), Scoring.points(drifterGame))
+
+        val ended = deal(GameSettings(GameMode.CLASSIC))
+        ended.reveal()
+        assertTrue(Scoring.points(ended).isEmpty())
+    }
+
+    @Test
     fun pickerAvoidsRecentWords() {
         val (_, entry) = WordPicker.pick(listOf(pack), recent = listOf("Playa"), random = Random(1))
         assertEquals("Cine", entry.word)

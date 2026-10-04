@@ -18,6 +18,8 @@
 - 📝 **Your own packs:** one word per line, `word / similar / similar…` (similar words are optional; the impostor gets one at random)
 - 🔁 No word repeats until ~90% of the chosen packs were played, then the oldest come back first; setup shows how many are left
 - ⏱️ Optional discussion timer before each vote (1–5 min, tap to pause, beeps at zero)
+- 🎨 **Drawing mode** (with any mode): clues are drawn together on one canvas (7 inks, undo, clear) instead of said; the drawing is shown and shareable at the end
+- 🏆 **Scores** across games: winners score (civilians 5, impostors/drifter 15), ranking on the result screen
 - 📘 In-app guide to every mode (home → Modes, or "Which mode?" in setup)
 - ⚙️ Settings: in-app language (Android 13+), share with friends, rate, privacy
 - 🚫 No ads, no accounts, no network, no data collected

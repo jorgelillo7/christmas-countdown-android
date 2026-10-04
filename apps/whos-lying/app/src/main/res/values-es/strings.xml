@@ -196,4 +196,20 @@
         <item quantity="other">Impostores</item>
     </plurals>
     <string name="report_action">Reportar esta palabra</string>
+
+    <!-- Modo dibujo y puntos -->
+    <string name="setup_drawing">Modo dibujo</string>
+    <string name="setup_drawing_desc">Nada de hablar: dibujad la palabra entre todos, un trazo cada uno</string>
+    <string name="drawing_turns">Empieza %1$s. Pasaos el móvil: cada uno añade algo, ¡sin hablar!</string>
+    <string name="result_drawing">El dibujo</string>
+    <string name="result_share">Compartir</string>
+    <string name="drawing_share_caption">Nuestro dibujo de «%1$s» en ¿Quién miente? %2$s</string>
+    <string name="modes_drawing_title">Modo dibujo (en cualquier modo)</string>
+    <string name="modes_drawing">En vez de decir pistas, dibujáis la palabra entre todos en el mismo lienzo: pasaos el móvil y cada uno añade un trazo o un detalle. Los impostores dibujan su palabra… o se tiran el farol. Luego se vota igual, y al final podéis compartir la obra de arte.</string>
+    <string name="modes_scores_title">Puntos</string>
+    <string name="modes_scores">Puntúan todos los del bando ganador, aunque los hayan eliminado: civiles 5 puntos, impostores y Despistado 15. Los puntos se suman partida a partida; toca 🏆 al final para ver la clasificación.</string>
+    <string name="scores_title">Clasificación</string>
+    <string name="scores_rules">Los civiles ganan 5 puntos; los impostores y el Despistado, 15.</string>
+    <string name="scores_reset">Poner el marcador a cero</string>
+    <string name="scores_reset_confirm">Toca otra vez para borrarlo</string>
 </resources>

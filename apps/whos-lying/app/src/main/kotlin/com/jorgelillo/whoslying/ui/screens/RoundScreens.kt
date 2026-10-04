@@ -69,6 +69,7 @@ import com.jorgelillo.whoslying.domain.Elimination
 import com.jorgelillo.whoslying.domain.Game
 import com.jorgelillo.whoslying.domain.Outcome
 import com.jorgelillo.whoslying.domain.Role
+import com.jorgelillo.whoslying.ui.DrawStroke
 import com.jorgelillo.whoslying.ui.theme.Neon
 import kotlinx.coroutines.delay
 import kotlin.random.Random
@@ -199,7 +200,7 @@ private fun CircularTimer(seconds: Int) {
     }
 }
 
-private fun beep() {
+internal fun beep() {
     runCatching {
         val tone = ToneGenerator(AudioManager.STREAM_NOTIFICATION, ToneGenerator.MAX_VOLUME)
         tone.startTone(ToneGenerator.TONE_PROP_BEEP2, 600)
@@ -382,7 +383,16 @@ private fun EliminatedCard(card: Card, game: Game, guessResult: Boolean?, onGues
 
 /** End of the game: who won, the words, who was who, and confetti when someone won. */
 @Composable
-fun ResultScreen(game: Game, lastElimination: Elimination?, onReport: (() -> Unit)?, onPlayAgain: () -> Unit, onHome: () -> Unit) {
+fun ResultScreen(
+    game: Game,
+    lastElimination: Elimination?,
+    drawing: List<DrawStroke>,
+    onShareDrawing: () -> Unit,
+    onScores: () -> Unit,
+    onReport: (() -> Unit)?,
+    onPlayAgain: () -> Unit,
+    onHome: () -> Unit,
+) {
     val outcome = game.outcome
     val impostors = game.cards.filter { it.role == Role.IMPOSTOR }
     val drifter = game.cards.firstOrNull { it.role == Role.DRIFTER }
@@ -418,7 +428,14 @@ fun ResultScreen(game: Game, lastElimination: Elimination?, onReport: (() -> Uni
             onBack = null,
             background = background,
             bottom = {
-                BigButton(stringResource(R.string.play_again), onPlayAgain, Modifier.testTag("play_again"), color = GoGreen, contentColor = Neon.Night)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        Modifier.size(60.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.25f)).clickable(onClick = onScores).testTag("scores"),
+                        contentAlignment = Alignment.Center,
+                    ) { Text("🏆", fontSize = 26.sp) }
+                    Spacer(Modifier.width(12.dp))
+                    BigButton(stringResource(R.string.play_again), onPlayAgain, Modifier.weight(1f).testTag("play_again"), color = GoGreen, contentColor = Neon.Night)
+                }
                 TextButton(onClick = onHome, modifier = Modifier.align(Alignment.CenterHorizontally).testTag("home")) {
                     Text(stringResource(R.string.home), color = Color.White.copy(alpha = 0.85f))
                 }
@@ -438,6 +455,18 @@ fun ResultScreen(game: Game, lastElimination: Elimination?, onReport: (() -> Uni
                         LabelValue(pluralStringResource(R.plurals.result_impostors_label, impostors.size), impostors.joinToString { it.player })
                     }
                     drifter?.let { LabelValue(stringResource(R.string.role_drifter), it.player) }
+                }
+                if (drawing.isNotEmpty()) {
+                    Spacer(Modifier.height(12.dp))
+                    ResultPanel {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(stringResource(R.string.result_drawing), color = Color.White.copy(alpha = 0.7f), style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f))
+                            TextButton(onClick = onShareDrawing, modifier = Modifier.testTag("share_drawing")) {
+                                Text("↗ " + stringResource(R.string.result_share), color = Color.White)
+                            }
+                        }
+                        DrawingPreview(drawing, Modifier.fillMaxWidth(0.8f).padding(top = 6.dp))
+                    }
                 }
                 Spacer(Modifier.height(12.dp))
                 ResultPanel {

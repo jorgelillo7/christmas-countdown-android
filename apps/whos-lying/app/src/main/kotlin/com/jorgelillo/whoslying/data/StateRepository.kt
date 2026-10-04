@@ -13,13 +13,15 @@ import kotlinx.serialization.json.Json
 
 private val Context.dataStore by preferencesDataStore(name = "whos_lying")
 
-/** What survives between games: the group, the last setup, your packs and recently used words. */
+/** What survives between games: the group, the last setup, your packs, recently used words and scores. */
 @Serializable
 data class SavedState(
     val players: List<String> = emptyList(),
     val settings: GameSettings = GameSettings(),
     val customPacks: List<WordPack> = emptyList(),
     val recentWords: List<String> = emptyList(),
+    /** Running points per player across games, until the group resets them. */
+    val scores: Map<String, Int> = emptyMap(),
 )
 
 /** The whole saved state as one JSON document in DataStore. */
