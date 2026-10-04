@@ -234,4 +234,18 @@
     <string name="podium_new_match">New match</string>
     <string name="time_up">Time\'s up!</string>
     <string name="setup_recommended">Recommended: %1$s</string>
+
+    <!-- Report a word -->
+    <string name="report_title">Report this word</string>
+    <string name="report_word">Civilians\' word: %1$s</string>
+    <string name="report_decoy">Impostor\'s word: %1$s</string>
+    <string name="report_pick">Pick everything that applies</string>
+    <string name="report_offensive">Offensive</string>
+    <string name="report_typo">Spelling mistake</string>
+    <string name="report_not_similar">The words don\'t match</string>
+    <string name="report_difficulty">Too easy or too hard</string>
+    <string name="report_other">Something else</string>
+    <string name="report_comment">More details (optional)</string>
+    <string name="report_privacy">A Google form opens in your browser with this word and what you wrote, ready to send. Nothing else is shared.</string>
+    <string name="report_send">Open the form</string>
 </resources>

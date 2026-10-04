@@ -229,4 +229,18 @@
     <string name="podium_new_match">Nueva partida</string>
     <string name="time_up">¡Se acabó\nel tiempo!</string>
     <string name="setup_recommended">Recomendado: %1$s</string>
+
+    <!-- Reportar palabra -->
+    <string name="report_title">Reportar esta palabra</string>
+    <string name="report_word">Palabra de los civiles: %1$s</string>
+    <string name="report_decoy">Palabra del impostor: %1$s</string>
+    <string name="report_pick">Marca todo lo que aplique</string>
+    <string name="report_offensive">Ofensiva</string>
+    <string name="report_typo">Falta de ortografía</string>
+    <string name="report_not_similar">Las palabras no se parecen</string>
+    <string name="report_difficulty">Demasiado fácil o difícil</string>
+    <string name="report_other">Otra cosa</string>
+    <string name="report_comment">Más detalles (opcional)</string>
+    <string name="report_privacy">Se abrirá un formulario de Google en el navegador con esta palabra y lo que escribas, listo para enviar. No se comparte nada más.</string>
+    <string name="report_send">Abrir el formulario</string>
 </resources>

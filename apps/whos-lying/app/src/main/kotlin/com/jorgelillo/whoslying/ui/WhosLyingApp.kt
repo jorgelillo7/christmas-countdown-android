@@ -33,6 +33,7 @@ import com.jorgelillo.whoslying.ui.screens.PackPickerScreen
 import com.jorgelillo.whoslying.ui.screens.PacksScreen
 import com.jorgelillo.whoslying.ui.screens.PlayersScreen
 import com.jorgelillo.whoslying.ui.screens.PodiumScreen
+import com.jorgelillo.whoslying.ui.screens.ReportSheet
 import com.jorgelillo.whoslying.ui.screens.ResultScreen
 import com.jorgelillo.whoslying.ui.screens.RevealScreen
 import com.jorgelillo.whoslying.ui.screens.ScoresSheet
@@ -55,6 +56,7 @@ fun WhosLyingApp(app: WhosLyingApplication) {
     var showAbout by rememberSaveable { mutableStateOf(false) }
     var showModes by rememberSaveable { mutableStateOf(false) }
     var showScores by rememberSaveable { mutableStateOf(false) }
+    var showReport by rememberSaveable { mutableStateOf(false) }
 
     NavHost(nav, startDestination = "home") {
         composable("home") {
@@ -158,7 +160,7 @@ fun WhosLyingApp(app: WhosLyingApplication) {
                 onScores = { showScores = true },
                 roundsLeft = state.settings.rounds.takeIf { it > 0 }?.let { Match.remaining(state.roundsPlayed, it) },
                 onSeeWinner = { nav.navigate("podium") { popUpTo("setup") } },
-                onReport = null,
+                onReport = { showReport = true },
                 onPlayAgain = { if (vm.startGame()) nav.navigate("reveal") { popUpTo("setup") } },
                 onHome = { nav.goHome() },
             )
@@ -206,6 +208,16 @@ fun WhosLyingApp(app: WhosLyingApplication) {
     if (showHowTo) HowToSheet(onDismiss = { showHowTo = false })
     if (showAbout) SettingsSheet(onHowTo = { showHowTo = true }, onModes = { showModes = true }, onDismiss = { showAbout = false })
     if (showModes) ModesSheet(onDismiss = { showModes = false })
+    val reported = vm.game
+    if (showReport && reported != null) {
+        ReportSheet(
+            word = reported.civilianWord,
+            decoy = reported.cards.firstNotNullOfOrNull { card -> card.word?.takeIf { it != reported.civilianWord } },
+            pack = reported.category,
+            language = language,
+            onDismiss = { showReport = false },
+        )
+    }
     if (showScores) ScoresSheet(state.players, state.scores, vm.lastPoints, state.roundsPlayed, state.settings.rounds, onReset = vm::resetScores, onDismiss = { showScores = false })
 }
 
