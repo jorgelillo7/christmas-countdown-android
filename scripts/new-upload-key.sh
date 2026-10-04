@@ -6,7 +6,7 @@
 #
 # Usage: scripts/new-upload-key.sh <app-folder> [keys-dir]
 #   app-folder  folder under apps/, e.g. decision-wheel
-#   keys-dir    where the .jks goes (default: ~/Projects/documentación/keys/<app-folder>)
+#   keys-dir    where the .jks goes (default: ~/Projects/documentation/keys/<app-folder>)
 #
 # See docs/signing.md for the whole process (backup, Play App Signing, lost key).
 set -euo pipefail
@@ -15,7 +15,7 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 app="${1:?usage: new-upload-key.sh <app-folder> [keys-dir]}"
 [ -d "$ROOT/apps/$app" ] || { echo "No such app: apps/$app" >&2; exit 1; }
-dir="${2:-$HOME/Projects/documentación/keys/$app}"
+dir="${2:-$HOME/Projects/documentation/keys/$app}"
 jks="$dir/upload-$app.jks"
 props="$ROOT/apps/$app/keystore.properties"
 alias="upload"
@@ -37,10 +37,14 @@ export KEY_PASSWORD
   -alias "$alias" -keyalg RSA -keysize 4096 -validity 10000 \
   -dname "CN=Jorge Lillo"
 
+# Gradle reads .properties as ISO-8859-1: escape any non-ASCII path characters as \uXXXX so a
+# custom keys-dir with accents still works (the default path is plain ASCII).
+jks_escaped="$(printf '%s' "$jks" | python3 -c 'import sys; print("".join(c if ord(c) < 128 else "\\u%04x" % ord(c) for c in sys.stdin.read()))')"
+
 umask 077   # keystore.properties holds the password: readable by you only
 cat > "$props" <<EOF
 # Upload key for $app. Git-ignored: never commit this file.
-storeFile=$jks
+storeFile=$jks_escaped
 storePassword=$KEY_PASSWORD
 keyAlias=$alias
 keyPassword=$KEY_PASSWORD

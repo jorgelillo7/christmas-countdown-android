@@ -7,13 +7,16 @@ days and a support request. Treat it like a password.
 
 | Thing | Where | Secret? |
 |---|---|---|
-| `upload-<app>.jks` (the key) | `~/Projects/documentación/keys/<app>/` + an off-Mac backup | **Yes** |
+| `upload-<app>.jks` (the key) | `~/Projects/documentation/keys/<app>/` + an off-Mac backup | **Yes** |
 | Its password | Password manager | **Yes** |
 | `apps/<app>/keystore.properties` | Repo folder, git-ignored | **Yes** (contains the password) |
 | Certificate fingerprints (SHA-1/SHA-256, serial) | `apps/<app>/OPERATIONS.md` | No |
 
-Christmas Countdown's key predates this layout: `~/Projects/documentación/christmas countdown/christmas.jks`
-(alias `key0`). Don't move it without updating its `keystore.properties`.
+Christmas Countdown's key keeps its 2021 name: `~/Projects/documentation/keys/christmas-countdown/christmas.jks`
+(alias `key0`). If you move any key, update the app's `keystore.properties` (`storeFile`).
+
+Keep folder names ASCII without spaces: `.properties` files are read as ISO-8859-1, so accents
+or stray spaces in the path break signing.
 
 ## Create one (new app)
 
@@ -25,7 +28,7 @@ cd ~/Projects/lillo-android-apps
 scripts/new-upload-key.sh <app-folder>          # e.g. decision-wheel
 ```
 
-It creates `~/Projects/documentación/keys/<app>/upload-<app>.jks` (RSA 4096, PKCS12, alias
+It creates `~/Projects/documentation/keys/<app>/upload-<app>.jks (RSA 4096, PKCS12, alias
 `upload`, ~27 years) and `apps/<app>/keystore.properties` with the password (git-ignored,
 readable only by you), and prints the fingerprints.
 

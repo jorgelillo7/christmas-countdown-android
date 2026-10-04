@@ -53,6 +53,7 @@ check `verify-bundle.sh` output and to recognise the key in Play Console → App
 
 | | |
 |---|---|
+| File | `~/Projects/documentation/keys/christmas-countdown/christmas.jks` (+ off-Mac backup) |
 | Alias | `key0` (created 29 Aug 2021) |
 | Serial | `2a72affc` |
 | SHA-1 | `33:90:93:3B:B2:7C:97:B5:93:4C:24:2B:2C:4C:DD:FE:11:82:8F:3F` |
