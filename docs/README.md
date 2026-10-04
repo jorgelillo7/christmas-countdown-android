@@ -16,3 +16,6 @@ Per-app docs live next to each app:
 | Christmas Countdown | [OPERATIONS.md](../apps/christmas-countdown/OPERATIONS.md) | [Relaunch 2026](../apps/christmas-countdown/docs/relaunch-2026.md) |
 
 Shared scripts are in [`scripts/`](../scripts) and shared branding in [`branding/`](../branding).
+
+Claude Code skills for repeatable operations live in [`.claude/skills/`](../.claude/skills):
+`upgrade-android-deps` (toolchain and library upgrades) and `release-android-app` (ship a new version).
