@@ -75,7 +75,6 @@
     <string name="role_civilian">Civil</string>
     <string name="role_impostor">Impostor</string>
     <string name="role_drifter">Despistado</string>
-    <string name="play_again">Otra partida</string>
     <string name="home">Inicio</string>
 
     <string name="packs_builtin">Incluidos</string>
@@ -207,7 +206,7 @@
     <string name="modes_drawing_title">Modo dibujo (en cualquier modo)</string>
     <string name="modes_drawing">En vez de decir pistas, dibujáis la palabra entre todos en el mismo lienzo: pasaos el móvil y cada uno añade un trazo o un detalle. Los impostores no reciben palabra (solo la categoría, si la pista está activada) y tienen que tirarse el farol. Luego se vota igual, y al final podéis compartir la obra de arte.</string>
     <string name="modes_scores_title">Puntos</string>
-    <string name="modes_scores">Puntúan todos los del bando ganador, aunque los hayan eliminado: civiles 5 puntos, impostores y Despistado 15. Los puntos se suman durante la partida (10 rondas por defecto, cámbialo en la configuración); toca 🏆 para ver la clasificación y, tras la última ronda, el podio corona al ganador.</string>
+    <string name="modes_scores">Puntúan todos los del bando ganador, aunque los hayan eliminado: civiles 5 puntos, impostores y Despistado 15. Los puntos se suman durante la partida (10 rondas por defecto, cámbialo en la configuración); tras cada ronda veis la clasificación y, al acabar la última, se corona al ganador.</string>
     <string name="scores_title">Clasificación</string>
     <string name="scores_rules">Los civiles ganan 5 puntos; los impostores y el Despistado, 15.</string>
     <string name="scores_reset">Poner el marcador a cero</string>
@@ -222,7 +221,7 @@
         <item quantity="other">Quedan %d rondas</item>
     </plurals>
     <string name="scores_rounds_free">Sin límite de rondas · %1$d jugadas</string>
-    <string name="result_see_winner">🏆 Ver quién gana</string>
+    <string name="result_see_winner">🏆 Ver resultados</string>
     <string name="podium_winner">¡%1$s gana la partida!</string>
     <string name="podium_tie">¡Empate! %1$s</string>
     <string name="podium_nobody">Nadie ha puntuado… ¡revancha!</string>

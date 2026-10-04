@@ -406,12 +406,12 @@ fun ResultScreen(
     lastElimination: Elimination?,
     drawing: List<DrawStroke>,
     onShareDrawing: () -> Unit,
-    onScores: () -> Unit,
     /** Rounds left in the match after this game; null when there is no limit. */
     roundsLeft: Int?,
     onSeeWinner: () -> Unit,
     onReport: (() -> Unit)?,
-    onPlayAgain: () -> Unit,
+    /** Goes to the ranking, which then starts the next round. */
+    onContinue: () -> Unit,
     onHome: () -> Unit,
 ) {
     val outcome = game.outcome
@@ -449,17 +449,10 @@ fun ResultScreen(
             onBack = null,
             background = background,
             bottom = {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
-                        Modifier.size(60.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.25f)).clickable(onClick = onScores).testTag("scores"),
-                        contentAlignment = Alignment.Center,
-                    ) { Text("🏆", fontSize = 26.sp) }
-                    Spacer(Modifier.width(12.dp))
-                    if (roundsLeft == 0) {
-                        BigButton(stringResource(R.string.result_see_winner), onSeeWinner, Modifier.weight(1f).testTag("see_winner"), color = Neon.Amber, contentColor = Neon.Night)
-                    } else {
-                        BigButton(stringResource(R.string.play_again), onPlayAgain, Modifier.weight(1f).testTag("play_again"), color = GoGreen, contentColor = Neon.Night)
-                    }
+                if (roundsLeft == 0) {
+                    BigButton(stringResource(R.string.result_see_winner), onSeeWinner, Modifier.testTag("see_winner"), color = Neon.Amber, contentColor = Neon.Night)
+                } else {
+                    BigButton(stringResource(R.string.continue_), onContinue, Modifier.testTag("play_again"), color = GoGreen, contentColor = Neon.Night)
                 }
                 TextButton(onClick = onHome, modifier = Modifier.align(Alignment.CenterHorizontally).testTag("home")) {
                     Text(stringResource(R.string.home), color = Color.White.copy(alpha = 0.85f))
@@ -603,10 +596,100 @@ internal fun roleColor(role: Role): Color = when (role) {
     Role.DRIFTER -> Neon.Amber
 }
 
-/** End of a match: the podium, the full ranking and a fresh start. */
+/** Players by points, best first. */
+private fun ranking(players: List<String>, scores: Map<String, Int>) =
+    (players + scores.keys).distinct().sortedByDescending { scores[it] ?: 0 }
+
+@Composable
+private fun Avatar(player: String, players: List<String>, size: Int, ring: Color? = null) {
+    val color = avatarColors[players.indexOf(player).coerceAtLeast(0) % avatarColors.size]
+    Box(
+        Modifier
+            .size(size.dp)
+            .clip(CircleShape)
+            .background(color)
+            .then(if (ring != null) Modifier.border((size / 16).dp, ring, CircleShape) else Modifier),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(player.take(1).uppercase(), color = Neon.Night, fontSize = (size * 0.45).sp, fontWeight = FontWeight.Black)
+    }
+}
+
+@Composable
+private fun RankRow(player: String, players: List<String>, points: Int, gained: Int?) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.extraLarge)
+            .background(Color.Black.copy(alpha = 0.25f))
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .testTag("rank_$player"),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Avatar(player, players, 40)
+        Text(player, Modifier.weight(1f).padding(horizontal = 14.dp), color = Color.White, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+        if (gained != null) {
+            Text(
+                "+$gained",
+                color = Neon.Night,
+                fontWeight = FontWeight.Black,
+                modifier = Modifier.padding(end = 12.dp).clip(CircleShape).background(GoGreen).padding(horizontal = 12.dp, vertical = 4.dp),
+            )
+        }
+        Text("$points", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Black)
+    }
+}
+
+/** Between rounds: the running ranking with what the last game gave, then the next round. */
+@Composable
+fun RankingScreen(
+    players: List<String>,
+    scores: Map<String, Int>,
+    lastPoints: Map<String, Int>,
+    /** Rounds left in the match; null when there is no limit. */
+    roundsLeft: Int?,
+    roundsPlayed: Int,
+    onNextRound: () -> Unit,
+    onReset: () -> Unit,
+    onBack: () -> Unit,
+) {
+    var confirmReset by rememberSaveable { mutableStateOf(false) }
+    Page(
+        title = null,
+        onBack = onBack,
+        background = Neon.RevealBackdrop,
+        bottom = {
+            BigButton(stringResource(R.string.continue_), onNextRound, Modifier.testTag("next_round"), color = GoGreen, contentColor = Neon.Night)
+            TextButton(
+                onClick = { if (confirmReset) { onReset(); confirmReset = false } else confirmReset = true },
+                modifier = Modifier.align(Alignment.CenterHorizontally).testTag("reset_scores"),
+            ) {
+                Text(stringResource(if (confirmReset) R.string.scores_reset_confirm else R.string.scores_reset), color = Color.White.copy(alpha = 0.75f))
+            }
+        },
+    ) {
+        Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.CenterHorizontally) {
+            Text("🏆", fontSize = 56.sp)
+            Text(stringResource(R.string.scores_title), color = Color.White, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Black)
+            Text(
+                if (roundsLeft != null) pluralStringResource(R.plurals.scores_rounds_left, roundsLeft, roundsLeft)
+                else stringResource(R.string.scores_rounds_free, roundsPlayed),
+                color = Color.White.copy(alpha = 0.8f),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = 16.dp).testTag("rounds_left"),
+            )
+            ranking(players, scores).forEach { player ->
+                RankRow(player, players, scores[player] ?: 0, lastPoints[player])
+                Spacer(Modifier.height(10.dp))
+            }
+            Text(stringResource(R.string.scores_rules), color = Color.White.copy(alpha = 0.6f), style = MaterialTheme.typography.bodySmall, textAlign = TextAlign.Center)
+        }
+    }
+}
+
+/** End of a match: the winner big in the middle with fireworks, everyone else below. */
 @Composable
 fun PodiumScreen(players: List<String>, scores: Map<String, Int>, onNewMatch: () -> Unit, onHome: () -> Unit) {
-    val ranking = (players + scores.keys).distinct().sortedByDescending { scores[it] ?: 0 }
     val leaders = Match.leaders(scores)
     Box(Modifier.fillMaxSize()) {
         Page(
@@ -621,55 +704,33 @@ fun PodiumScreen(players: List<String>, scores: Map<String, Int>, onNewMatch: ()
             },
         ) {
             Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("🏆", fontSize = 72.sp)
-                Text(
-                    when (leaders.size) {
-                        0 -> stringResource(R.string.podium_nobody)
-                        1 -> stringResource(R.string.podium_winner, leaders.single())
-                        else -> stringResource(R.string.podium_tie, leaders.joinToString(" · "))
-                    },
-                    color = Color.White,
-                    fontSize = 34.sp,
-                    lineHeight = 40.sp,
-                    fontWeight = FontWeight.Black,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.testTag("podium_title"),
-                )
-                Spacer(Modifier.height(24.dp))
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Bottom) {
-                    // Classic podium order: second, first, third.
-                    listOf(1 to 120.dp, 0 to 170.dp, 2 to 90.dp).forEach { (place, height) ->
-                        val player = ranking.getOrNull(place)
-                        Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
-                            if (player != null) {
-                                Text(if ((scores[player] ?: 0) > 0) listOf("🥇", "🥈", "🥉")[place] else " ", fontSize = 30.sp)
-                                Text(player, color = Color.White, fontWeight = FontWeight.Bold, maxLines = 1)
-                                Box(
-                                    Modifier
-                                        .fillMaxWidth()
-                                        .height(height)
-                                        .padding(top = 6.dp)
-                                        .clip(MaterialTheme.shapes.medium)
-                                        .background(listOf(Neon.Amber, Color(0xFFD9DCEB), Color(0xFFE09A5B))[place]),
-                                    contentAlignment = Alignment.TopCenter,
-                                ) {
-                                    Text("${scores[player] ?: 0}", color = Neon.Night, fontSize = 26.sp, fontWeight = FontWeight.Black, modifier = Modifier.padding(top = 10.dp))
-                                }
-                            }
-                        }
+                Text("🏆", fontSize = 44.sp)
+                if (leaders.size == 1) {
+                    val winner = leaders.single()
+                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 12.dp)) {
+                        Text("🎆", fontSize = 56.sp)
+                        Spacer(Modifier.width(16.dp))
+                        Avatar(winner, players, 128, ring = Neon.Amber)
+                        Spacer(Modifier.width(16.dp))
+                        Text("🎆", fontSize = 56.sp)
                     }
+                    Text(winner, color = Color.White, fontSize = 34.sp, fontWeight = FontWeight.Black, modifier = Modifier.padding(top = 12.dp).testTag("podium_title"))
+                    Text("${scores[winner] ?: 0}", color = Neon.Amber, fontSize = 56.sp, fontWeight = FontWeight.Black)
+                } else {
+                    Text(
+                        if (leaders.isEmpty()) stringResource(R.string.podium_nobody) else stringResource(R.string.podium_tie, leaders.joinToString(" · ")),
+                        color = Color.White,
+                        fontSize = 32.sp,
+                        lineHeight = 38.sp,
+                        fontWeight = FontWeight.Black,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(vertical = 16.dp).testTag("podium_title"),
+                    )
                 }
-                if (ranking.size > 3) {
-                    Spacer(Modifier.height(16.dp))
-                    ResultPanel {
-                        ranking.drop(3).forEachIndexed { i, player ->
-                            Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-                                Text("${i + 4}", color = Color.White.copy(alpha = 0.7f), modifier = Modifier.width(32.dp))
-                                Text(player, Modifier.weight(1f), color = Color.White, fontWeight = FontWeight.SemiBold)
-                                Text("${scores[player] ?: 0}", color = Neon.Amber, fontWeight = FontWeight.Black)
-                            }
-                        }
-                    }
+                Spacer(Modifier.height(20.dp))
+                ranking(players, scores).filterNot { leaders.size == 1 && it == leaders.single() }.forEach { player ->
+                    RankRow(player, players, scores[player] ?: 0, gained = null)
+                    Spacer(Modifier.height(10.dp))
                 }
             }
         }
