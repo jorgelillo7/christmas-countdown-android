@@ -69,7 +69,7 @@ Regenerate the framed screenshots and feature graphic after new raw captures:
 .venv/bin/python apps/christmas-countdown/tools/generate_store_assets.py
 ```
 
-See [OPERATIONS.md](OPERATIONS.md) for every command, [docs/relaunch-2026.md](docs/relaunch-2026.md) for the relaunch history and the
+See [OPERATIONS.md](OPERATIONS.md) for every command and signing details, [release-notes.md](release-notes.md) for the version history, and the
 [publishing guide](../../docs/publishing-on-google-play.md).
 
 Privacy policy: https://jorgelillo7.github.io/privacy/christmas-countdown/

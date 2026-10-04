@@ -1,21 +1,32 @@
-# 📚 Docs
+# docs/ — index
 
-Guides and runbooks for every app in this repo. Grows as we go.
+One entry per document. Runbooks first, then setup, then reference.
 
-| Guide | What it covers |
+## Operations
+
+| Doc | What's in it |
 |---|---|
-| [Publishing an app on Google Play](publishing-on-google-play.md) | End-to-end checklist: account, signing, Play Console declarations, store listing, release tracks, review |
-| [Toolchain](toolchain.md) | Versions in use, how to upgrade them, and the gotchas we hit (AGP 9, R8, JDK) |
-| [Adding a new app](adding-a-new-app.md) | Folder layout, Gradle setup, icon, privacy policy and store assets for app #2, #3… |
-| [Lessons learned](lessons-learned.md) | Short list of things that went wrong once and how to avoid them |
+| [`operations.md`](operations.md) | Repo-wide runbook: prerequisites, build/test, shared scripts, release steps. Per-app commands live in `apps/<app>/OPERATIONS.md` |
+| [`publishing-on-google-play.md`](publishing-on-google-play.md) | End-to-end Play checklist: account, signing, App content declarations, store listing, release tracks, review |
+| [`adding-a-new-app.md`](adding-a-new-app.md) | Folder layout, Gradle setup, icon, privacy policy and store assets for a new app |
 
-Per-app docs live next to each app:
+## Setup
 
-| App | Operations (commands) | History |
+| Doc | What's in it |
+|---|---|
+| [`setup/toolchain.md`](setup/toolchain.md) | Versions in use, how to upgrade them, and the gotchas we hit (AGP 9, R8, JDK) |
+
+## Reference
+
+| Doc | What's in it |
+|---|---|
+| [`lessons-learned.md`](lessons-learned.md) | Things that went wrong once and how to avoid them |
+
+## Per app
+
+| App | Operations | Release notes |
 |---|---|---|
-| Christmas Countdown | [OPERATIONS.md](../apps/christmas-countdown/OPERATIONS.md) | [Relaunch 2026](../apps/christmas-countdown/docs/relaunch-2026.md) |
+| Christmas Countdown | [`OPERATIONS.md`](../apps/christmas-countdown/OPERATIONS.md) | [`release-notes.md`](../apps/christmas-countdown/release-notes.md) |
 
-Shared scripts are in [`scripts/`](../scripts) and shared branding in [`branding/`](../branding).
-
-Claude Code skills for repeatable operations live in [`.claude/skills/`](../.claude/skills):
-`upgrade-android-deps` (toolchain and library upgrades) and `release-android-app` (ship a new version).
+Shared scripts: [`scripts/`](../scripts). Branding: [`branding/`](../branding).
+Claude Code skills: [`.claude/skills/`](../.claude/skills) — `upgrade-android-deps`, `release-android-app`.

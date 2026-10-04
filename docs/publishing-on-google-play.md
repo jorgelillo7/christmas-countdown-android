@@ -117,4 +117,4 @@ Expected review warnings that are fine to accept:
 
 - [ ] Install from Play on a real phone and check the app starts.
 - [ ] Watch Android vitals (crashes/ANRs) for a few days.
-- [ ] Update `apps/<app>/docs/` with anything new learned.
+- [ ] Add anything new learned to `docs/lessons-learned.md` and a row in `apps/<app>/release-notes.md`.

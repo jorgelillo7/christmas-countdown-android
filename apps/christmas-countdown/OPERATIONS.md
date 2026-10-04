@@ -47,8 +47,18 @@ scripts/verify-bundle.sh apps/christmas-countdown/app/build/outputs/bundle/relea
 open -R apps/christmas-countdown/app/build/outputs/bundle/release/app-release.aab
 ```
 
-Signing needs `apps/christmas-countdown/keystore.properties` (git-ignored). The upload key is
-`christmas.jks`, alias `key0`, serial `2a72affc` (kept outside the repo).
+Signing needs `apps/christmas-countdown/keystore.properties` (git-ignored) pointing to the upload
+key, which is kept outside the repo (backed up off the Mac). Upload key certificate — use it to
+check `verify-bundle.sh` output and to recognise the key in Play Console → App integrity:
+
+| | |
+|---|---|
+| Alias | `key0` (created 29 Aug 2021) |
+| Serial | `2a72affc` |
+| SHA-1 | `33:90:93:3B:B2:7C:97:B5:93:4C:24:2B:2C:4C:DD:FE:11:82:8F:3F` |
+| SHA-256 | `12:EC:1D:3D:8B:56:8D:C9:C5:BE:AF:56:B8:ED:F4:3C:74:64:7A:BE:4A:8E:B0:8B:6A:A2:FE:DB:E3:48:EB:43` |
+
+Lost key or password: [upload key reset](../../docs/publishing-on-google-play.md#1-package-name-and-signing-once-per-app).
 
 Then follow [docs/publishing-on-google-play.md](../../docs/publishing-on-google-play.md#6-release).
 
@@ -61,11 +71,4 @@ apps/christmas-countdown/tools/capture_store_screenshots.sh               # raw 
 .venv/bin/python apps/christmas-countdown/tools/generate_store_assets.py  # framed screenshots + feature graphic
 ```
 
-## Release history
-
-| versionCode | Version | Date | Notes |
-|---|---|---|---|
-| 1 | 1.0 | Sep 2021 | Original Java app |
-| 2 | 2.0 | Oct 2026 | Relaunch: API 36, countdown no longer stuck in 2021 |
-| 3 | 3.0 | Oct 2026 | Kotlin + Compose rewrite: advent, widget, carols, sleeps, new icon |
-| 4 | 4.0 | — | 3 more carols in shuffled order, share text matches the mode, toolchain 2026 (AGP 9.4, Gradle 9.8, Kotlin 2.4) |
+Release history and notes: [release-notes.md](release-notes.md).

@@ -13,7 +13,7 @@ Ask which app (`apps/<app>`) if there is more than one. Full background:
 - Current `versionCode`/`versionName`: `apps/<app>/app/build.gradle.kts`.
 - The new `versionCode` must be higher than anything ever uploaded. Ask the user to confirm the
   latest in Play Console → App bundle explorer if unsure.
-- Bump both values; update the release history table in `apps/<app>/OPERATIONS.md`.
+- Bump both values; add a row to `apps/<app>/release-notes.md`.
 
 ## 2. Release notes
 
@@ -79,4 +79,4 @@ Expected review warnings that are OK: "devices no longer supported" after raisin
 ## 7. After approval
 
 Ask the user to install from Play on a real phone; note anything learned in
-`apps/<app>/docs/` or `docs/lessons-learned.md`.
+`docs/lessons-learned.md` and `apps/<app>/release-notes.md`.
