@@ -44,7 +44,8 @@ player only taps *Enviar*. The app itself never goes online.
 | What | Where |
 |---|---|
 | Public form (what players see) | https://docs.google.com/forms/d/e/1FAIpQLSf36XFjNcuWZLrEj4Msc01SdGrY8a-2GlxUy_DqQ-quov1dAQ/viewform |
-| Form, responses sheet, Apps Script project | Jorge's Google Drive: "¿Quién miente? · Reportar palabra", "¿Quién miente? · Reportes", Apps Script project "Proyecto sin título" (https://script.google.com → *My projects*) |
+| Apps Script project | "Script - ¿Quién miente? · Reportar palabra": https://script.google.com/home/projects/1FNOkHu9I9jCSLiGsM6TFvQ6dToGux63-maHfHmXYkFcYOqSnybrjeCzC/edit (only Jorge's account can open it) |
+| Form and responses sheet | Jorge's Google Drive: "¿Quién miente? · Reportar palabra" and "¿Quién miente? · Reportes" |
 | Script source | `tools/create_report_form.gs` (the copy in Apps Script is the same code) |
 | Form URL and field ids used by the app | `app/src/main/kotlin/com/jorgelillo/whoslying/ui/Report.kt` (`WordReport`) |
 
@@ -53,8 +54,7 @@ in Google Forms. Field ids don't change, so the app keeps working.
 
 **Adding or replacing fields, or recreating the form** (the script always creates a *new* form):
 
-1. Edit `tools/create_report_form.gs` here, paste it into the Apps Script project (script.google.com
-   → My projects), save and **Run** `createReportForm`.
+1. Edit `tools/create_report_form.gs` here, paste it into the Apps Script project above, save and **Run** `createReportForm`.
 2. From the execution log, copy the `Prefilled:` link. It holds the new form URL and one
    `entry.<id>=<PLACEHOLDER>` per field (placeholders are just markers; players never see them).
 3. Update `FORM_URL` and the `entry.*` constants in `WordReport`, ship a new version.
