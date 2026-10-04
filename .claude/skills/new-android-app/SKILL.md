@@ -84,4 +84,5 @@ Follow [docs/adding-a-new-app.md](../../../docs/adding-a-new-app.md). Checklist:
 
 Hand over to the `release-android-app` skill. For a brand-new app the Play Console also needs:
 create app, register the package name in Android developer verification, App content
-declarations and a new upload key (back it up off the Mac; never commit it).
+declarations and a new upload key: the user runs `scripts/new-upload-key.sh <app>` in their own
+terminal (never ask for the password in chat), then backs it up off the Mac ([docs/signing.md](../../../docs/signing.md)).

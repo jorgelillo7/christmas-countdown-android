@@ -45,8 +45,8 @@ open -R apps/<app>/app/build/outputs/bundle/release/app-release.aab
 Check in the `verify-bundle.sh` output:
 - `versionCode` is the new one (a stale bundle from an earlier build is easy to upload by mistake).
 - Signature serial matches the app's upload key (see `apps/<app>/OPERATIONS.md`). "NOT SIGNED"
-  means `apps/<app>/keystore.properties` is missing: the user must create it; never ask them to
-  paste passwords into the chat.
+  means `apps/<app>/keystore.properties` is missing: the user runs `scripts/new-upload-key.sh <app>`
+  in their own terminal (docs/signing.md); never ask them to paste passwords into the chat.
 - New permissions vs. the previous release → the Data safety form may need updating.
 
 If the app has no `tools/smoke_test.sh` yet, create one from

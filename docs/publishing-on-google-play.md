@@ -19,17 +19,11 @@ app; for an update, jump to [6. Release](#6-release).
 ## 1. Package name and signing (once per app)
 
 - [ ] Choose `applicationId` (`com.jorgelillo.<app>`). **It can never change.**
-- [ ] Create an **upload key** (Android Studio → Build → Generate Signed Bundle → Create new).
-      Store the `.jks` and its password outside the repo, backed up.
-- [ ] Create `apps/<app>/keystore.properties` (git-ignored):
-      ```properties
-      storeFile=/absolute/path/upload-key.jks
-      storePassword=...
-      keyAlias=...
-      keyPassword=...
-      ```
+- [ ] Create the **upload key** and `apps/<app>/keystore.properties`: run
+      `scripts/new-upload-key.sh <app>` in your own terminal and follow [signing.md](signing.md)
+      (password manager + off-Mac backup of the `.jks`).
 - [ ] Use **Play App Signing** (default): Google keeps the app signing key; you only hold the upload key.
-- [ ] Lost upload key? Integrity → App signing → *Request upload key reset* (takes a few days).
+- [ ] Lost upload key? See [signing.md](signing.md#lost-key-or-forgotten-password).
 
 ## 2. Build the release
 

@@ -26,8 +26,8 @@ UI test tags (usable with `scripts/tap-text.sh`): `new_wheel`, `more`, `spin`, `
 
 Not published yet. Before the first release:
 
-- Create an **upload key** for this app (Android Studio → Generate Signed Bundle → Create new),
-  back it up off the Mac, and create `apps/decision-wheel/keystore.properties` (git-ignored).
+- Create the **upload key**: `scripts/new-upload-key.sh decision-wheel` in your own terminal, then
+  back it up off the Mac ([docs/signing.md](../../docs/signing.md)) and paste its fingerprints here.
   Until then release builds are signed with the debug key so they can be smoke tested; Play
   rejects them.
 - Store listing texts and images in `store/metadata/android/<locale>/`.
