@@ -36,12 +36,16 @@ tap start 3
 for _ in 1 2 3; do tap tap_to_reveal 1; tap hide 1; done
 shot countdown
 sleep 5
+shot debate
+tap go_vote 2
+tap vote_Ana 1
 shot vote
-tap Ana 2
-tap confirm_vote 3
+tap confirm_vote 1
+sleep 1; shot expose
+sleep 4
 tap keep_playing 2 2>/dev/null || true      # only shown when the game goes on
 tap reveal_all 3 2>/dev/null || true        # end it if it's still running
-shot result
+sleep 1; shot result
 
 crashes="$("$ADB" logcat -d -b crash | grep -c FATAL || true)"
 pid="$("$ADB" shell pidof "$PKG" || true)"
