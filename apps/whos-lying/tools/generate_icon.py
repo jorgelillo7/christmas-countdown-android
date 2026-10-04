@@ -1,9 +1,11 @@
 """Generates the launcher and store icons of Who's lying? from one geometry definition.
 
-A speech bubble with three "clue" dots, one of them pink: the one who's lying.
+A speech bubble with three "clue" dots, one of them pink: the one who's lying. A tilted fedora
+on the bubble hints at someone in disguise without saying "impostor".
 
 Usage (repo root): .venv/bin/python apps/whos-lying/tools/generate_icon.py
 """
+import math
 from pathlib import Path
 
 from PIL import Image, ImageDraw
@@ -13,11 +15,28 @@ RES = ROOT / "app/src/main/res"
 
 TOP, BOTTOM = "#3A2490", "#100E20"
 BUBBLE, DOT, LIAR, INK = "#F0EEFF", "#7C5CFF", "#FF4D94", "#100E20"
+HAT = "#17122E"
 
 # 108x108 adaptive viewport, content inside the r=33 safe circle.
-BX0, BY0, BX1, BY1, BR = 27.0, 34.0, 81.0, 70.0, 12.0
-TAIL = [(38, 68), (34, 80), (50, 69)]
-DOTS = [((41, 52), 5.2, DOT), ((54, 52), 5.2, LIAR), ((67, 52), 5.2, DOT)]
+BX0, BY0, BX1, BY1, BR = 27.0, 40.0, 81.0, 74.0, 12.0
+TAIL = [(38, 72), (34, 84), (50, 73)]
+DOTS = [((41, 57), 5.2, DOT), ((54, 57), 5.2, LIAR), ((67, 57), 5.2, DOT)]
+
+
+def hat_part(points, cx=61.0, cy=41.8, angle=-9):
+    """Hat shapes are drawn around the brim centre, then tilted and placed on the bubble's corner."""
+    a = math.radians(angle)
+    return [(cx + x * math.cos(a) - y * math.sin(a), cy + x * math.sin(a) + y * math.cos(a)) for x, y in points]
+
+
+def taper(y):
+    return 8.5 - 1.5 * (-y / 12.5)  # crown half-width: narrower at the top
+
+
+BRIM = hat_part([(16 * math.cos(t / 24 * math.tau), 2.4 * math.sin(t / 24 * math.tau)) for t in range(24)])
+CROWN = hat_part([(-taper(0), -1), (-taper(-12.5), -12.5), (-5, -13.8), (-2, -13), (0, -11.9), (2, -13), (5, -13.8), (taper(-12.5), -12.5), (taper(0), -1)])
+BAND = hat_part([(-taper(-1), -1), (-taper(-4.5), -4.5), (taper(-4.5), -4.5), (taper(-1), -1)])
+HAT_PARTS = [(BRIM, HAT), (CROWN, HAT), (BAND, LIAR)]
 
 
 def f(v):
@@ -63,10 +82,12 @@ def write_vectors():
         ns='\n    xmlns:aapt="http://schemas.android.com/aapt"'))
     (d / "ic_launcher_foreground.xml").write_text(vector(
         [path(rr(BX0, BY0 + 1.5, BX1, BY1 + 1.5, BR), "#55000000"), path(rr(BX0, BY0, BX1, BY1, BR), BUBBLE), path(poly(TAIL), BUBBLE)]
-        + [path(circle(*c, r), col) for c, r, col in DOTS]))
+        + [path(circle(*c, r), col) for c, r, col in DOTS]
+        + [path(poly(pts), col) for pts, col in HAT_PARTS]))
     (d / "ic_launcher_monochrome.xml").write_text(vector(
         [path(rr(BX0 + 1.2, BY0 + 1.2, BX1 - 1.2, BY1 - 1.2, BR - 1.2), stroke="#FF000000", width=2.4), path(poly(TAIL), "#FF000000")]
-        + [path(circle(*c, r), "#FF000000") for c, r, _ in DOTS]))
+        + [path(circle(*c, r), "#FF000000") for c, r, _ in DOTS]
+        + [path(poly(pts), "#FF000000") for pts, _ in HAT_PARTS[:2]]))
     adaptive = ('<?xml version="1.0" encoding="utf-8"?>\n<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\n'
                 '    <background android:drawable="@drawable/ic_launcher_background" />\n'
                 '    <foreground android:drawable="@drawable/ic_launcher_foreground" />\n'
@@ -91,6 +112,8 @@ def render(size, crop=(0, 108), ss=4):
     d.polygon([P(*p) for p in TAIL], fill=BUBBLE)
     for (cx, cy), r, col in DOTS:
         d.ellipse([P(cx - r, cy - r), P(cx + r, cy + r)], fill=col)
+    for pts, col in HAT_PARTS:
+        d.polygon([P(*p) for p in pts], fill=col)
     return img.resize((size, size), Image.LANCZOS)
 
 
