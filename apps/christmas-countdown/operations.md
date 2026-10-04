@@ -71,11 +71,4 @@ apps/christmas-countdown/tools/capture_store_screenshots.sh               # raw 
 .venv/bin/python apps/christmas-countdown/tools/generate_store_assets.py  # framed screenshots + feature graphic
 ```
 
-## Release history
-
-| versionCode | Version | Date | Notes |
-|---|---|---|---|
-| 1 | 1.0 | Sep 2021 | Original Java app |
-| 2 | 2.0 | Oct 2026 | Relaunch after the developer account was reactivated: API 36, countdown no longer stuck in 2021 |
-| 3 | 3.0 | Oct 2026 | Kotlin + Compose rewrite: advent, widget, carols, sleeps, new icon |
-| 4 | 4.0 | Oct 2026 | 3 more carols in shuffled order, share text matches the mode, toolchain 2026 (AGP 9.4, Gradle 9.8, Kotlin 2.4) |
+Release history and notes: [release-notes.md](release-notes.md).

@@ -22,7 +22,7 @@
 ## 🗂️ Repository layout
 
 ```
-docs/                              Guides: publishing on Google Play, toolchain, adding an app
+docs/                              Runbook (operations.md), Google Play guide, setup/toolchain, adding an app
 scripts/                           Shared scripts: env, emulator, screenshots, bundle verification
 branding/                          Developer profile images (Play Console) and their generator
 build-logic/                       Gradle convention plugins: shared Android/Kotlin/Compose config
@@ -35,7 +35,8 @@ apps/
     ├── domain/                    :apps:christmas-countdown:domain — pure Kotlin business logic
     ├── store/                     Play Store listing: texts and images per language
     ├── tools/                     App-specific scripts (icon, store assets, smoke test)
-    └── OPERATIONS.md              Every command to run, test and release the app
+    ├── operations.md              Every command to run, test and release the app
+    └── release-notes.md           Version history
 ```
 
 ### Principles
@@ -49,7 +50,7 @@ apps/
 
 ## 🚀 Building
 
-Requirements: Android Studio 2026.2+ and Android SDK 37. See [docs/toolchain.md](docs/toolchain.md).
+Requirements: Android Studio 2026.2+ and Android SDK 37. See [docs/setup/toolchain.md](docs/setup/toolchain.md).
 
 ```bash
 source scripts/env.sh                                      # Android Studio's JDK, adb, SDK paths

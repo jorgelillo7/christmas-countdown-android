@@ -6,14 +6,14 @@ description: Prepare and ship a new version of one of the apps in this repo to G
 # Release an app to Google Play
 
 Ask which app (`apps/<app>`) if there is more than one. Full background:
-`docs/publishing-on-google-play.md`. App-specific commands: `apps/<app>/OPERATIONS.md`.
+`docs/publishing-on-google-play.md`. App-specific commands: `apps/<app>/operations.md`.
 
 ## 1. Version
 
 - Current `versionCode`/`versionName`: `apps/<app>/app/build.gradle.kts`.
 - The new `versionCode` must be higher than anything ever uploaded. Ask the user to confirm the
   latest in Play Console → App bundle explorer if unsure.
-- Bump both values; update the release history table in `apps/<app>/OPERATIONS.md`.
+- Bump both values; add a row to `apps/<app>/release-notes.md`.
 
 ## 2. Release notes
 
@@ -44,7 +44,7 @@ open -R apps/<app>/app/build/outputs/bundle/release/app-release.aab
 
 Check in the `verify-bundle.sh` output:
 - `versionCode` is the new one (a stale bundle from an earlier build is easy to upload by mistake).
-- Signature serial matches the app's upload key (see `apps/<app>/OPERATIONS.md`). "NOT SIGNED"
+- Signature serial matches the app's upload key (see `apps/<app>/operations.md`). "NOT SIGNED"
   means `apps/<app>/keystore.properties` is missing: the user must create it; never ask them to
   paste passwords into the chat.
 - New permissions vs. the previous release → the Data safety form may need updating.
@@ -79,4 +79,4 @@ Expected review warnings that are OK: "devices no longer supported" after raisin
 ## 7. After approval
 
 Ask the user to install from Play on a real phone; note anything learned in
-`docs/lessons-learned.md` and the release history in `apps/<app>/OPERATIONS.md`.
+`docs/lessons-learned.md` and `apps/<app>/release-notes.md`.

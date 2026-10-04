@@ -1,0 +1,11 @@
+# Christmas Countdown — Release notes
+
+Newest first. User-facing notes per language (as uploaded to Play) are in
+`store/metadata/android/<locale>/changelogs/<versionCode>.txt`.
+
+| versionCode | Version | Date | Notes |
+|---|---|---|---|
+| 4 | 4.0 | Oct 2026 | 3 more carols in shuffled order, share text matches the mode, toolchain 2026 (AGP 9.4, Gradle 9.8, Kotlin 2.4) |
+| 3 | 3.0 | Oct 2026 | Kotlin + Compose rewrite: advent, widget, carols, sleeps, new icon |
+| 2 | 2.0 | Oct 2026 | Relaunch after the developer account was reactivated: API 36, countdown no longer stuck in 2021 |
+| 1 | 1.0 | Sep 2021 | Original Java app |
