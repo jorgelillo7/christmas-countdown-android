@@ -1,0 +1,53 @@
+package com.jorgelillo.decisionwheel.ui
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.jorgelillo.decisionwheel.data.StateRepository
+import com.jorgelillo.decisionwheel.domain.AppState
+import com.jorgelillo.decisionwheel.domain.Decision
+import com.jorgelillo.decisionwheel.domain.Wheel
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import java.util.UUID
+
+/** Single ViewModel for the whole (small) app: exposes the state and every mutation. */
+class WheelsViewModel(private val repository: StateRepository) : ViewModel() {
+
+    /** Null until the first read from disk, so screens don't flash empty. */
+    val state: StateFlow<AppState?> = repository.state
+        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+
+    fun newWheelId(): String = UUID.randomUUID().toString()
+
+    fun save(wheel: Wheel) = update { state ->
+        val exists = state.wheels.any { it.id == wheel.id }
+        state.copy(wheels = if (exists) state.wheels.map { if (it.id == wheel.id) wheel else it } else state.wheels + wheel)
+    }
+
+    fun delete(wheelId: String) = update { state ->
+        state.copy(wheels = state.wheels.filterNot { it.id == wheelId }, history = state.history.filterNot { it.wheelId == wheelId })
+    }
+
+    fun accept(wheelId: String, option: String) = update { it.withDecision(Decision(wheelId, option, System.currentTimeMillis())) }
+
+    fun clearHistory(wheelId: String) = update { state -> state.copy(history = state.history.filterNot { it.wheelId == wheelId }) }
+
+    fun setAvoidRepeats(enabled: Boolean) = update { it.copy(avoidRepeats = enabled) }
+
+    fun setSound(enabled: Boolean) = update { it.copy(soundOn = enabled) }
+
+    private fun update(transform: (AppState) -> AppState) {
+        viewModelScope.launch { repository.update(transform) }
+    }
+
+    companion object {
+        fun factory(repository: StateRepository): ViewModelProvider.Factory = viewModelFactory {
+            initializer { WheelsViewModel(repository) }
+        }
+    }
+}

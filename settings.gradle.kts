@@ -25,3 +25,7 @@ include(":core:designsystem")
 // Christmas Countdown
 include(":apps:christmas-countdown:app")
 include(":apps:christmas-countdown:domain")
+
+// Decision wheel ("What next?")
+include(":apps:decision-wheel:app")
+include(":apps:decision-wheel:domain")

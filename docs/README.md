@@ -27,6 +27,7 @@ One entry per document. Runbooks first, then setup, then reference.
 | App | Operations | Release notes |
 |---|---|---|
 | Christmas Countdown | [`OPERATIONS.md`](../apps/christmas-countdown/OPERATIONS.md) | [`release-notes.md`](../apps/christmas-countdown/release-notes.md) |
+| What next? (decision wheel) | [`OPERATIONS.md`](../apps/decision-wheel/OPERATIONS.md) | [`release-notes.md`](../apps/decision-wheel/release-notes.md) |
 
 Shared scripts: [`scripts/`](../scripts). Branding: [`branding/`](../branding).
-Claude Code skills: [`.claude/skills/`](../.claude/skills) — `upgrade-android-deps`, `release-android-app`.
+Claude Code skills: [`.claude/skills/`](../.claude/skills) — `new-android-app`, `upgrade-android-deps`, `release-android-app`.

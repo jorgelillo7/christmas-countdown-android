@@ -28,7 +28,7 @@ Commands shared by every app. Per-app commands (module paths, release steps, sig
 | `emulator.sh date MMDDhhmmYYYY\|auto` | Freeze the emulator clock (e.g. to test December) / restore it |
 | `emulator.sh demo on\|off` | Clean status bar for screenshots |
 | `screenshot.sh <out.png>` | Screenshot, dismissing "isn't responding" dialogs first |
-| `tap-text.sh "<label>"` | Tap an element by its on-screen text (any language, any layout) |
+| `tap-text.sh "<label or tag>"` | Tap an element by its on-screen text or Compose test tag (any language, any layout) |
 | `verify-bundle.sh <aab>` | Signature, versionCode, permissions and native libs of a bundle |
 | `setup-python.sh` | Create `.venv` with Pillow/numpy |
 

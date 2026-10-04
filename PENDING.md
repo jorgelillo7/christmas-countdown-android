@@ -20,11 +20,19 @@ Lines are pruned as items ship. What has **shipped** lives in `apps/<app>/releas
 | 🔨 | More advent entries (48–72, EN + ES) rotating by year | Before December of a later year |
 | ⏳ | Raise `targetSdk` to 37 (Android 17 behaviour changes, test on an API 37 emulator) | Google Play announcing API 37 as the requirement (usually each August) |
 
+## decision-wheel
+
+| | What is missing | Waiting on |
+|---|---|---|
+| 👤 | Try it on a real phone: feel of the spin, tick sound, haptics, presets | You · `./gradlew :apps:decision-wheel:app:installDebug` |
+| 👤 | Upload key + `keystore.properties`, create the app in Play Console, register the package name | You · [OPERATIONS](apps/decision-wheel/OPERATIONS.md#release) |
+| 🔨 | Store screenshots and feature graphic (`tools/capture_store_screenshots.sh` + generator, from Christmas Countdown) | The design being final |
+| 🔨 | Privacy page `privacy/decision-wheel/` and app card on jorgelillo7.github.io | Your OK on the restyled privacy page preview |
+| ⏳ | Group veto turns (each person vetoes one, passing the phone) | Feedback after real use · v1 vetoes are free taps |
+
 ## repo
 
 | | What is missing | Waiting on |
 |---|---|---|
-| 🔨 | Roulette app (`apps/roulette`): Compose animation, click sound via the music-box synth promoted to `core/` | Your go · [recipe](docs/adding-a-new-app.md) |
-| 🔨 | Skill for creating a new app | Writing it while building the roulette, from what that actually needs |
-| ⏳ | Card tournament manager (Room) | After the roulette |
+| ⏳ | Card tournament manager (Room) | After the decision wheel ships |
 | ⏳ | Move into `lillorepo` (Bazel) | Gradle builds or the Play publishing loop slowing you down · domain modules are pure Kotlin to make it easy |

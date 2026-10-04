@@ -1,0 +1,87 @@
+---
+name: new-android-app
+description: Create a new Android app in this repo from idea to first Play-ready build: competitor study on Google Play, differential value, design direction (palette, name), module scaffolding with the convention plugins, icon, privacy policy page, store listing skeleton and repo bookkeeping. Use when the user wants to start, create or build a new app.
+---
+
+# New Android app
+
+Process used for the decision wheel (app #2). Keep the user in the loop at the three decision
+points marked **🛑 ask**; everything else you can do on your own. Write in English; talk to the
+user in their language.
+
+## 1. Understand the idea
+
+Restate the idea in two lines: what the user decides/does with it, for whom, offline or not.
+Default constraints in this repo: **local only, no backend, no ads, no tracking**, English +
+Spanish, simple scope.
+
+## 2. Competitor study (Google Play)
+
+```bash
+for q in "<keyword 1>" "<keyword 2>" "<spanish keyword>"; do
+  curl -s -A 'Mozilla/5.0' "https://play.google.com/store/search?q=${q// /%20}&c=apps&hl=en" \
+    | rtk proxy grep -oE 'details\?id=[A-Za-z0-9_.]+'
+done | sort | uniq -c | sort -rn | head -25
+```
+
+For the top ~12 ids, fetch `https://play.google.com/store/apps/details?id=<id>&hl=en` and extract
+title, downloads (`>[0-9.,]+[KMB]?\+<`), rating (`Rated ([0-9.]+) stars`), "Contains ads",
+"In-app purchases" and the description (`data-g-id="description"`). One WebSearch for review
+complaints ("<category> app reviews too many ads / I wish") gives the pain points.
+
+Summarise for the user: a table (app, downloads, rating, ads, standout feature), what users
+complain about, and **honestly** whether there is room for something different. "Nothing new,
+but done well and without ads" is a valid outcome.
+
+## 3. 🛑 ask: scope, design, name
+
+Propose 3–5 differential ideas ranked by value/effort and let the user pick (AskUserQuestion,
+multi-select). Keep v1 small.
+
+Design: render 2 palette proposals of the app's key screen with Pillow and `open` the PNG on the
+user's Mac (they can't see your Read images). Rules that worked: one background (light or dark),
+5–6 accent colours with similar saturation (cohesive, not a rainbow), never two equal colours
+adjacent, dark text on light accents.
+
+Name: check it on Play (`search?q=<name>`); avoid generic names that already have dozens of
+apps. Pick a package id that never changes: `com.jorgelillo.<name>`.
+
+## 4. Scaffold
+
+Follow [docs/adding-a-new-app.md](../../../docs/adding-a-new-app.md). Checklist:
+
+- `apps/<app>/domain` (pure Kotlin: all rules, unit tested) and `apps/<app>/app` (Compose UI).
+- Register both in `settings.gradle.kts`.
+- Before adding a library, read its AAR `minCompileSdk`/`minAndroidGradlePluginVersion`
+  (see the upgrade-android-deps skill) and add it to `gradle/libs.versions.toml`.
+- Persistence: DataStore (+ kotlinx.serialization JSON for small object graphs). Room only when
+  queries/relations justify it.
+- Copy from Christmas Countdown: signing block and build types in `app/build.gradle.kts`,
+  `proguard-rules.pro` (RoomDatabase keep rule if WorkManager/Glance/Room is pulled in),
+  splash theme, edge-to-edge in `MainActivity`, About sheet with privacy + rate links.
+- Strings in `values/` and `values-es/` from the start.
+- `./gradlew :apps:<app>:domain:test :apps:<app>:app:lintDebug :apps:<app>:app:assembleDebug`
+
+## 5. Assets
+
+- Icon: copy `apps/christmas-countdown/tools/generate_icon.py`, change geometry/palette; it emits
+  adaptive + monochrome + legacy PNGs + `store/play-icon-512.png`. Look at the result.
+- `tools/smoke_test.sh` and `tools/capture_store_screenshots.sh` from Christmas Countdown, using
+  `scripts/tap-text.sh` labels (never coordinates).
+- `store/metadata/android/{en-US,es-ES}/` with title (≤30), short (≤80), full description,
+  `changelogs/1.txt`.
+
+## 6. Repo bookkeeping
+
+- Privacy policy: `privacy/<app>/index.html` in `~/Projects/jorgelillo7.github.io` (copy the
+  Christmas Countdown one) and an app card in the pinned "Apps" block of `index.html` and
+  `en/index.html`. Publish only after the user previews it.
+- `apps/<app>/README.md`, `OPERATIONS.md` (uppercase), `release-notes.md`; add the app to the
+  root README table, `docs/README.md` per-app table and `PENDING.md` (its own section).
+- Branch + PR; the user merges.
+
+## 7. First release
+
+Hand over to the `release-android-app` skill. For a brand-new app the Play Console also needs:
+create app, register the package name in Android developer verification, App content
+declarations and a new upload key (back it up off the Mac; never commit it).

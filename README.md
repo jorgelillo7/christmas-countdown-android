@@ -18,6 +18,7 @@
 | App | Status | Folder |
 |---|---|---|
 | 🎄 [Christmas Countdown](apps/christmas-countdown) | [On Google Play](https://play.google.com/store/apps/details?id=com.jorgelillo.christmascountdown) | `apps/christmas-countdown` |
+| 🎡 [What next? · Decision Wheel](apps/decision-wheel) | In development | `apps/decision-wheel` |
 
 ## 🗂️ Repository layout
 
