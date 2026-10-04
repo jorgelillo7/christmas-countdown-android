@@ -47,7 +47,7 @@ LOCALES = {
             "01-reveal": ("Todos tienen la palabra…", "menos el impostor"),
             "02-debate": ("Dad pistas", "contra el reloj"),
             "03-vote": ("Votad a quién", "creéis que miente"),
-            "04-result": ("¿Pilláis al impostor…", "o os la cuela?"),
+            "04-result": ("¿Pilláis al impostor…", "u os la cuela?"),
             "05-drawing": ("Modo dibujo:", "prohibido hablar"),
             "06-packs": ("21 paquetes, +600 palabras", "todos gratis"),
             "07-home": ("Gratis. Sin anuncios.", "Sin trampas."),
