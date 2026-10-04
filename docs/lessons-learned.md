@@ -20,3 +20,7 @@ Short, one line each. Add to it whenever something bites.
 - **`.properties` files are read as ISO-8859-1.** A UTF-8 "ó" in a path broke
   `keystore.properties`. Keys now live in `~/Projects/documentation/keys/<app>/` (ASCII, no spaces),
   and `scripts/new-upload-key.sh` still escapes non-ASCII as `\uXXXX` just in case.
+- **Compose dialogs are separate windows**: `testTagsAsResourceId` set on the activity content does
+  not reach them; set it on the dialog modifier too, or UI scripts cannot find their buttons.
+- **Keep `@Serializable` classes in a module with the serialization plugin.** Missing it compiles
+  fine and crashes at runtime ("Serializer for class … is not found").

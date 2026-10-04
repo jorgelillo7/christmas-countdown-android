@@ -1,0 +1,126 @@
+<resources>
+    <string name="app_name">Who\'s lying?</string>
+
+    <!-- Home -->
+    <string name="home_title">Who\'s lying?</string>
+    <string name="home_subtitle">The impostor word game. Free, no ads, no catch.</string>
+    <string name="play">Play</string>
+    <string name="how_to_play">How to play</string>
+    <string name="packs">Word packs</string>
+    <string name="packs_short">Packs</string>
+    <string name="action_about">About</string>
+    <string name="action_back">Back</string>
+
+    <!-- Players -->
+    <string name="players_title">Players</string>
+    <string name="players_subtitle">3 to 24 players, sitting together with one phone</string>
+    <string name="players_add_hint">Player name</string>
+    <string name="players_add">Add</string>
+    <string name="players_remove">Remove %1$s</string>
+    <plurals name="players_need_more">
+        <item quantity="one">Add at least %1$d players</item>
+        <item quantity="other">Add at least %1$d players</item>
+    </plurals>
+    <string name="continue_">Continue</string>
+
+    <!-- Setup -->
+    <string name="setup_title">Game setup</string>
+    <string name="mode_classic">Classic</string>
+    <string name="mode_classic_desc">The impostor gets a similar word and doesn\'t know they\'re the impostor.</string>
+    <string name="mode_blind">Blind</string>
+    <string name="mode_blind_desc">The impostor gets no word and has to bluff.</string>
+    <string name="mode_drifter">The Drifter</string>
+    <string name="mode_drifter_desc">Classic, plus a Drifter with no word who wins by guessing it.</string>
+    <string name="setup_impostors">Impostors</string>
+    <string name="setup_hint">Category hint</string>
+    <string name="setup_hint_desc">Players without a word see the pack name</string>
+    <string name="setup_chaos">Chaos</string>
+    <string name="setup_chaos_desc">Some games get a random number of impostors… sometimes everyone</string>
+    <string name="setup_packs">Packs</string>
+    <string name="setup_all_packs">All</string>
+    <string name="start">Start</string>
+
+    <!-- Reveal -->
+    <string name="reveal_pass_to">Pass the phone to</string>
+    <string name="reveal_tap">Tap to see your word</string>
+    <string name="reveal_your_word">Your word</string>
+    <string name="reveal_you_are_impostor">You are the impostor</string>
+    <string name="reveal_you_are_drifter">You are the Drifter</string>
+    <string name="reveal_impostor_desc">You have no word. Listen, blend in and don\'t get caught.</string>
+    <string name="reveal_drifter_desc">You have no word. If you\'re voted out, guess the word to win.</string>
+    <string name="reveal_hint">Category: %1$s</string>
+    <string name="reveal_hide">Hide and pass</string>
+    <string name="reveal_counter">%1$d of %2$d</string>
+
+    <!-- Countdown -->
+    <string name="countdown_starts">%1$s starts.</string>
+    <string name="countdown_ready">Get ready!</string>
+
+    <!-- Vote -->
+    <string name="vote_title">Who\'s lying?</string>
+    <string name="vote_desc">Give clues in turns, discuss, and vote someone out.</string>
+    <string name="vote_starter">%1$s started this game</string>
+    <string name="vote_confirm">Vote out %1$s?</string>
+    <string name="vote_yes">Vote out</string>
+    <string name="vote_cancel">Cancel</string>
+    <string name="vote_reveal_all">End and reveal</string>
+    <string name="out_was_civilian">%1$s was a civilian</string>
+    <string name="out_was_impostor">%1$s was an impostor!</string>
+    <string name="out_was_drifter">%1$s was the Drifter!</string>
+    <string name="out_their_word">Their word: %1$s</string>
+    <string name="next_vote">Keep playing</string>
+
+    <!-- Drifter guess -->
+    <string name="guess_title">Last chance, %1$s</string>
+    <string name="guess_desc">Guess the civilians\' word to win the game.</string>
+    <string name="guess_hint">The word</string>
+    <string name="guess_go">Guess</string>
+    <string name="guess_wrong">Wrong! The game goes on.</string>
+
+    <!-- Result -->
+    <string name="result_civilians">Civilians win!</string>
+    <string name="result_impostors">The impostors win!</string>
+    <string name="result_impostors_drifter">Impostors and Drifter win!</string>
+    <string name="result_drifter">The Drifter wins!</string>
+    <string name="result_drifter_guessed">The Drifter guessed the word!</string>
+    <string name="result_nobody">Everyone was an impostor! 🎭</string>
+    <string name="result_ended">Game over</string>
+    <string name="result_word">The word was %1$s</string>
+    <string name="result_roles">Who was who</string>
+    <string name="role_civilian">Civilian</string>
+    <string name="role_impostor">Impostor</string>
+    <string name="role_drifter">Drifter</string>
+    <string name="play_again">Play again</string>
+    <string name="home">Home</string>
+
+    <!-- Packs -->
+    <string name="packs_builtin">Included</string>
+    <string name="packs_custom">Yours</string>
+    <string name="packs_new">New pack</string>
+    <plurals name="pack_words">
+        <item quantity="one">%d word</item>
+        <item quantity="other">%d words</item>
+    </plurals>
+    <string name="pack_name">Pack name</string>
+    <string name="pack_words_label">One per line: word / similar word</string>
+    <string name="pack_words_help">The similar word is optional: without it the impostor gets another word from the pack.</string>
+    <string name="pack_save">Save</string>
+    <string name="pack_delete">Delete pack</string>
+    <string name="pack_need">Add a name and at least 3 words</string>
+
+    <!-- How to play -->
+    <string name="how_1_title">1 · Get your word</string>
+    <string name="how_1">Pass the phone around. Everyone sees the same secret word… except the impostors.</string>
+    <string name="how_2_title">2 · Give clues</string>
+    <string name="how_2">In turns, say one word or short phrase about it. Not too obvious, or the impostor will catch on.</string>
+    <string name="how_3_title">3 · Vote</string>
+    <string name="how_3">Discuss and vote someone out. The app reveals what they were.</string>
+    <string name="how_4_title">4 · Win</string>
+    <string name="how_4">Civilians win by voting out every impostor. Impostors win if only one civilian is left. The Drifter can also win by guessing the word when voted out.</string>
+
+    <!-- About -->
+    <string name="about_version">Version %1$s</string>
+    <string name="about_body">Free forever: every pack, no ads, no subscriptions, no tracking. Made with care by Jorge Lillo.</string>
+    <string name="about_privacy">Privacy policy</string>
+    <string name="about_rate">Rate on Google Play</string>
+</resources>

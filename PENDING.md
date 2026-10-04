@@ -29,6 +29,15 @@ Lines are pruned as items ship. What has **shipped** lives in `apps/<app>/releas
 | ⏳ | App card in the pinned "Apps" block of jorgelillo7.github.io (both languages), replacing "coming soon" | The app being live on Google Play (the Play link must work) |
 | ⏳ | Group veto turns (each person vetoes one, passing the phone) | Feedback after real use · v1 vetoes are free taps |
 
+## whos-lying
+
+| | What is missing | Waiting on |
+|---|---|---|
+| 👤 | Play a real game with friends: word pairs, flow, readability | You · `./gradlew :apps:whos-lying:app:installDebug` |
+| 🔨 | Upload key, privacy page `privacy/whos-lying/`, store screenshots, Play Console | v1 feeling right after real games |
+| ⏳ | Open-source license (GPL-3.0 was the candidate) | Your decision · not licensed for now |
+| ⏳ | More packs / sharing packs between phones (QR or text) | Feedback after real use |
+
 ## repo
 
 | | What is missing | Waiting on |

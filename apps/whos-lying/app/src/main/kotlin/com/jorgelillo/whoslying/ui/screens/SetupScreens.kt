@@ -1,0 +1,306 @@
+package com.jorgelillo.whoslying.ui.screens
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import com.jorgelillo.whoslying.R
+import com.jorgelillo.whoslying.domain.GameMode
+import com.jorgelillo.whoslying.domain.GameSettings
+import com.jorgelillo.whoslying.domain.Rules
+import com.jorgelillo.whoslying.domain.WordPack
+import com.jorgelillo.whoslying.ui.theme.Neon
+
+@Composable
+fun HomeScreen(onPlay: () -> Unit, onHowTo: () -> Unit, onPacks: () -> Unit, onAbout: () -> Unit) {
+    Page(title = null, onBack = null, bottom = {
+        BigButton(stringResource(R.string.play), onPlay, Modifier.testTag("play"))
+        Spacer(Modifier.height(12.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            HomeChip("📖", stringResource(R.string.how_to_play), onHowTo, Modifier.weight(1f).testTag("how_to"))
+            HomeChip("🗂️", stringResource(R.string.packs_short), onPacks, Modifier.weight(1f).testTag("packs"))
+        }
+        TextButton(onClick = onAbout, modifier = Modifier.align(Alignment.CenterHorizontally).testTag("about")) {
+            Text(stringResource(R.string.action_about), color = Neon.Muted)
+        }
+    }) {
+        Spacer(Modifier.weight(1f))
+        Emoji("🕵️", size = 110, modifier = Modifier.fillMaxWidth())
+        Spacer(Modifier.height(16.dp))
+        Text(
+            stringResource(R.string.home_title),
+            style = MaterialTheme.typography.displayMedium,
+            fontWeight = FontWeight.Black,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Text(
+            stringResource(R.string.home_subtitle),
+            color = Neon.Muted,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+        )
+        Spacer(Modifier.weight(1.3f))
+    }
+}
+
+@Composable
+private fun HomeChip(emoji: String, label: String, onClick: () -> Unit, modifier: Modifier) {
+    Row(
+        modifier
+            .clip(MaterialTheme.shapes.large)
+            .background(Neon.Card)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(emoji)
+        Spacer(Modifier.width(10.dp))
+        Text(label, fontWeight = FontWeight.SemiBold, maxLines = 1)
+    }
+}
+
+private val avatarColors = listOf(Neon.Pink, Neon.Turquoise, Neon.Violet, Neon.Amber)
+
+@Composable
+fun PlayersScreen(
+    players: List<String>,
+    onAdd: (String) -> Unit,
+    onRemove: (String) -> Unit,
+    onContinue: () -> Unit,
+    onBack: () -> Unit,
+) {
+    var draft by rememberSaveable { mutableStateOf("") }
+    fun add() {
+        if (draft.isNotBlank()) onAdd(draft)
+        draft = ""
+    }
+    Page(
+        title = stringResource(R.string.players_title),
+        onBack = onBack,
+        modifier = Modifier.imePadding(),
+        bottom = {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                OutlinedTextField(
+                    value = draft,
+                    onValueChange = { draft = it },
+                    placeholder = { Text(stringResource(R.string.players_add_hint)) },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { add() }),
+                    modifier = Modifier.weight(1f).testTag("player_name"),
+                )
+                Spacer(Modifier.width(10.dp))
+                FilledIconButton(onClick = { add() }, enabled = draft.isNotBlank(), modifier = Modifier.size(52.dp).testTag("add_player")) {
+                    Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.players_add))
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+            BigButton(
+                stringResource(R.string.continue_),
+                onContinue,
+                enabled = players.size >= Rules.MIN_PLAYERS,
+                modifier = Modifier.testTag("continue"),
+            )
+        },
+    ) {
+        Text(
+            if (players.size < Rules.MIN_PLAYERS) pluralStringResource(R.plurals.players_need_more, Rules.MIN_PLAYERS, Rules.MIN_PLAYERS)
+            else stringResource(R.string.players_subtitle),
+            color = Neon.Muted,
+        )
+        Spacer(Modifier.height(12.dp))
+        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            items(players, key = { it }) { name ->
+                val color = avatarColors[players.indexOf(name) % avatarColors.size]
+                Row(
+                    Modifier.fillMaxWidth().clip(CircleShape).background(Neon.Card).padding(start = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Box(Modifier.size(38.dp).clip(CircleShape).background(color), contentAlignment = Alignment.Center) {
+                        Text(name.take(1).uppercase(), fontWeight = FontWeight.Black, color = Neon.Night)
+                    }
+                    Text(name, Modifier.weight(1f).padding(horizontal = 14.dp), style = MaterialTheme.typography.titleMedium)
+                    IconButton(onClick = { onRemove(name) }) {
+                        Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.players_remove, name), tint = Neon.Pink)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun SetupScreen(
+    playerCount: Int,
+    settings: GameSettings,
+    packs: List<WordPack>,
+    onChange: ((GameSettings) -> GameSettings) -> Unit,
+    onStart: () -> Unit,
+    onBack: () -> Unit,
+) {
+    val maxImpostors = Rules.maxImpostors(playerCount, settings.mode).coerceAtLeast(1)
+    Page(
+        title = stringResource(R.string.setup_title),
+        onBack = onBack,
+        bottom = {
+            BigButton(
+                stringResource(R.string.start),
+                onStart,
+                enabled = Rules.canStart(playerCount, settings),
+                modifier = Modifier.testTag("start"),
+            )
+        },
+    ) {
+        Column(Modifier.verticalScroll(rememberScrollState())) {
+            listOf(
+                Triple(GameMode.CLASSIC, R.string.mode_classic to R.string.mode_classic_desc, "🎭"),
+                Triple(GameMode.BLIND, R.string.mode_blind to R.string.mode_blind_desc, "🙈"),
+                Triple(GameMode.DRIFTER, R.string.mode_drifter to R.string.mode_drifter_desc, "🤷"),
+            ).forEach { (mode, texts, emoji) ->
+                val selected = settings.mode == mode
+                val enabled = playerCount >= Rules.minPlayers(mode)
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 10.dp)
+                        .clip(MaterialTheme.shapes.large)
+                        .background(if (selected) Neon.CardHigh else Neon.Card)
+                        .border(2.dp, if (selected) Neon.Violet else Color.Transparent, MaterialTheme.shapes.large)
+                        .clickable(enabled = enabled) { onChange { it.copy(mode = mode) } }
+                        .padding(16.dp)
+                        .testTag("mode_${mode.name.lowercase()}"),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(emoji, style = MaterialTheme.typography.headlineMedium)
+                    Spacer(Modifier.width(14.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text(stringResource(texts.first), fontWeight = FontWeight.Bold, color = if (enabled) Neon.Ink else Neon.Muted)
+                        Text(stringResource(texts.second), style = MaterialTheme.typography.bodySmall, color = Neon.Muted)
+                    }
+                }
+            }
+
+            SettingRow(stringResource(R.string.setup_impostors), null) {
+                IconButton(onClick = { onChange { it.copy(impostors = it.impostors - 1) } }, enabled = settings.impostors > 1, modifier = Modifier.testTag("impostors_minus")) {
+                    Text("−", style = MaterialTheme.typography.headlineSmall)
+                }
+                Text("${settings.impostors}", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(horizontal = 8.dp))
+                IconButton(onClick = { onChange { it.copy(impostors = it.impostors + 1) } }, enabled = settings.impostors < maxImpostors, modifier = Modifier.testTag("impostors_plus")) {
+                    Text("+", style = MaterialTheme.typography.headlineSmall)
+                }
+            }
+            if (settings.mode != GameMode.CLASSIC) {
+                SettingRow(stringResource(R.string.setup_hint), stringResource(R.string.setup_hint_desc)) {
+                    NeonSwitch(settings.categoryHint, "hint") { v -> onChange { it.copy(categoryHint = v) } }
+                }
+            }
+            SettingRow(stringResource(R.string.setup_chaos), stringResource(R.string.setup_chaos_desc)) {
+                NeonSwitch(settings.chaos, "chaos") { v -> onChange { it.copy(chaos = v) } }
+            }
+
+            Text(stringResource(R.string.setup_packs), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp))
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                PackChip("✨ " + stringResource(R.string.setup_all_packs), settings.packIds.isEmpty()) {
+                    onChange { it.copy(packIds = emptySet()) }
+                }
+                packs.forEach { pack ->
+                    PackChip("${pack.emoji} ${pack.name}", pack.id in settings.packIds) {
+                        onChange { s ->
+                            val ids = if (pack.id in s.packIds) s.packIds - pack.id else s.packIds + pack.id
+                            s.copy(packIds = ids)
+                        }
+                    }
+                }
+            }
+            Spacer(Modifier.height(16.dp))
+        }
+    }
+}
+
+@Composable
+private fun SettingRow(title: String, subtitle: String?, control: @Composable () -> Unit) {
+    Row(
+        Modifier.fillMaxWidth().padding(vertical = 6.dp).clip(MaterialTheme.shapes.large).background(Neon.Card).padding(horizontal = 16.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(Modifier.weight(1f)) {
+            Text(title, fontWeight = FontWeight.SemiBold)
+            if (subtitle != null) Text(subtitle, style = MaterialTheme.typography.bodySmall, color = Neon.Muted)
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) { control() }
+    }
+}
+
+@Composable
+private fun NeonSwitch(checked: Boolean, tag: String, onChange: (Boolean) -> Unit) {
+    Switch(
+        checked = checked,
+        onCheckedChange = onChange,
+        modifier = Modifier.testTag(tag),
+        colors = SwitchDefaults.colors(checkedTrackColor = Neon.Violet, checkedThumbColor = Color.White),
+    )
+}
+
+@Composable
+private fun PackChip(label: String, selected: Boolean, onClick: () -> Unit) {
+    Text(
+        label,
+        modifier = Modifier
+            .clip(CircleShape)
+            .background(if (selected) Neon.Violet.copy(alpha = 0.3f) else Neon.Card)
+            .border(1.dp, if (selected) Neon.Violet else Color.Transparent, CircleShape)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 14.dp, vertical = 8.dp),
+        style = MaterialTheme.typography.labelLarge,
+    )
+}

@@ -1,0 +1,117 @@
+<resources>
+    <string name="app_name">¿Quién miente?</string>
+
+    <string name="home_title">¿Quién miente?</string>
+    <string name="home_subtitle">El juego del impostor. Gratis, sin anuncios y sin trampas.</string>
+    <string name="play">Jugar</string>
+    <string name="how_to_play">Cómo se juega</string>
+    <string name="packs">Paquetes de palabras</string>
+    <string name="packs_short">Paquetes</string>
+    <string name="action_about">Información</string>
+    <string name="action_back">Atrás</string>
+
+    <string name="players_title">Jugadores</string>
+    <string name="players_subtitle">De 3 a 24 jugadores, juntos y con un solo móvil</string>
+    <string name="players_add_hint">Nombre del jugador</string>
+    <string name="players_add">Añadir</string>
+    <string name="players_remove">Quitar a %1$s</string>
+    <plurals name="players_need_more">
+        <item quantity="one">Añade al menos %1$d jugadores</item>
+        <item quantity="many">Añade al menos %1$d jugadores</item>
+        <item quantity="other">Añade al menos %1$d jugadores</item>
+    </plurals>
+    <string name="continue_">Continuar</string>
+
+    <string name="setup_title">Configurar partida</string>
+    <string name="mode_classic">Clásico</string>
+    <string name="mode_classic_desc">El impostor recibe una palabra parecida y no sabe que es el impostor.</string>
+    <string name="mode_blind">A ciegas</string>
+    <string name="mode_blind_desc">El impostor no recibe palabra y tiene que tirarse el farol.</string>
+    <string name="mode_drifter">El Despistado</string>
+    <string name="mode_drifter_desc">Clásico, más un Despistado sin palabra que gana si la adivina.</string>
+    <string name="setup_impostors">Impostores</string>
+    <string name="setup_hint">Pista de categoría</string>
+    <string name="setup_hint_desc">Quien no tiene palabra ve el nombre del paquete</string>
+    <string name="setup_chaos">Caos</string>
+    <string name="setup_chaos_desc">Algunas partidas tienen un número de impostores al azar… a veces todos</string>
+    <string name="setup_packs">Paquetes</string>
+    <string name="setup_all_packs">Todos</string>
+    <string name="start">Empezar</string>
+
+    <string name="reveal_pass_to">Pásale el móvil a</string>
+    <string name="reveal_tap">Toca para ver tu palabra</string>
+    <string name="reveal_your_word">Tu palabra</string>
+    <string name="reveal_you_are_impostor">Eres el impostor</string>
+    <string name="reveal_you_are_drifter">Eres el Despistado</string>
+    <string name="reveal_impostor_desc">No tienes palabra. Escucha, disimula y que no te pillen.</string>
+    <string name="reveal_drifter_desc">No tienes palabra. Si te eliminan, adivínala para ganar.</string>
+    <string name="reveal_hint">Categoría: %1$s</string>
+    <string name="reveal_hide">Ocultar y pasar</string>
+    <string name="reveal_counter">%1$d de %2$d</string>
+
+    <string name="countdown_starts">Empieza %1$s.</string>
+    <string name="countdown_ready">¡Prepárate!</string>
+
+    <string name="vote_title">¿Quién miente?</string>
+    <string name="vote_desc">Dad pistas por turnos, discutid y votad a quién eliminar.</string>
+    <string name="vote_starter">Ha empezado %1$s</string>
+    <string name="vote_confirm">¿Eliminar a %1$s?</string>
+    <string name="vote_yes">Eliminar</string>
+    <string name="vote_cancel">Cancelar</string>
+    <string name="vote_reveal_all">Terminar y revelar</string>
+    <string name="out_was_civilian">%1$s era civil</string>
+    <string name="out_was_impostor">¡%1$s era impostor!</string>
+    <string name="out_was_drifter">¡%1$s era el Despistado!</string>
+    <string name="out_their_word">Su palabra: %1$s</string>
+    <string name="next_vote">Seguir jugando</string>
+
+    <string name="guess_title">Última oportunidad, %1$s</string>
+    <string name="guess_desc">Adivina la palabra de los civiles para ganar la partida.</string>
+    <string name="guess_hint">La palabra</string>
+    <string name="guess_go">Adivinar</string>
+    <string name="guess_wrong">¡Fallaste! La partida sigue.</string>
+
+    <string name="result_civilians">¡Ganan los civiles!</string>
+    <string name="result_impostors">¡Ganan los impostores!</string>
+    <string name="result_impostors_drifter">¡Ganan impostores y Despistado!</string>
+    <string name="result_drifter">¡Gana el Despistado!</string>
+    <string name="result_drifter_guessed">¡El Despistado adivinó la palabra!</string>
+    <string name="result_nobody">¡Todos erais impostores! 🎭</string>
+    <string name="result_ended">Partida terminada</string>
+    <string name="result_word">La palabra era %1$s</string>
+    <string name="result_roles">Quién era quién</string>
+    <string name="role_civilian">Civil</string>
+    <string name="role_impostor">Impostor</string>
+    <string name="role_drifter">Despistado</string>
+    <string name="play_again">Otra partida</string>
+    <string name="home">Inicio</string>
+
+    <string name="packs_builtin">Incluidos</string>
+    <string name="packs_custom">Tuyos</string>
+    <string name="packs_new">Nuevo paquete</string>
+    <plurals name="pack_words">
+        <item quantity="one">%d palabra</item>
+        <item quantity="many">%d palabras</item>
+        <item quantity="other">%d palabras</item>
+    </plurals>
+    <string name="pack_name">Nombre del paquete</string>
+    <string name="pack_words_label">Una por línea: palabra / parecida</string>
+    <string name="pack_words_help">La palabra parecida es opcional: sin ella, el impostor recibe otra palabra del paquete.</string>
+    <string name="pack_save">Guardar</string>
+    <string name="pack_delete">Borrar paquete</string>
+    <string name="pack_need">Pon un nombre y al menos 3 palabras</string>
+
+    <string name="how_1_title">1 · Recibe tu palabra</string>
+    <string name="how_1">Pasaos el móvil. Todos veis la misma palabra secreta… menos los impostores.</string>
+    <string name="how_2_title">2 · Da pistas</string>
+    <string name="how_2">Por turnos, decid una palabra o frase corta sobre ella. Sin pasarse, que el impostor se entera.</string>
+    <string name="how_3_title">3 · Votad</string>
+    <string name="how_3">Discutid y eliminad a alguien. La app revela qué era.</string>
+    <string name="how_4_title">4 · Ganar</string>
+    <string name="how_4">Los civiles ganan si eliminan a todos los impostores. Los impostores, si solo queda un civil. El Despistado también gana si adivina la palabra al ser eliminado.</string>
+
+    <string name="about_version">Versión %1$s</string>
+    <string name="about_body">Gratis para siempre: todos los paquetes, sin anuncios, sin suscripciones y sin rastreo. Hecha con cariño por Jorge Lillo.</string>
+    <string name="about_privacy">Política de privacidad</string>
+    <string name="about_rate">Valorar en Google Play</string>
+</resources>
