@@ -10,7 +10,8 @@ configuration lives in `build-logic/`. Human docs are in `docs/` (index `docs/RE
 each app has its own `apps/<app>/OPERATIONS.md` (exact commands) and `release-notes.md` (version history).
 
 Apps today: `christmas-countdown` (`com.jorgelillo.christmascountdown`, live on Play) and
-`decision-wheel` ("What next?", `com.jorgelillo.decisionwheel`, not released yet). Write code,
+`decision-wheel` ("What next?", `com.jorgelillo.decisionwheel`) and `whos-lying`
+("Who's lying?", `com.jorgelillo.whoslying`), the last two not released yet. Write code,
 docs and scripts so they work for any app.
 
 ## Environment

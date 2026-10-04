@@ -29,3 +29,7 @@ include(":apps:christmas-countdown:domain")
 // Decision wheel ("What next?")
 include(":apps:decision-wheel:app")
 include(":apps:decision-wheel:domain")
+
+// Who's lying? (impostor party game)
+include(":apps:whos-lying:app")
+include(":apps:whos-lying:domain")
