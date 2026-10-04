@@ -17,3 +17,6 @@ Short, one line each. Add to it whenever something bites.
 - **Don't publish a store listing ahead of the release** that adds the features it describes.
 - **The emulator is heavy on this Mac.** Run capture/test scripts in the foreground with Chrome
   closed; background jobs get killed under memory pressure.
+- **`.properties` files are read as ISO-8859-1.** A UTF-8 "ó" in a path broke
+  `keystore.properties`. Keys now live in `~/Projects/documentation/keys/<app>/` (ASCII, no spaces),
+  and `scripts/new-upload-key.sh` still escapes non-ASCII as `\uXXXX` just in case.

@@ -24,11 +24,23 @@ UI test tags (usable with `scripts/tap-text.sh`): `new_wheel`, `more`, `spin`, `
 
 ## Release
 
-Not published yet. Before the first release:
+Not published yet.
 
-- Create the **upload key**: `scripts/new-upload-key.sh decision-wheel` in your own terminal, then
-  back it up off the Mac ([docs/signing.md](../../docs/signing.md)) and paste its fingerprints here.
-  Until then release builds are signed with the debug key so they can be smoke tested; Play
-  rejects them.
-- Store listing texts and images in `store/metadata/android/<locale>/`.
-- Then follow the `release-android-app` skill / [docs/publishing-on-google-play.md](../../docs/publishing-on-google-play.md).
+Upload key (created 4 Oct 2026 with `scripts/new-upload-key.sh`, see [docs/signing.md](../../docs/signing.md)):
+
+| | |
+|---|---|
+| File | `~/Projects/documentation/keys/decision-wheel/upload-decision-wheel.jks` (+ off-Mac backup) |
+| Alias | `upload` |
+| Serial | `da62bb8484e5ec9d` (valid until Feb 2054) |
+| SHA-1 | `E4:78:C6:53:CB:3A:06:AD:F1:94:C0:AC:3E:73:E4:36:BD:32:31:30` |
+| SHA-256 | `52:DD:2C:AB:AF:2E:B2:0B:3B:74:5F:B0:AC:5F:0A:01:E9:B7:B4:60:BB:B7:65:B7:5A:BB:99:7E:FD:5D:6D:3C` |
+
+```bash
+./gradlew :apps:decision-wheel:app:bundleRelease
+apps/decision-wheel/tools/smoke_test.sh
+scripts/verify-bundle.sh apps/decision-wheel/app/build/outputs/bundle/release/app-release.aab
+```
+
+Store listing texts and images: `store/metadata/android/<locale>/`. Then follow the
+`release-android-app` skill / [docs/publishing-on-google-play.md](../../docs/publishing-on-google-play.md).
