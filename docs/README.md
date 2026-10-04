@@ -11,9 +11,9 @@ Guides and runbooks for every app in this repo. Grows as we go.
 
 Per-app docs live next to each app:
 
-| App | Operations (commands) | History |
-|---|---|---|
-| Christmas Countdown | [OPERATIONS.md](../apps/christmas-countdown/OPERATIONS.md) | [Relaunch 2026](../apps/christmas-countdown/docs/relaunch-2026.md) |
+| App | Operations (commands, signing, release history) |
+|---|---|
+| Christmas Countdown | [OPERATIONS.md](../apps/christmas-countdown/OPERATIONS.md) |
 
 Shared scripts are in [`scripts/`](../scripts) and shared branding in [`branding/`](../branding).
 

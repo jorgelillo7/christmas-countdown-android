@@ -79,4 +79,4 @@ Expected review warnings that are OK: "devices no longer supported" after raisin
 ## 7. After approval
 
 Ask the user to install from Play on a real phone; note anything learned in
-`apps/<app>/docs/` or `docs/lessons-learned.md`.
+`docs/lessons-learned.md` and the release history in `apps/<app>/OPERATIONS.md`.

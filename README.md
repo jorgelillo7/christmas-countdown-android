@@ -35,7 +35,6 @@ apps/
     ├── domain/                    :apps:christmas-countdown:domain — pure Kotlin business logic
     ├── store/                     Play Store listing: texts and images per language
     ├── tools/                     App-specific scripts (icon, store assets, smoke test)
-    ├── docs/                      App history
     └── OPERATIONS.md              Every command to run, test and release the app
 ```
 

@@ -10,7 +10,6 @@ apps/roulette/
 ├── domain/       pure Kotlin logic (no android.*), unit tested
 ├── store/        Play listing texts and images (fastlane layout)
 ├── tools/        app-specific scripts (icon, screenshots, smoke test)
-├── docs/         app history and notes
 ├── OPERATIONS.md commands to run, test and release
 └── README.md
 ```
