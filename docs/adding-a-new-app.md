@@ -49,6 +49,16 @@ include(":apps:roulette:domain")
 
 SDK levels, Java target, desugaring and Compose setup come from `build-logic`; nothing else to configure.
 
+Notes from app #2:
+- An app may override `minSdk` in its own `defaultConfig` when a library needs it (the decision
+  wheel uses 24 for navigation-compose); never raise it for an app that already has users without
+  reason.
+- Until the app has an upload key, sign release builds with the debug key
+  (`signingConfig = … if (keystorePropertiesFile.exists()) "release" else "debug"`) so
+  `tools/smoke_test.sh` can install the R8 build. Play rejects debug-signed bundles.
+- Wrap the content in `Modifier.semantics { testTagsAsResourceId = true }` and give buttons a
+  `testTag`: some Compose components (e.g. extended FABs) don't expose their text to UI Automator.
+
 ## 2. Theme
 
 Wrap the UI in `LilloTheme(colorScheme = RouletteColorScheme) { … }` from `:core:designsystem`.

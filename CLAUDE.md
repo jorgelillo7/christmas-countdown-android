@@ -9,8 +9,9 @@ self-contained folder under `apps/<app>/`; shared Compose code lives in `core/`;
 configuration lives in `build-logic/`. Human docs are in `docs/` (index `docs/README.md`, repo runbook `docs/operations.md`); open work in `PENDING.md`;
 each app has its own `apps/<app>/OPERATIONS.md` (exact commands) and `release-notes.md` (version history).
 
-Apps today: `christmas-countdown` (`com.jorgelillo.christmascountdown`, live on Play). More will
-follow (a roulette is next); write code, docs and scripts so they work for any app.
+Apps today: `christmas-countdown` (`com.jorgelillo.christmascountdown`, live on Play) and
+`decision-wheel` ("What next?", `com.jorgelillo.decisionwheel`, not released yet). Write code,
+docs and scripts so they work for any app.
 
 ## Environment
 
@@ -35,7 +36,7 @@ Module paths follow the folders: `:apps:<app>:app`, `:apps:<app>:domain`, `:core
 
 scripts/emulator.sh start|stop|date MMDDhhmmYYYY|date auto|demo on|off
 scripts/screenshot.sh <out.png>                           # dismisses "isn't responding" dialogs first
-scripts/tap-text.sh "<label>"                             # tap by on-screen text (use instead of coordinates)
+scripts/tap-text.sh "<label|test tag>"                    # tap by on-screen text or Compose test tag (never coordinates)
 scripts/verify-bundle.sh <aab>                            # signature, versionCode, permissions, native libs
 apps/<app>/tools/smoke_test.sh                            # release APK on emulator (per app)
 ```
@@ -44,8 +45,8 @@ Asset generators (icons, store graphics, developer profile) are Python + Pillow:
 `scripts/setup-python.sh` once, then `.venv/bin/python <script>`. Generated images are committed;
 regenerate them instead of editing by hand.
 
-Project skills in `.claude/skills/`: `upgrade-android-deps` (toolchain/dependency upgrades) and
-`release-android-app` (build, verify and ship a new version of an app).
+Project skills in `.claude/skills/`: `new-android-app` (competitor study → design → scaffold),
+`upgrade-android-deps` (toolchain/dependency upgrades) and `release-android-app` (ship a version).
 
 ## Build architecture
 

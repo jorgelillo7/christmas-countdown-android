@@ -2,6 +2,7 @@
 androidGradlePlugin = "9.4.1"
 kotlin = "2.4.20"
 desugarJdkLibs = "2.1.5"
+kotlinxSerialization = "1.11.0"
 
 androidxActivity = "1.13.0"
 androidxComposeBom = "2026.09.00"
@@ -10,6 +11,7 @@ androidxCoreSplashscreen = "1.2.0"
 androidxDataStore = "1.2.1"
 androidxGlance = "1.2.0"
 androidxLifecycle = "2.11.0"
+androidxNavigation = "2.10.2"
 
 junit = "4.13.2"
 
@@ -35,8 +37,10 @@ androidx-dataStore-preferences = { group = "androidx.datastore", name = "datasto
 androidx-glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "androidxGlance" }
 androidx-glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "androidxGlance" }
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit", version.ref = "kotlin" }
 
@@ -50,6 +54,7 @@ android-application = { id = "com.android.application", version.ref = "androidGr
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 # Convention plugins from build-logic.
 jorgelillo-android-application = { id = "jorgelillo.android.application" }

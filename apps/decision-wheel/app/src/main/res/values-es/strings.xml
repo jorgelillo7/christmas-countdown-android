@@ -1,0 +1,90 @@
+<resources>
+    <string name="app_name">¿Qué hacemos?</string>
+
+    <string name="home_title">¿Qué hacemos?</string>
+    <string name="home_subtitle">Elige una ruleta o crea la tuya.</string>
+    <string name="new_wheel">Nueva ruleta</string>
+    <plurals name="options_count">
+        <item quantity="one">%d opción</item>
+        <item quantity="many">%d opciones</item>
+        <item quantity="other">%d opciones</item>
+    </plurals>
+    <string name="settings_avoid_repeats">Evitar repetir</string>
+    <string name="settings_sound">Sonido</string>
+    <string name="action_about">Información</string>
+    <string name="action_more">Más</string>
+
+    <string name="action_back">Atrás</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_history">Historial</string>
+    <string name="spin">¡Gira!</string>
+    <string name="spinning">…</string>
+    <string name="veto_hint">Toca una opción para vetarla</string>
+    <string name="veto_reset">Quitar vetos</string>
+    <string name="need_two">Deja al menos dos opciones para girar</string>
+    <string name="recent_hint">⏱ Salió hace poco: sector más pequeño, menos probabilidad</string>
+    <string name="result_title">¡Decidido!</string>
+    <string name="result_accept">¡Vamos!</string>
+    <string name="result_again">Otra vez</string>
+    <string name="saved_to_history">Guardado en el historial</string>
+
+    <string name="history_title">Historial</string>
+    <string name="history_empty">Aún no hay nada. Acepta un resultado con \"¡Vamos!\" y aparecerá aquí.</string>
+    <string name="history_just_now">Ahora mismo</string>
+    <string name="history_clear">Borrar historial</string>
+
+    <string name="edit_title_new">Nueva ruleta</string>
+    <string name="edit_title">Editar ruleta</string>
+    <string name="edit_name">Nombre</string>
+    <string name="edit_add_option">Añade una opción</string>
+    <string name="edit_add">Añadir</string>
+    <string name="edit_remove">Quitar</string>
+    <string name="edit_save">Guardar</string>
+    <string name="edit_delete">Borrar ruleta</string>
+    <string name="edit_delete_confirm">¿Borrar esta ruleta y su historial?</string>
+    <string name="edit_cancel">Cancelar</string>
+    <string name="edit_need_name">Ponle un nombre</string>
+    <string name="edit_need_two">Añade al menos dos opciones</string>
+
+    <string name="about_version">Versión %1$s</string>
+    <string name="about_body">Sin anuncios, sin rastreo y sin recoger datos. Todo se queda en tu móvil. Hecha con cariño por Jorge Lillo.</string>
+    <string name="about_privacy">Política de privacidad</string>
+    <string name="about_rate">Valorar en Google Play</string>
+
+    <string name="preset_eat_out">¿Dónde comemos?</string>
+    <string-array name="preset_eat_out_options">
+        <item>VIPS</item>
+        <item>Foster\'s Hollywood</item>
+        <item>Goiko</item>
+        <item>100 Montaditos</item>
+        <item>Ginos</item>
+        <item>TGB</item>
+        <item>Lizarran</item>
+        <item>La Tagliatella</item>
+    </string-array>
+    <string name="preset_dinner">¿Qué cenamos en casa?</string>
+    <string-array name="preset_dinner_options">
+        <item>Tortilla</item>
+        <item>Pasta</item>
+        <item>Ensalada</item>
+        <item>Pizza casera</item>
+        <item>Crema de verduras</item>
+        <item>Pedimos a domicilio</item>
+    </string-array>
+    <string name="preset_weekend">Plan de finde</string>
+    <string-array name="preset_weekend_options">
+        <item>Senderismo</item>
+        <item>Piscina</item>
+        <item>Playa</item>
+        <item>Cine</item>
+        <item>Museo</item>
+        <item>Escapada rural</item>
+        <item>Terraceo</item>
+        <item>Sofá y peli</item>
+    </string-array>
+    <string name="preset_yes_no">¿Sí o no?</string>
+    <string-array name="preset_yes_no_options">
+        <item>Sí</item>
+        <item>No</item>
+    </string-array>
+</resources>

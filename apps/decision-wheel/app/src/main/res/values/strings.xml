@@ -1,0 +1,95 @@
+<resources>
+    <string name="app_name">What next?</string>
+
+    <!-- Home -->
+    <string name="home_title">What next?</string>
+    <string name="home_subtitle">Pick a wheel, or make your own.</string>
+    <string name="new_wheel">New wheel</string>
+    <plurals name="options_count">
+        <item quantity="one">%d option</item>
+        <item quantity="other">%d options</item>
+    </plurals>
+    <string name="settings_avoid_repeats">Avoid repeats</string>
+    <string name="settings_sound">Sound</string>
+    <string name="action_about">About</string>
+    <string name="action_more">More</string>
+
+    <!-- Wheel -->
+    <string name="action_back">Back</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_history">History</string>
+    <string name="spin">Spin!</string>
+    <string name="spinning">…</string>
+    <string name="veto_hint">Tap an option to veto it</string>
+    <string name="veto_reset">Clear vetoes</string>
+    <string name="need_two">Keep at least two options to spin</string>
+    <string name="recent_hint">⏱ Picked recently: smaller slice, less chance</string>
+    <string name="result_title">It\'s decided!</string>
+    <string name="result_accept">Let\'s go!</string>
+    <string name="result_again">Spin again</string>
+    <string name="saved_to_history">Saved to history</string>
+
+    <!-- History -->
+    <string name="history_title">History</string>
+    <string name="history_empty">Nothing yet. Accept a result with \"Let\'s go!\" and it shows up here.</string>
+    <string name="history_just_now">Just now</string>
+    <string name="history_clear">Clear history</string>
+
+    <!-- Edit -->
+    <string name="edit_title_new">New wheel</string>
+    <string name="edit_title">Edit wheel</string>
+    <string name="edit_name">Name</string>
+    <string name="edit_add_option">Add an option</string>
+    <string name="edit_add">Add</string>
+    <string name="edit_remove">Remove</string>
+    <string name="edit_save">Save</string>
+    <string name="edit_delete">Delete wheel</string>
+    <string name="edit_delete_confirm">Delete this wheel and its history?</string>
+    <string name="edit_cancel">Cancel</string>
+    <string name="edit_need_name">Give it a name</string>
+    <string name="edit_need_two">Add at least two options</string>
+
+    <!-- About -->
+    <string name="about_version">Version %1$s</string>
+    <string name="about_body">No ads, no tracking and no data collected. Everything stays on your phone. Made with care by Jorge Lillo.</string>
+    <string name="about_privacy">Privacy policy</string>
+    <string name="about_rate">Rate on Google Play</string>
+
+    <!-- Presets, seeded on first launch (users can edit or delete them) -->
+    <string name="preset_eat_out">Where should we eat?</string>
+    <string-array name="preset_eat_out_options">
+        <item>Burgers</item>
+        <item>Pizza</item>
+        <item>Sushi</item>
+        <item>Tacos</item>
+        <item>Italian</item>
+        <item>Thai</item>
+        <item>Indian</item>
+        <item>Chinese</item>
+    </string-array>
+    <string name="preset_dinner">Dinner at home</string>
+    <string-array name="preset_dinner_options">
+        <item>Pasta</item>
+        <item>Salad</item>
+        <item>Omelette</item>
+        <item>Soup</item>
+        <item>Stir-fry</item>
+        <item>Takeaway</item>
+    </string-array>
+    <string name="preset_weekend">Weekend plan</string>
+    <string-array name="preset_weekend_options">
+        <item>Hiking</item>
+        <item>Pool</item>
+        <item>Beach</item>
+        <item>Cinema</item>
+        <item>Museum</item>
+        <item>Road trip</item>
+        <item>Picnic</item>
+        <item>Movie night in</item>
+    </string-array>
+    <string name="preset_yes_no">Yes or no?</string>
+    <string-array name="preset_yes_no_options">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+</resources>

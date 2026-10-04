@@ -11,7 +11,7 @@ ls -lh "$aab" | awk '{print $5, $9}'
 # keytool is forced to English: JDK 25 keytool crashes formatting some localized (e.g. Spanish) messages.
 echo "== Signing certificate (must match the upload key registered in Play Console)"
 "$JAVA_HOME/bin/keytool" -J-Duser.language=en -printcert -jarfile "$aab" | grep -E "Owner|Serial|SHA1:|SHA256:" || {
-  echo "NOT SIGNED: create apps/<app>/keystore.properties"; exit 1; }
+  echo "NOT SIGNED: run scripts/new-upload-key.sh <app> (docs/signing.md)"; exit 1; }
 
 # The bundle manifest is protobuf: repack it as a minimal APK so aapt2 can print it.
 aapt2="$(ls -d "$ANDROID_HOME"/build-tools/*/aapt2 | sort -V | tail -1)"
