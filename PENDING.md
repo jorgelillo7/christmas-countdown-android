@@ -25,9 +25,8 @@ Lines are pruned as items ship. What has **shipped** lives in `apps/<app>/releas
 | | What is missing | Waiting on |
 |---|---|---|
 | 👤 | Try it on a real phone: feel of the spin, tick sound, haptics, presets | You · `./gradlew :apps:decision-wheel:app:installDebug` |
-| 👤 | Upload key + `keystore.properties`, create the app in Play Console, register the package name | You · `scripts/new-upload-key.sh decision-wheel` · [signing guide](docs/signing.md) |
-| 🔨 | Store screenshots and feature graphic (`tools/capture_store_screenshots.sh` + generator, from Christmas Countdown) | The design being final |
-| 🔨 | Privacy page `privacy/decision-wheel/` and app card on jorgelillo7.github.io | Your OK on the restyled privacy page preview |
+| 👤 | Create the app in Play Console and ship v1 to internal testing | You · upload key ready, store texts and images in `apps/decision-wheel/store/` |
+| ⏳ | App card in the pinned "Apps" block of jorgelillo7.github.io (both languages), replacing "coming soon" | The app being live on Google Play (the Play link must work) |
 | ⏳ | Group veto turns (each person vetoes one, passing the phone) | Feedback after real use · v1 vetoes are free taps |
 
 ## repo

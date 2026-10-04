@@ -13,11 +13,13 @@ RAW="$ROOT/apps/decision-wheel/store/raw"
 tap() { "$ROOT/scripts/tap-text.sh" "$@"; }
 shot() { "$ROOT/scripts/screenshot.sh" "$RAW/$1/$2.png"; }
 
-# Wheel to open and two options to veto, per locale (macOS bash 3.2: no associative arrays).
+# Wheel to open and veto candidates, per locale (macOS bash 3.2: no associative arrays).
+# The winner's chip gets a "⏱" suffix, so it is skipped automatically (its exact label no longer
+# matches); the first two candidates that do match are vetoed.
 labels() {
   case "$1" in
-    en-US) WHEEL="Where should we eat?"; VETO1="Indian"; VETO2="Chinese" ;;
-    es-ES) WHEEL="¿Dónde comemos?"; VETO1="Ginos"; VETO2="Lizarran" ;;
+    en-US) WHEEL="Where should we eat?"; VETOES=("Indian" "Chinese" "Thai" "Tacos") ;;
+    es-ES) WHEEL="¿Dónde comemos?"; VETOES=("Ginos" "Lizarran" "TGB" "Goiko") ;;
   esac
 }
 
@@ -35,8 +37,12 @@ for locale in en-US es-ES; do
   tap spin 7                                                   # spin lasts ~5 s
   shot "$locale" 02-result
   tap accept 3                                                 # winner now has a smaller slice
-  tap "$VETO1" 2
-  tap "$VETO2" 3
+  vetoed=0
+  for option in "${VETOES[@]}"; do
+    [ "$vetoed" -lt 2 ] || break
+    if tap "$option" 2 2>/dev/null; then vetoed=$((vetoed + 1)); fi
+  done
+  sleep 1
   shot "$locale" 03-repeats-vetoes
   tap back 3
 done

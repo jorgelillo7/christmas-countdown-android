@@ -34,6 +34,17 @@ is why slice size = probability, with no hidden weighting.
 "Sunset" palette on a night background: coral, orange, sun, teal, blue, lilac (`ui/theme/WheelTheme.kt`).
 Neighbouring slices never share a colour, and each option keeps its colour when others are vetoed.
 
+## 🛍️ Store listing
+
+Texts and images in [`store/`](store) (fastlane supply layout). Regenerate after UI changes:
+
+```bash
+scripts/emulator.sh start
+./gradlew :apps:decision-wheel:app:installRelease
+apps/decision-wheel/tools/capture_store_screenshots.sh
+.venv/bin/python apps/decision-wheel/tools/generate_store_assets.py
+```
+
 ## 📦 Commands
 
 See [OPERATIONS.md](OPERATIONS.md). Version history: [release-notes.md](release-notes.md).
