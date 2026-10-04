@@ -17,6 +17,8 @@ import androidx.navigation.compose.rememberNavController
 import com.jorgelillo.whoslying.WhosLyingApplication
 import com.jorgelillo.whoslying.domain.WordPack
 import com.jorgelillo.whoslying.ui.screens.CountdownScreen
+import com.jorgelillo.whoslying.ui.screens.DebateScreen
+import com.jorgelillo.whoslying.ui.screens.ExposeScreen
 import com.jorgelillo.whoslying.ui.screens.HomeScreen
 import com.jorgelillo.whoslying.ui.screens.HowToSheet
 import com.jorgelillo.whoslying.ui.screens.ModesSheet
@@ -28,7 +30,7 @@ import com.jorgelillo.whoslying.ui.screens.ResultScreen
 import com.jorgelillo.whoslying.ui.screens.RevealScreen
 import com.jorgelillo.whoslying.ui.screens.SettingsSheet
 import com.jorgelillo.whoslying.ui.screens.SetupScreen
-import com.jorgelillo.whoslying.ui.screens.VoteScreen
+import com.jorgelillo.whoslying.ui.screens.VotingScreen
 
 private const val NEW = "new"
 
@@ -76,27 +78,51 @@ fun WhosLyingApp(app: WhosLyingApplication) {
         }
         composable("countdown") {
             val game = vm.game ?: return@composable LaunchedEffect(Unit) { nav.goHome() }
-            CountdownScreen(game.starter, onDone = { nav.navigate("vote") { popUpTo("setup") } })
+            CountdownScreen(game.starter, onDone = { nav.navigate("debate") { popUpTo("setup") } })
+        }
+        composable("debate") {
+            val game = vm.game ?: return@composable LaunchedEffect(Unit) { nav.goHome() }
+            LaunchedEffect(vm.revision) { if (game.isOver) nav.navigate("result") { popUpTo("setup") } }
+            DebateScreen(
+                game = game,
+                alive = remember(vm.revision) { game.alive.map { it.player }.toSet() },
+                discussionSeconds = state.settings.discussionSeconds,
+                onVote = { nav.navigate("vote") },
+                onRevealAll = vm::revealAll,
+                onQuit = { nav.goHome() },
+            )
         }
         composable("vote") {
             val game = vm.game ?: return@composable LaunchedEffect(Unit) { nav.goHome() }
-            LaunchedEffect(vm.revision) { if (game.isOver) nav.navigate("result") { popUpTo("setup") } }
-            VoteScreen(
+            VotingScreen(
                 game = game,
-                discussionSeconds = state.settings.discussionSeconds,
                 alive = remember(vm.revision) { game.alive.map { it.player }.toSet() },
-                elimination = vm.lastElimination,
-                onVote = vm::eliminate,
-                onGuess = vm::guess,
-                onDismissElimination = vm::dismissElimination,
-                onRevealAll = vm::revealAll,
-                onQuit = { nav.goHome() },
+                onConfirm = { player ->
+                    vm.eliminate(player)
+                    nav.navigate("expose") { popUpTo("debate") }
+                },
+                onBack = { nav.popBackStack() },
+            )
+        }
+        composable("expose") {
+            val game = vm.game ?: return@composable LaunchedEffect(Unit) { nav.goHome() }
+            // Null for a moment after "keep playing" while this screen leaves.
+            val elimination = vm.lastElimination ?: return@composable
+            val toResult = { nav.navigate("result") { popUpTo("setup") } }
+            ExposeScreen(
+                game = game,
+                elimination = elimination,
+                onGuess = { text -> vm.guess(text).also { right -> if (right || game.isOver) toResult() } },
+                onContinue = { vm.dismissElimination(); nav.popBackStack() },
+                onGameOver = toResult,
             )
         }
         composable("result") {
             val game = vm.game ?: return@composable LaunchedEffect(Unit) { nav.goHome() }
             ResultScreen(
-                game,
+                game = game,
+                lastElimination = vm.lastElimination,
+                onReport = null,
                 onPlayAgain = { if (vm.startGame()) nav.navigate("reveal") { popUpTo("setup") } },
                 onHome = { nav.goHome() },
             )
