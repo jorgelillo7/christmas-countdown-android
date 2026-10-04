@@ -17,6 +17,7 @@ Package: `com.jorgelillo.whoslying` (minSdk 24: navigation-compose needs it).
 | Run in Spanish | `$ADB shell cmd locale set-app-locales com.jorgelillo.whoslying --locales es-ES` |
 | Smoke test (release build, emulator running) | `apps/whos-lying/tools/smoke_test.sh` |
 | Regenerate icons | `.venv/bin/python apps/whos-lying/tools/generate_icon.py` |
+| Store screenshots | emulator running + app installed: `apps/whos-lying/tools/capture_store_screenshots.sh`, check `store/raw/`, then `.venv/bin/python apps/whos-lying/tools/generate_store_assets.py` |
 
 UI test tags (usable with `scripts/tap-text.sh`, dialogs included): `play`, `how_to`, `modes`,
 `packs`, `about`, `modes_info`, `modes_sheet`, `timer_plus|minus`, `timer`, `unplayed`,
