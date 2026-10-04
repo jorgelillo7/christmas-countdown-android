@@ -12,20 +12,25 @@ APK="$ROOT/apps/christmas-countdown/app/build/outputs/apk/release/app-release.ap
 
 (cd "$ROOT" && ./gradlew -q :apps:christmas-countdown:app:assembleRelease)
 "$ADB" install -r "$APK" | tail -1
+"$ADB" shell cmd locale set-app-locales "$PKG" --locales en-US   # labels below are English
 "$ADB" logcat -c
+"$ADB" shell am force-stop "$PKG"
 "$ADB" shell am start -n "$PKG/.MainActivity" >/dev/null
 sleep 12
 
+tap() { "$ROOT/scripts/tap-text.sh" "$@"; }
 shot() { "$ROOT/scripts/screenshot.sh" "$OUT/$1.png" >/dev/null; echo "screen: $1"; }
-shot countdown
-"$ADB" shell input tap 746 1713; sleep 4; shot sleeps
-"$ADB" shell input tap 813 2262; sleep 5; shot advent
-"$ADB" shell input tap 1004 226; sleep 5; shot about
+tap "Time"; shot countdown
+tap "Sleeps"; shot sleeps
+tap "Advent" 5; shot advent
+tap "About" 5; shot about
 "$ADB" shell input keyevent KEYCODE_BACK; sleep 2
-"$ADB" shell input tap 76 225; sleep 6                 # music on
+tap "Countdown"
+tap "Play carols" 6                                    # music on
 pid="$("$ADB" shell pidof "$PKG" || true)"
 audio="$("$ADB" shell dumpsys audio | grep "/$pid " | grep -c 'AudioTrack.*state:started' || true)"
-"$ADB" shell input tap 76 225                          # music off
+tap "Stop carols" 2                                    # music off
+"$ADB" shell cmd locale set-app-locales "$PKG" --locales ""
 crashes="$("$ADB" logcat -d -b crash | grep -c FATAL || true)"
 
 echo "music playing: $([ "$audio" -gt 0 ] && echo yes || echo NO)"

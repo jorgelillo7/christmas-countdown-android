@@ -87,7 +87,7 @@ fun ChristmasApp(app: ChristmasCountdownApplication) {
                         }
                     },
                     actions = {
-                        IconButton(onClick = { context.shareCountdown(countdown.countdown) }) {
+                        IconButton(onClick = { context.shareCountdown(countdown.countdown, countdown.sleepsMode) }) {
                             Icon(Icons.Filled.Share, contentDescription = stringResource(R.string.action_share))
                         }
                         IconButton(onClick = { showAbout = true }) {
@@ -138,10 +138,25 @@ fun ChristmasApp(app: ChristmasCountdownApplication) {
     if (showAbout) AboutSheet(onDismiss = { showAbout = false })
 }
 
-private fun Context.shareCountdown(state: CountdownState) {
+/** The shared text follows the mode on screen: "81 days and 13 hours" or "82 sleeps". */
+private fun Context.shareCountdown(state: CountdownState, sleepsMode: Boolean) {
     val message = when (state) {
         CountdownState.ChristmasDay -> getString(R.string.share_text_christmas)
-        is CountdownState.Counting -> resources.getQuantityString(R.plurals.share_text, state.sleeps.toInt(), state.sleeps.toInt())
+        is CountdownState.Counting -> if (sleepsMode) {
+            val sleeps = state.sleeps.toInt()
+            resources.getQuantityString(R.plurals.share_text_sleeps, sleeps, sleeps)
+        } else {
+            val days = state.timeLeft.days.toInt()
+            val hours = state.timeLeft.hours
+            val daysText = resources.getQuantityString(R.plurals.share_days, days, days)
+            val hoursText = resources.getQuantityString(R.plurals.share_hours, hours, hours)
+            when {
+                days > 0 && hours > 0 -> getString(R.string.share_text_time_two, daysText, hoursText)
+                days > 0 -> getString(R.string.share_text_time_one, daysText)
+                hours > 0 -> getString(R.string.share_text_time_one, hoursText)
+                else -> getString(R.string.share_text_time_soon)
+            }
+        }
     }
     val send = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"

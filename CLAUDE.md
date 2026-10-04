@@ -35,6 +35,7 @@ Module paths follow the folders: `:apps:<app>:app`, `:apps:<app>:domain`, `:core
 
 scripts/emulator.sh start|stop|date MMDDhhmmYYYY|date auto|demo on|off
 scripts/screenshot.sh <out.png>                           # dismisses "isn't responding" dialogs first
+scripts/tap-text.sh "<label>"                             # tap by on-screen text (use instead of coordinates)
 scripts/verify-bundle.sh <aab>                            # signature, versionCode, permissions, native libs
 apps/<app>/tools/smoke_test.sh                            # release APK on emulator (per app)
 ```

@@ -24,10 +24,23 @@
     <string name="action_music_on">Poner villancicos</string>
     <string name="action_music_off">Parar villancicos</string>
     <string name="action_about">Información</string>
-    <plurals name="share_text">
-        <item quantity="one">¡Solo queda %1$d día para Navidad! 🎄</item>
-        <item quantity="other">¡Solo quedan %1$d días para Navidad! 🎄</item>
-        <item quantity="many">¡Solo quedan %1$d días para Navidad! 🎄</item>
+    <plurals name="share_days">
+        <item quantity="one">%d día</item>
+        <item quantity="many">%d días</item>
+        <item quantity="other">%d días</item>
+    </plurals>
+    <plurals name="share_hours">
+        <item quantity="one">%d hora</item>
+        <item quantity="many">%d horas</item>
+        <item quantity="other">%d horas</item>
+    </plurals>
+    <string name="share_text_time_two">¡Navidad en %1$s y %2$s! 🎄</string>
+    <string name="share_text_time_one">¡Navidad en %1$s! 🎄</string>
+    <string name="share_text_time_soon">¡Navidad en menos de una hora! 🎄</string>
+    <plurals name="share_text_sleeps">
+        <item quantity="one">¡Solo queda %d noche para Navidad! 🎄</item>
+        <item quantity="many">¡Solo quedan %d noches para Navidad! 🎄</item>
+        <item quantity="other">¡Solo quedan %d noches para Navidad! 🎄</item>
     </plurals>
     <string name="share_text_christmas">¡Feliz Navidad! 🎄</string>
     <string name="share_chooser">Compartir cuenta atrás</string>

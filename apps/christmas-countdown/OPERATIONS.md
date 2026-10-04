@@ -31,6 +31,7 @@ Module paths: app `:apps:christmas-countdown:app`, logic `:apps:christmas-countd
 | Back to real time | `scripts/emulator.sh date auto` |
 | Clean status bar for screenshots | `scripts/emulator.sh demo on` / `off` |
 | Screenshot | `scripts/screenshot.sh build/shot.png` |
+| Tap a button by its label | `scripts/tap-text.sh "Advent"` |
 | Run app in Spanish only | `$ADB shell cmd locale set-app-locales com.jorgelillo.christmascountdown --locales es-ES` |
 
 ## Release
@@ -67,4 +68,4 @@ apps/christmas-countdown/tools/capture_store_screenshots.sh               # raw 
 | 1 | 1.0 | Sep 2021 | Original Java app |
 | 2 | 2.0 | Oct 2026 | Relaunch: API 36, countdown no longer stuck in 2021 |
 | 3 | 3.0 | Oct 2026 | Kotlin + Compose rewrite: advent, widget, carols, sleeps, new icon |
-| 4 | 4.0 | — | Toolchain 2026: AGP 9.4, Gradle 9.8, Kotlin 2.4, compileSdk 37 |
+| 4 | 4.0 | — | 3 more carols in shuffled order, share text matches the mode, toolchain 2026 (AGP 9.4, Gradle 9.8, Kotlin 2.4) |
