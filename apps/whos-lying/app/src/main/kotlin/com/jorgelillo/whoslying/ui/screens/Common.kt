@@ -85,6 +85,9 @@ fun BigButton(
     ) { Text(text, fontSize = 20.sp, fontWeight = FontWeight.Black) }
 }
 
+/** Player colors for avatars, by position in the group. */
+val avatarColors = listOf(Neon.Pink, Neon.Turquoise, Neon.Violet, Neon.Amber)
+
 /** Big emoji used as illustration (no image assets needed). */
 @Composable
 fun Emoji(value: String, modifier: Modifier = Modifier, size: Int = 72) {

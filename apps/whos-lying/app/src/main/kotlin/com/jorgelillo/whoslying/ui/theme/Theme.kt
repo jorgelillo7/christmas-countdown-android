@@ -18,6 +18,11 @@ object Neon {
 
     val Backdrop = Brush.verticalGradient(listOf(Color(0xFF2B1B6B), Night, Night))
     val RevealBackdrop = Brush.verticalGradient(listOf(Color(0xFF7C5CFF), Color(0xFF4B2BD6)))
+
+    // Result screens: who won sets the mood.
+    val CiviliansBackdrop = Brush.verticalGradient(listOf(Color(0xFF00B4FF), Color(0xFF2346E8)))
+    val ImpostorsBackdrop = Brush.verticalGradient(listOf(Color(0xFFFF8A3D), Color(0xFFD7263D)))
+    val DrifterBackdrop = Brush.verticalGradient(listOf(Color(0xFFFFB13D), Color(0xFFE0367A)))
 }
 
 val NeonColorScheme = darkColorScheme(

@@ -56,11 +56,6 @@
     <string name="countdown_ready">Get ready!</string>
 
     <!-- Vote -->
-    <string name="vote_title">Who\'s lying?</string>
-    <string name="vote_desc">Give clues in turns, discuss, and vote someone out.</string>
-    <string name="vote_starter">%1$s started this game</string>
-    <string name="vote_confirm">Vote out %1$s?</string>
-    <string name="vote_yes">Vote out</string>
     <string name="vote_cancel">Cancel</string>
     <string name="vote_reveal_all">End and reveal</string>
     <string name="out_was_civilian">%1$s was a civilian</string>
@@ -77,14 +72,12 @@
     <string name="guess_wrong">Wrong! The game goes on.</string>
 
     <!-- Result -->
-    <string name="result_civilians">Civilians win!</string>
     <string name="result_impostors">The impostors win!</string>
     <string name="result_impostors_drifter">Impostors and Drifter win!</string>
     <string name="result_drifter">The Drifter wins!</string>
     <string name="result_drifter_guessed">The Drifter guessed the word!</string>
     <string name="result_nobody">Everyone was an impostor! 🎭</string>
     <string name="result_ended">Game over</string>
-    <string name="result_word">The word was %1$s</string>
     <string name="result_roles">Who was who</string>
     <string name="role_civilian">Civilian</string>
     <string name="role_impostor">Impostor</string>
@@ -175,4 +168,38 @@
     <string name="settings_share">Share with friends</string>
     <string name="settings_share_desc">The more of you, the better it gets</string>
     <string name="share_text">Let\'s play Who\'s lying? The impostor word game, free and with no ads: %1$s</string>
+
+    <!-- Round: debate, vote, expose -->
+    <string name="debate_title">Debate</string>
+    <string name="debate_desc">One by one, say a word or short phrase about your secret word.</string>
+    <string name="debate_no_timer">When you\'re ready, go to the vote.</string>
+    <string name="debate_out">Out: %1$s</string>
+    <string name="vote_button">Vote</string>
+    <string name="voting_title">Voting</string>
+    <string name="voting_desc">Discuss it and decide together who goes.</string>
+    <string name="voting_question">Who do you think is lying?</string>
+    <string name="voting_confirm">Confirm vote</string>
+    <string name="voting_back">Back to the debate</string>
+    <string name="expose_in">Exposed in</string>
+    <string name="out_civilian_desc">Innocent… the liar is still among you.</string>
+    <string name="out_impostor_desc">Well spotted! But someone is still lying.</string>
+
+    <!-- Result -->
+    <plurals name="result_caught">
+        <item quantity="one">You caught the impostor!</item>
+        <item quantity="other">You caught them all!</item>
+    </plurals>
+    <string name="result_sub_civilians">Victory! The civilians win.</string>
+    <string name="result_sub_infiltrators_vote">A civilian was voted out and only one is left.</string>
+    <string name="result_sub_infiltrators">Only one civilian is left: they got away with it!</string>
+    <string name="result_sub_drifter">They guessed the word when voted out.</string>
+    <string name="result_sub_nobody">There wasn\'t a single civilian.</string>
+    <string name="result_sub_ended">You ended the game early.</string>
+    <string name="result_secret_word">Secret word</string>
+    <string name="result_decoy">Impostor\'s word</string>
+    <plurals name="result_impostors_label">
+        <item quantity="one">Impostor</item>
+        <item quantity="other">Impostors</item>
+    </plurals>
+    <string name="report_action">Report this word</string>
 </resources>

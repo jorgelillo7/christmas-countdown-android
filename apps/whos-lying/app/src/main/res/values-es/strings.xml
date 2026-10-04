@@ -51,11 +51,6 @@
     <string name="countdown_starts">Empieza %1$s.</string>
     <string name="countdown_ready">¡Prepárate!</string>
 
-    <string name="vote_title">¿Quién miente?</string>
-    <string name="vote_desc">Dad pistas por turnos, discutid y votad a quién eliminar.</string>
-    <string name="vote_starter">Ha empezado %1$s</string>
-    <string name="vote_confirm">¿Eliminar a %1$s?</string>
-    <string name="vote_yes">Eliminar</string>
     <string name="vote_cancel">Cancelar</string>
     <string name="vote_reveal_all">Terminar y revelar</string>
     <string name="out_was_civilian">%1$s era civil</string>
@@ -70,14 +65,12 @@
     <string name="guess_go">Adivinar</string>
     <string name="guess_wrong">¡Fallaste! La partida sigue.</string>
 
-    <string name="result_civilians">¡Ganan los civiles!</string>
     <string name="result_impostors">¡Ganan los impostores!</string>
     <string name="result_impostors_drifter">¡Ganan impostores y Despistado!</string>
     <string name="result_drifter">¡Gana el Despistado!</string>
     <string name="result_drifter_guessed">¡El Despistado adivinó la palabra!</string>
     <string name="result_nobody">¡Todos erais impostores! 🎭</string>
     <string name="result_ended">Partida terminada</string>
-    <string name="result_word">La palabra era %1$s</string>
     <string name="result_roles">Quién era quién</string>
     <string name="role_civilian">Civil</string>
     <string name="role_impostor">Impostor</string>
@@ -167,4 +160,40 @@
     <string name="settings_share">Compartir con amigos</string>
     <string name="settings_share_desc">Cuantos más seáis, mejor</string>
     <string name="share_text">¿Echamos una de ¿Quién miente? El juego del impostor, gratis y sin anuncios: %1$s</string>
+
+    <!-- Ronda: debate, votación, revelación -->
+    <string name="debate_title">Debate</string>
+    <string name="debate_desc">Uno por uno, decid una palabra o frase corta sobre vuestra palabra secreta.</string>
+    <string name="debate_no_timer">Cuando estéis listos, a votar.</string>
+    <string name="debate_out">Fuera: %1$s</string>
+    <string name="vote_button">Votar</string>
+    <string name="voting_title">Votación</string>
+    <string name="voting_desc">Discutid en grupo y decidid a quién eliminar.</string>
+    <string name="voting_question">¿Quién creéis que miente?</string>
+    <string name="voting_confirm">Confirmar voto</string>
+    <string name="voting_back">Volver a debatir</string>
+    <string name="expose_in">Expuesto en</string>
+    <string name="out_civilian_desc">Era inocente… el mentiroso sigue entre vosotros.</string>
+    <string name="out_impostor_desc">¡Bien visto! Pero aún queda alguien mintiendo.</string>
+
+    <!-- Resultado -->
+    <plurals name="result_caught">
+        <item quantity="one">¡Habéis pillado al impostor!</item>
+        <item quantity="many">¡Los habéis pillado a todos!</item>
+        <item quantity="other">¡Los habéis pillado a todos!</item>
+    </plurals>
+    <string name="result_sub_civilians">¡Victoria! Ganan los civiles.</string>
+    <string name="result_sub_infiltrators_vote">Habéis eliminado a un civil y solo queda uno.</string>
+    <string name="result_sub_infiltrators">Solo queda un civil: ¡se han salido con la suya!</string>
+    <string name="result_sub_drifter">Adivinó la palabra al ser eliminado.</string>
+    <string name="result_sub_nobody">No había ni un solo civil.</string>
+    <string name="result_sub_ended">Habéis terminado antes de tiempo.</string>
+    <string name="result_secret_word">Palabra secreta</string>
+    <string name="result_decoy">Palabra del impostor</string>
+    <plurals name="result_impostors_label">
+        <item quantity="one">Impostor</item>
+        <item quantity="many">Impostores</item>
+        <item quantity="other">Impostores</item>
+    </plurals>
+    <string name="report_action">Reportar esta palabra</string>
 </resources>

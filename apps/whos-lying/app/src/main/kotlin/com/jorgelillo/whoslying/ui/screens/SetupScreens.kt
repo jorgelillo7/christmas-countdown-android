@@ -106,8 +106,6 @@ private fun HomeChip(emoji: String, label: String, onClick: () -> Unit, modifier
     }
 }
 
-private val avatarColors = listOf(Neon.Pink, Neon.Turquoise, Neon.Violet, Neon.Amber)
-
 @Composable
 fun PlayersScreen(
     players: List<String>,
