@@ -1,22 +1,36 @@
 package com.jorgelillo.whoslying.ui.screens
 
+import android.app.LocaleManager
+import android.content.Intent
+import android.os.Build
+import android.os.LocaleList
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -59,7 +73,7 @@ fun HowToSheet(onDismiss: () -> Unit) {
 fun ModesSheet(onDismiss: () -> Unit) {
     ModalBottomSheet(onDismissRequest = onDismiss, containerColor = Neon.Card) {
         Column(
-            Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 24.dp).padding(bottom = 32.dp).testTag("modes_sheet"),
+            Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 24.dp).padding(bottom = 32.dp).then(DialogTags).testTag("modes_sheet"),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text(stringResource(R.string.modes_title), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Black)
@@ -99,26 +113,90 @@ private class ModeGuide(
     @param:StringRes val tip: Int,
 )
 
+/** Settings and about: language, rules, sharing, rating and privacy. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutSheet(onDismiss: () -> Unit) {
+fun SettingsSheet(onHowTo: () -> Unit, onModes: () -> Unit, onDismiss: () -> Unit) {
+    val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
+    var pickLanguage by rememberSaveable { mutableStateOf(false) }
+    val shareText = stringResource(R.string.share_text, PLAY_STORE_URL)
     ModalBottomSheet(onDismissRequest = onDismiss, containerColor = Neon.Card) {
         Column(
-            Modifier.fillMaxWidth().padding(horizontal = 24.dp).padding(bottom = 32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 24.dp).padding(bottom = 32.dp).then(DialogTags).testTag("settings_sheet"),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Emoji("🕵️", size = 56)
-            Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge)
-            Text(stringResource(R.string.about_version, BuildConfig.VERSION_NAME), style = MaterialTheme.typography.bodySmall, color = Neon.Muted)
-            Text(stringResource(R.string.about_body), textAlign = TextAlign.Center)
-            OutlinedButton(onClick = { uriHandler.openUri(PLAY_STORE_URL) }, modifier = Modifier.fillMaxWidth()) {
-                Text(stringResource(R.string.about_rate))
+            Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Black)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                val current = LocalConfiguration.current.locales[0].displayLanguage.replaceFirstChar { it.uppercase() }
+                SettingsRow("🌐", stringResource(R.string.settings_language), current, "language") { pickLanguage = true }
             }
-            OutlinedButton(onClick = { uriHandler.openUri(PRIVACY_POLICY_URL) }, modifier = Modifier.fillMaxWidth()) {
-                Text(stringResource(R.string.about_privacy))
+            SettingsRow("📖", stringResource(R.string.how_to_play), null, "settings_how_to") { onDismiss(); onHowTo() }
+            SettingsRow("🎭", stringResource(R.string.modes_title), null, "settings_modes") { onDismiss(); onModes() }
+            SettingsRow("💌", stringResource(R.string.settings_share), stringResource(R.string.settings_share_desc), "share") {
+                val send = Intent(Intent.ACTION_SEND).setType("text/plain")
+                    .putExtra(Intent.EXTRA_TEXT, shareText)
+                context.startActivity(Intent.createChooser(send, null))
             }
+            SettingsRow("⭐", stringResource(R.string.about_rate), null, "rate") { uriHandler.openUri(PLAY_STORE_URL) }
+            SettingsRow("🔒", stringResource(R.string.about_privacy), null, "privacy") { uriHandler.openUri(PRIVACY_POLICY_URL) }
+            Text(
+                stringResource(R.string.about_body) + "\n" + stringResource(R.string.about_version, BuildConfig.VERSION_NAME),
+                style = MaterialTheme.typography.bodySmall,
+                color = Neon.Muted,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
+            )
         }
     }
+    if (pickLanguage && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        LanguageDialog(onDismiss = { pickLanguage = false })
+    }
+}
+
+@Composable
+private fun SettingsRow(emoji: String, title: String, subtitle: String?, tag: String, onClick: () -> Unit) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .clip(MaterialTheme.shapes.large)
+            .background(Neon.Night)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 14.dp)
+            .testTag(tag),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(emoji, style = MaterialTheme.typography.titleLarge)
+        Column(Modifier.weight(1f).padding(start = 14.dp)) {
+            Text(title, fontWeight = FontWeight.SemiBold)
+            if (subtitle != null) Text(subtitle, style = MaterialTheme.typography.bodySmall, color = Neon.Muted)
+        }
+        Text("›", style = MaterialTheme.typography.headlineSmall, color = Neon.Muted)
+    }
+}
+
+/** Per-app language (Android 13+). An empty list follows the phone's language. */
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@Composable
+private fun LanguageDialog(onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    fun choose(tags: String) {
+        context.getSystemService(LocaleManager::class.java).applicationLocales = LocaleList.forLanguageTags(tags)
+        onDismiss()
+    }
+    AlertDialog(
+        modifier = DialogTags,
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.settings_language)) },
+        text = {
+            Column {
+                listOf("" to stringResource(R.string.language_system), "es" to "Español", "en" to "English").forEach { (tag, label) ->
+                    TextButton(onClick = { choose(tag) }, modifier = Modifier.fillMaxWidth().testTag("language_${tag.ifEmpty { "system" }}")) {
+                        Text(label, modifier = Modifier.fillMaxWidth())
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.vote_cancel)) } },
+    )
 }

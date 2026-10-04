@@ -16,16 +16,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.jorgelillo.whoslying.WhosLyingApplication
 import com.jorgelillo.whoslying.domain.WordPack
-import com.jorgelillo.whoslying.ui.screens.AboutSheet
 import com.jorgelillo.whoslying.ui.screens.CountdownScreen
 import com.jorgelillo.whoslying.ui.screens.HomeScreen
 import com.jorgelillo.whoslying.ui.screens.HowToSheet
 import com.jorgelillo.whoslying.ui.screens.ModesSheet
 import com.jorgelillo.whoslying.ui.screens.PackEditScreen
+import com.jorgelillo.whoslying.ui.screens.PackPickerScreen
 import com.jorgelillo.whoslying.ui.screens.PacksScreen
 import com.jorgelillo.whoslying.ui.screens.PlayersScreen
 import com.jorgelillo.whoslying.ui.screens.ResultScreen
 import com.jorgelillo.whoslying.ui.screens.RevealScreen
+import com.jorgelillo.whoslying.ui.screens.SettingsSheet
 import com.jorgelillo.whoslying.ui.screens.SetupScreen
 import com.jorgelillo.whoslying.ui.screens.VoteScreen
 
@@ -64,6 +65,7 @@ fun WhosLyingApp(app: WhosLyingApplication) {
                 unplayed = vm.unplayed(state),
                 onChange = vm::updateSettings,
                 onModesInfo = { showModes = true },
+                onChoosePacks = { nav.navigate("pick_packs") },
                 onStart = { if (vm.startGame()) nav.navigate("reveal") },
                 onBack = { nav.popBackStack() },
             )
@@ -99,6 +101,16 @@ fun WhosLyingApp(app: WhosLyingApplication) {
                 onHome = { nav.goHome() },
             )
         }
+        composable("pick_packs") {
+            PackPickerScreen(
+                packs = vm.allPacks(state),
+                selected = state.settings.packIds,
+                onToggle = vm::togglePack,
+                onSelectAll = vm::selectAllPacks,
+                onNewPack = { nav.navigate("pack/$NEW") },
+                onDone = { nav.popBackStack() },
+            )
+        }
         composable("packs") {
             PacksScreen(vm.builtInPacks, state.customPacks, onEdit = { id -> nav.navigate("pack/${id ?: NEW}") }, onBack = { nav.popBackStack() })
         }
@@ -119,7 +131,7 @@ fun WhosLyingApp(app: WhosLyingApplication) {
     }
 
     if (showHowTo) HowToSheet(onDismiss = { showHowTo = false })
-    if (showAbout) AboutSheet(onDismiss = { showAbout = false })
+    if (showAbout) SettingsSheet(onHowTo = { showHowTo = true }, onModes = { showModes = true }, onDismiss = { showAbout = false })
     if (showModes) ModesSheet(onDismiss = { showModes = false })
 }
 

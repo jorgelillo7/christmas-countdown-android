@@ -8,7 +8,7 @@
     <string name="how_to_play">How to play</string>
     <string name="packs">Word packs</string>
     <string name="packs_short">Packs</string>
-    <string name="action_about">About</string>
+    <string name="action_about">Settings &amp; info</string>
     <string name="action_back">Back</string>
 
     <!-- Players -->
@@ -37,7 +37,6 @@
     <string name="setup_chaos">Chaos</string>
     <string name="setup_chaos_desc">Some games get a random number of impostors… sometimes everyone</string>
     <string name="setup_packs">Packs</string>
-    <string name="setup_all_packs">All</string>
     <string name="start">Start</string>
 
     <!-- Reveal -->
@@ -159,4 +158,21 @@
     <string name="modes_hint">In Blind and The Drifter, players without a word see which pack it comes from. Turn it off for a harder game.</string>
     <string name="modes_timer_title">Discussion time</string>
     <string name="modes_timer">An optional countdown before each vote, so nobody drags it out. It beeps when time\'s up.</string>
+
+    <!-- Pack picker -->
+    <string name="pick_packs_title">Choose packs</string>
+    <string name="pick_packs_all">All packs</string>
+    <plurals name="pick_packs_some">
+        <item quantity="one">%d pack selected</item>
+        <item quantity="other">%d packs selected</item>
+    </plurals>
+    <string name="pick_packs_select_all">Select all</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_language">Language</string>
+    <string name="language_system">Same as the phone</string>
+    <string name="settings_share">Share with friends</string>
+    <string name="settings_share_desc">The more of you, the better it gets</string>
+    <string name="share_text">Let\'s play Who\'s lying? The impostor word game, free and with no ads: %1$s</string>
 </resources>

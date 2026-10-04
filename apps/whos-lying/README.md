@@ -14,11 +14,12 @@
 - 🙈 **Blind:** the impostor gets no word (optionally the category) and must bluff
 - 🤷 **The Drifter:** classic plus a player with no word who wins by guessing it when voted out
 - 🌀 **Chaos:** some games get a random number of impostors… sometimes everyone
-- 📦 6 built-in packs × 20 word pairs, in Spanish and English, written for this app
+- 📦 21 built-in packs, 600+ words per language (Spanish, English), each with two similar words, written for this app; multi-select grid
 - 📝 **Your own packs:** one word per line, `word / similar / similar…` (similar words are optional; the impostor gets one at random)
 - 🔁 No word repeats until ~90% of the chosen packs were played, then the oldest come back first; setup shows how many are left
 - ⏱️ Optional discussion timer before each vote (1–5 min, tap to pause, beeps at zero)
 - 📘 In-app guide to every mode (home → Modes, or "Which mode?" in setup)
+- ⚙️ Settings: in-app language (Android 13+), share with friends, rate, privacy
 - 🚫 No ads, no accounts, no network, no data collected
 
 ## 🏗️ Architecture

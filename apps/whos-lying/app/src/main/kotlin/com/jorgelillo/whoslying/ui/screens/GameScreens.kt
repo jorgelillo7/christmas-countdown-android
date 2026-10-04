@@ -66,7 +66,7 @@ import kotlinx.coroutines.delay
 
 /** Dialogs live in their own window: expose their test tags as resource ids too (scripts/tap-text.sh). */
 @OptIn(ExperimentalComposeUiApi::class)
-private val DialogTags = Modifier.semantics { testTagsAsResourceId = true }
+internal val DialogTags = Modifier.semantics { testTagsAsResourceId = true }
 
 /** Pass-the-phone reveal: each player taps to see their word, then hides it before passing on. */
 @Composable

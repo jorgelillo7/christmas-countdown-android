@@ -153,15 +153,20 @@ class GameTest {
     fun builtInPacksAreWellFormed() {
         for (language in listOf("es", "en")) {
             val packs = WordPacks.builtIn(language)
-            assertEquals(6, packs.size)
+            assertEquals(21, packs.size)
+            assertEquals(packs.size, packs.map { it.id }.toSet().size)
             for (p in packs) {
-                assertEquals(20, p.entries.size, p.name)
-                assertEquals(p.entries.size, p.entries.map { Rules.normalize(it.word) }.toSet().size, "duplicates in ${p.name}")
+                assertTrue(p.entries.size >= 30, "${p.name} has ${p.entries.size} words")
                 p.entries.forEach { e ->
-                    assertTrue(e.decoys.isNotEmpty(), "no similar word for ${e.word}")
+                    assertEquals(2, e.decoys.size, "similar words for ${e.word}")
                     e.decoys.forEach { assertNotEquals(Rules.normalize(e.word), Rules.normalize(it)) }
                 }
             }
+            // A word is played once per language, whatever pack it comes from.
+            val words = packs.flatMap { p -> p.entries.map { Rules.normalize(it.word) } }
+            assertEquals(words.groupingBy { it }.eachCount().filterValues { it > 1 }, emptyMap(), "repeated words in $language")
         }
+        // Both languages offer the same packs, in the same order.
+        assertEquals(WordPacks.builtIn("es").map { it.id }, WordPacks.builtIn("en").map { it.id })
     }
 }

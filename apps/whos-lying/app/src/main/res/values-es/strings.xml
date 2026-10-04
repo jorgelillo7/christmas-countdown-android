@@ -7,7 +7,7 @@
     <string name="how_to_play">Cómo se juega</string>
     <string name="packs">Paquetes de palabras</string>
     <string name="packs_short">Paquetes</string>
-    <string name="action_about">Información</string>
+    <string name="action_about">Ajustes e información</string>
     <string name="action_back">Atrás</string>
 
     <string name="players_title">Jugadores</string>
@@ -35,7 +35,6 @@
     <string name="setup_chaos">Caos</string>
     <string name="setup_chaos_desc">Algunas partidas tienen un número de impostores al azar… a veces todos</string>
     <string name="setup_packs">Paquetes</string>
-    <string name="setup_all_packs">Todos</string>
     <string name="start">Empezar</string>
 
     <string name="reveal_pass_to">Pásale el móvil a</string>
@@ -150,4 +149,22 @@
     <string name="modes_hint">En A ciegas y El Despistado, quien no tiene palabra ve de qué paquete sale. Quítala para una partida más difícil.</string>
     <string name="modes_timer_title">Tiempo para debatir</string>
     <string name="modes_timer">Una cuenta atrás opcional antes de cada votación, para que nadie se eternice. Pita al acabar.</string>
+
+    <!-- Selector de paquetes -->
+    <string name="pick_packs_title">Elegir paquetes</string>
+    <string name="pick_packs_all">Todos los paquetes</string>
+    <plurals name="pick_packs_some">
+        <item quantity="one">%d paquete elegido</item>
+        <item quantity="many">%d paquetes elegidos</item>
+        <item quantity="other">%d paquetes elegidos</item>
+    </plurals>
+    <string name="pick_packs_select_all">Elegir todos</string>
+
+    <!-- Ajustes -->
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_language">Idioma</string>
+    <string name="language_system">El del móvil</string>
+    <string name="settings_share">Compartir con amigos</string>
+    <string name="settings_share_desc">Cuantos más seáis, mejor</string>
+    <string name="share_text">¿Echamos una de ¿Quién miente? El juego del impostor, gratis y sin anuncios: %1$s</string>
 </resources>

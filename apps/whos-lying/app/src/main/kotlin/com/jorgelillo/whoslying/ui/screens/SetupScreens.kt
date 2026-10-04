@@ -6,8 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -70,7 +68,7 @@ fun HomeScreen(onPlay: () -> Unit, onHowTo: () -> Unit, onModes: () -> Unit, onP
             HomeChip("🗂️", stringResource(R.string.packs_short), onPacks, Modifier.weight(1f).testTag("packs"))
         }
         TextButton(onClick = onAbout, modifier = Modifier.align(Alignment.CenterHorizontally).testTag("about")) {
-            Text(stringResource(R.string.action_about), color = Neon.Muted)
+            Text("⚙️  " + stringResource(R.string.action_about), color = Neon.Muted)
         }
     }) {
         Spacer(Modifier.weight(1f))
@@ -178,7 +176,6 @@ fun PlayersScreen(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SetupScreen(
     playerCount: Int,
@@ -188,6 +185,7 @@ fun SetupScreen(
     unplayed: Pair<Int, Int>,
     onChange: ((GameSettings) -> GameSettings) -> Unit,
     onModesInfo: () -> Unit,
+    onChoosePacks: () -> Unit,
     onStart: () -> Unit,
     onBack: () -> Unit,
 ) {
@@ -270,24 +268,39 @@ fun SetupScreen(
                 }
             }
 
-            Text(stringResource(R.string.setup_packs), style = MaterialTheme.typography.titleMedium, modifier = Modifier.padding(top = 16.dp, bottom = 8.dp))
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                PackChip("✨ " + stringResource(R.string.setup_all_packs), settings.packIds.isEmpty()) {
-                    onChange { it.copy(packIds = emptySet()) }
-                }
-                packs.forEach { pack ->
-                    PackChip("${pack.emoji} ${pack.name}", pack.id in settings.packIds) {
-                        onChange { s ->
-                            val ids = if (pack.id in s.packIds) s.packIds - pack.id else s.packIds + pack.id
-                            s.copy(packIds = ids)
-                        }
-                    }
-                }
-            }
             val (left, total) = unplayed
-            Text(stringResource(R.string.setup_unplayed, left, total), style = MaterialTheme.typography.bodySmall, color = Neon.Muted, modifier = Modifier.padding(top = 12.dp).testTag("unplayed"))
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 6.dp)
+                    .clip(MaterialTheme.shapes.large)
+                    .background(Neon.Card)
+                    .clickable(onClick = onChoosePacks)
+                    .padding(horizontal = 16.dp, vertical = 14.dp)
+                    .testTag("choose_packs"),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text("🗂️", style = MaterialTheme.typography.headlineSmall)
+                Spacer(Modifier.width(14.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(stringResource(R.string.setup_packs), fontWeight = FontWeight.SemiBold)
+                    val chosen = packs.filter { it.id in settings.packIds }
+                    Text(
+                        when {
+                            settings.packIds.isEmpty() -> stringResource(R.string.pick_packs_all)
+                            chosen.size <= 3 -> chosen.joinToString { "${it.emoji} ${it.name}" }
+                            else -> pluralStringResource(R.plurals.pick_packs_some, chosen.size, chosen.size)
+                        },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Neon.Muted,
+                        maxLines = 2,
+                    )
+                    Text(stringResource(R.string.setup_unplayed, left, total), style = MaterialTheme.typography.bodySmall, color = Neon.Muted, modifier = Modifier.testTag("unplayed"))
+                }
+                Text("›", style = MaterialTheme.typography.headlineMedium, color = Neon.Muted)
+            }
             if (left * 10 < total) {
-                Text(stringResource(R.string.setup_running_out), style = MaterialTheme.typography.bodySmall, color = Neon.Amber, modifier = Modifier.padding(top = 4.dp))
+                Text(stringResource(R.string.setup_running_out), style = MaterialTheme.typography.bodySmall, color = Neon.Amber, modifier = Modifier.padding(top = 6.dp))
             }
             Spacer(Modifier.height(16.dp))
         }
@@ -318,19 +331,5 @@ private fun NeonSwitch(checked: Boolean, tag: String, onChange: (Boolean) -> Uni
         onCheckedChange = onChange,
         modifier = Modifier.testTag(tag),
         colors = SwitchDefaults.colors(checkedTrackColor = Neon.Violet, checkedThumbColor = Color.White),
-    )
-}
-
-@Composable
-private fun PackChip(label: String, selected: Boolean, onClick: () -> Unit) {
-    Text(
-        label,
-        modifier = Modifier
-            .clip(CircleShape)
-            .background(if (selected) Neon.Violet.copy(alpha = 0.3f) else Neon.Card)
-            .border(1.dp, if (selected) Neon.Violet else Color.Transparent, CircleShape)
-            .clickable(onClick = onClick)
-            .padding(horizontal = 14.dp, vertical = 8.dp),
-        style = MaterialTheme.typography.labelLarge,
     )
 }
