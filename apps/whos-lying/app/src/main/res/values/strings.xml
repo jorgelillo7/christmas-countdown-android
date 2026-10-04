@@ -41,14 +41,14 @@
 
     <!-- Reveal -->
     <string name="reveal_pass_to">Pass the phone to</string>
-    <string name="reveal_tap">Tap to see your word</string>
+    <string name="reveal_tap">Slide up to see your word.\nLet go and it hides itself.</string>
     <string name="reveal_your_word">Your word</string>
     <string name="reveal_you_are_impostor">You are the impostor</string>
     <string name="reveal_you_are_drifter">You are the Drifter</string>
     <string name="reveal_impostor_desc">You have no word. Listen, blend in and don\'t get caught.</string>
     <string name="reveal_drifter_desc">You have no word. If you\'re voted out, guess the word to win.</string>
     <string name="reveal_hint">Category: %1$s</string>
-    <string name="reveal_hide">Hide and pass</string>
+    <string name="reveal_hide">Next player</string>
     <string name="reveal_counter">%1$d of %2$d</string>
 
     <!-- Countdown -->
@@ -148,7 +148,7 @@
     <string name="modes_chaos_title">Chaos (any mode)</string>
     <string name="modes_chaos">About one game in three ignores the impostor count: there can be one, several… or everyone. Nobody knows how many there are, so trust no one.</string>
     <string name="modes_hint_title">Category hint</string>
-    <string name="modes_hint">In Blind and The Drifter, players without a word see which pack it comes from. Turn it off for a harder game.</string>
+    <string name="modes_hint">In Blind, The Drifter and drawing mode, players without a word see which pack it comes from. Turn it off for a harder game.</string>
     <string name="modes_timer_title">Discussion time</string>
     <string name="modes_timer">An optional countdown before each vote, so nobody drags it out. It beeps when time\'s up.</string>
 
@@ -211,7 +211,7 @@
     <string name="result_share">Share</string>
     <string name="drawing_share_caption">Our drawing of "%1$s" in Who\'s lying? %2$s</string>
     <string name="modes_drawing_title">Drawing mode (any mode)</string>
-    <string name="modes_drawing">Instead of saying clues, you draw the word together on one canvas: pass the phone and each adds a stroke or a detail. Impostors draw from their own word… or bluff. Then vote as usual, and share the masterpiece at the end.</string>
+    <string name="modes_drawing">Instead of saying clues, you draw the word together on one canvas: pass the phone and each adds a stroke or a detail. Impostors get no word (just the category, if the hint is on) and have to bluff. Then vote as usual, and share the masterpiece at the end.</string>
     <string name="modes_scores_title">Scores</string>
     <string name="modes_scores">Every player on the winning side scores, even if voted out: civilians 5 points, impostors and the Drifter 15. Points add up game after game; tap 🏆 at the end to see the ranking.</string>
     <string name="scores_title">Ranking</string>

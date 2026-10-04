@@ -36,6 +36,17 @@ class GameTest {
     }
 
     @Test
+    fun drawingImpostorsGetNoWordInAnyMode() {
+        for (mode in GameMode.entries) {
+            val game = deal(GameSettings(mode, drawing = true))
+            val impostor = game.cards.first { it.role == Role.IMPOSTOR }
+            assertNull(impostor.word, "$mode")
+            assertTrue(impostor.knowsRole)
+            assertEquals("Lugares", impostor.hint)
+        }
+    }
+
+    @Test
     fun drifterModeAddsOneDrifterWhoNeverStarts() {
         repeat(30) { seed ->
             val game = deal(GameSettings(GameMode.DRIFTER), seed)

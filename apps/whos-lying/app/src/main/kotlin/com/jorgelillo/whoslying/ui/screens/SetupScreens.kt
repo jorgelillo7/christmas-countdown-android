@@ -241,7 +241,7 @@ fun SetupScreen(
                     Text("+", style = MaterialTheme.typography.headlineSmall)
                 }
             }
-            if (settings.mode != GameMode.CLASSIC) {
+            if (settings.mode != GameMode.CLASSIC || settings.drawing) {
                 SettingRow(stringResource(R.string.setup_hint), stringResource(R.string.setup_hint_desc)) {
                     NeonSwitch(settings.categoryHint, "hint") { v -> onChange { it.copy(categoryHint = v) } }
                 }

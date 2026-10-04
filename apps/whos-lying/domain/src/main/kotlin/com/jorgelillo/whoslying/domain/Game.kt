@@ -123,7 +123,8 @@ class Game private constructor(
                 }
                 val word = when {
                     role == Role.CIVILIAN -> entry.word
-                    role == Role.IMPOSTOR && settings.mode != GameMode.BLIND -> decoy
+                    // Drawing a similar word would give impostors away, so they draw blind.
+                    role == Role.IMPOSTOR && settings.mode != GameMode.BLIND && !settings.drawing -> decoy
                     else -> null
                 }
                 val hint = if (word == null && settings.categoryHint) pack.name else null

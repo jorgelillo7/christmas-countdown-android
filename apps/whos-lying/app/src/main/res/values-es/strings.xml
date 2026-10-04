@@ -38,14 +38,14 @@
     <string name="start">Empezar</string>
 
     <string name="reveal_pass_to">Pásale el móvil a</string>
-    <string name="reveal_tap">Toca para ver tu palabra</string>
+    <string name="reveal_tap">Desliza hacia arriba para ver tu palabra.\nAl soltar, se esconde sola.</string>
     <string name="reveal_your_word">Tu palabra</string>
     <string name="reveal_you_are_impostor">Eres el impostor</string>
     <string name="reveal_you_are_drifter">Eres el Despistado</string>
     <string name="reveal_impostor_desc">No tienes palabra. Escucha, disimula y que no te pillen.</string>
     <string name="reveal_drifter_desc">No tienes palabra. Si te eliminan, adivínala para ganar.</string>
     <string name="reveal_hint">Categoría: %1$s</string>
-    <string name="reveal_hide">Ocultar y pasar</string>
+    <string name="reveal_hide">Jugador siguiente</string>
     <string name="reveal_counter">%1$d de %2$d</string>
 
     <string name="countdown_starts">Empieza %1$s.</string>
@@ -139,7 +139,7 @@
     <string name="modes_chaos_title">Caos (en cualquier modo)</string>
     <string name="modes_chaos">Más o menos una de cada tres partidas ignora el número de impostores: puede haber uno, varios… o todos. Nadie sabe cuántos hay, así que no te fíes de nadie.</string>
     <string name="modes_hint_title">Pista de categoría</string>
-    <string name="modes_hint">En A ciegas y El Despistado, quien no tiene palabra ve de qué paquete sale. Quítala para una partida más difícil.</string>
+    <string name="modes_hint">En A ciegas, El Despistado y el modo dibujo, quien no tiene palabra ve de qué paquete sale. Quítala para una partida más difícil.</string>
     <string name="modes_timer_title">Tiempo para debatir</string>
     <string name="modes_timer">Una cuenta atrás opcional antes de cada votación, para que nadie se eternice. Pita al acabar.</string>
 
@@ -205,7 +205,7 @@
     <string name="result_share">Compartir</string>
     <string name="drawing_share_caption">Nuestro dibujo de «%1$s» en ¿Quién miente? %2$s</string>
     <string name="modes_drawing_title">Modo dibujo (en cualquier modo)</string>
-    <string name="modes_drawing">En vez de decir pistas, dibujáis la palabra entre todos en el mismo lienzo: pasaos el móvil y cada uno añade un trazo o un detalle. Los impostores dibujan su palabra… o se tiran el farol. Luego se vota igual, y al final podéis compartir la obra de arte.</string>
+    <string name="modes_drawing">En vez de decir pistas, dibujáis la palabra entre todos en el mismo lienzo: pasaos el móvil y cada uno añade un trazo o un detalle. Los impostores no reciben palabra (solo la categoría, si la pista está activada) y tienen que tirarse el farol. Luego se vota igual, y al final podéis compartir la obra de arte.</string>
     <string name="modes_scores_title">Puntos</string>
     <string name="modes_scores">Puntúan todos los del bando ganador, aunque los hayan eliminado: civiles 5 puntos, impostores y Despistado 15. Los puntos se suman partida a partida; toca 🏆 al final para ver la clasificación.</string>
     <string name="scores_title">Clasificación</string>

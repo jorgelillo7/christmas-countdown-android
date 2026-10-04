@@ -33,7 +33,11 @@ tap continue 3
 tap mode_classic 1
 shot setup
 tap start 3
-for _ in 1 2 3; do tap tap_to_reveal 1; tap hide 1; done
+for _ in 1 2 3; do
+  sleep 1
+  "$ADB" shell input swipe 540 1700 540 700 800  # slide the curtain up; it drops on release
+  sleep 1; tap hide 1
+done
 shot countdown
 sleep 5
 shot debate
