@@ -41,14 +41,14 @@
 
     <!-- Reveal -->
     <string name="reveal_pass_to">Pass the phone to</string>
-    <string name="reveal_tap">Tap to see your word</string>
+    <string name="reveal_tap">Slide up to see your word.\nLet go and it hides itself.</string>
     <string name="reveal_your_word">Your word</string>
     <string name="reveal_you_are_impostor">You are the impostor</string>
     <string name="reveal_you_are_drifter">You are the Drifter</string>
     <string name="reveal_impostor_desc">You have no word. Listen, blend in and don\'t get caught.</string>
     <string name="reveal_drifter_desc">You have no word. If you\'re voted out, guess the word to win.</string>
     <string name="reveal_hint">Category: %1$s</string>
-    <string name="reveal_hide">Hide and pass</string>
+    <string name="reveal_hide">Next player</string>
     <string name="reveal_counter">%1$d of %2$d</string>
 
     <!-- Countdown -->
@@ -120,8 +120,8 @@
     <string name="rules_short">Rules</string>
     <string name="modes_short">Modes</string>
     <string name="setup_which_mode">Which mode should we play?</string>
-    <string name="setup_timer">Discussion time</string>
-    <string name="setup_timer_desc">Countdown before each vote</string>
+    <string name="setup_timer">Time</string>
+    <string name="setup_timer_desc">Countdown before voting</string>
     <string name="setup_timer_off">Off</string>
     <string name="setup_timer_minutes">%1$d min</string>
     <string name="setup_unplayed">Words still to come: %1$d of %2$d</string>
@@ -148,9 +148,9 @@
     <string name="modes_chaos_title">Chaos (any mode)</string>
     <string name="modes_chaos">About one game in three ignores the impostor count: there can be one, several… or everyone. Nobody knows how many there are, so trust no one.</string>
     <string name="modes_hint_title">Category hint</string>
-    <string name="modes_hint">In Blind and The Drifter, players without a word see which pack it comes from. Turn it off for a harder game.</string>
+    <string name="modes_hint">In Blind, The Drifter and drawing mode, players without a word see which pack it comes from. Turn it off for a harder game.</string>
     <string name="modes_timer_title">Discussion time</string>
-    <string name="modes_timer">An optional countdown before each vote, so nobody drags it out. It beeps when time\'s up.</string>
+    <string name="modes_timer">An optional countdown before each vote, so nobody drags it out. When time\'s up it beeps and you go straight to the vote.</string>
 
     <!-- Pack picker -->
     <string name="pick_packs_title">Choose packs</string>
@@ -202,4 +202,50 @@
         <item quantity="other">Impostors</item>
     </plurals>
     <string name="report_action">Report this word</string>
+
+    <!-- Drawing mode and scores -->
+    <string name="setup_drawing">Drawing mode</string>
+    <string name="setup_drawing_desc">No talking: draw the word together, one stroke each</string>
+    <string name="drawing_turns">%1$s starts. Pass the phone: add something each, no talking!</string>
+    <string name="result_drawing">The drawing</string>
+    <string name="result_share">Share</string>
+    <string name="drawing_share_caption">Our drawing of "%1$s" in Who\'s lying? %2$s</string>
+    <string name="modes_drawing_title">Drawing mode (any mode)</string>
+    <string name="modes_drawing">Instead of saying clues, you draw the word together on one canvas: pass the phone and each adds a stroke or a detail. Impostors get no word (just the category, if the hint is on) and have to bluff. Then vote as usual, and share the masterpiece at the end.</string>
+    <string name="modes_scores_title">Scores</string>
+    <string name="modes_scores">Every player on the winning side scores, even if voted out: civilians 5 points, impostors and the Drifter 15. Points add up over the match (10 rounds by default, change it in setup); tap 🏆 to see the ranking, and after the last round the podium crowns the winner.</string>
+    <string name="scores_title">Ranking</string>
+    <string name="scores_rules">Civilians win 5 points, impostors and the Drifter 15.</string>
+    <string name="scores_reset">Reset scores</string>
+    <string name="scores_reset_confirm">Tap again to reset</string>
+
+    <!-- Match rounds and podium -->
+    <string name="setup_rounds">Rounds</string>
+    <string name="setup_rounds_desc">Most points wins</string>
+    <plurals name="scores_rounds_left">
+        <item quantity="one">%d round left</item>
+        <item quantity="other">%d rounds left</item>
+    </plurals>
+    <string name="scores_rounds_free">No round limit · %1$d played</string>
+    <string name="result_see_winner">🏆 See who won</string>
+    <string name="podium_winner">%1$s wins the match!</string>
+    <string name="podium_tie">It\'s a tie: %1$s!</string>
+    <string name="podium_nobody">Nobody scored… rematch!</string>
+    <string name="podium_new_match">New match</string>
+    <string name="time_up">Time\'s up!</string>
+    <string name="setup_recommended">Recommended: %1$s</string>
+
+    <!-- Report a word -->
+    <string name="report_title">Report this word</string>
+    <string name="report_word">Civilians\' word: %1$s</string>
+    <string name="report_decoy">Impostor\'s word: %1$s</string>
+    <string name="report_pick">Pick everything that applies</string>
+    <string name="report_offensive">Offensive</string>
+    <string name="report_typo">Spelling mistake</string>
+    <string name="report_not_similar">The words don\'t match</string>
+    <string name="report_difficulty">Too easy or too hard</string>
+    <string name="report_other">Something else</string>
+    <string name="report_comment">More details (optional)</string>
+    <string name="report_privacy">A Google form opens in your browser with this word and what you wrote, ready to send. Nothing else is shared.</string>
+    <string name="report_send">Open the form</string>
 </resources>

@@ -8,28 +8,38 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.jorgelillo.whoslying.R
 import com.jorgelillo.whoslying.WhosLyingApplication
+import com.jorgelillo.whoslying.domain.Match
 import com.jorgelillo.whoslying.domain.WordPack
 import com.jorgelillo.whoslying.ui.screens.CountdownScreen
 import com.jorgelillo.whoslying.ui.screens.DebateScreen
+import com.jorgelillo.whoslying.ui.screens.DrawingScreen
 import com.jorgelillo.whoslying.ui.screens.ExposeScreen
 import com.jorgelillo.whoslying.ui.screens.HomeScreen
 import com.jorgelillo.whoslying.ui.screens.HowToSheet
 import com.jorgelillo.whoslying.ui.screens.ModesSheet
+import com.jorgelillo.whoslying.ui.screens.PLAY_STORE_URL
 import com.jorgelillo.whoslying.ui.screens.PackEditScreen
 import com.jorgelillo.whoslying.ui.screens.PackPickerScreen
 import com.jorgelillo.whoslying.ui.screens.PacksScreen
 import com.jorgelillo.whoslying.ui.screens.PlayersScreen
+import com.jorgelillo.whoslying.ui.screens.PodiumScreen
+import com.jorgelillo.whoslying.ui.screens.ReportSheet
 import com.jorgelillo.whoslying.ui.screens.ResultScreen
 import com.jorgelillo.whoslying.ui.screens.RevealScreen
+import com.jorgelillo.whoslying.ui.screens.ScoresSheet
 import com.jorgelillo.whoslying.ui.screens.SettingsSheet
 import com.jorgelillo.whoslying.ui.screens.SetupScreen
+import com.jorgelillo.whoslying.ui.screens.TimeUpScreen
 import com.jorgelillo.whoslying.ui.screens.VotingScreen
 
 private const val NEW = "new"
@@ -45,6 +55,8 @@ fun WhosLyingApp(app: WhosLyingApplication) {
     var showHowTo by rememberSaveable { mutableStateOf(false) }
     var showAbout by rememberSaveable { mutableStateOf(false) }
     var showModes by rememberSaveable { mutableStateOf(false) }
+    var showScores by rememberSaveable { mutableStateOf(false) }
+    var showReport by rememberSaveable { mutableStateOf(false) }
 
     NavHost(nav, startDestination = "home") {
         composable("home") {
@@ -83,20 +95,39 @@ fun WhosLyingApp(app: WhosLyingApplication) {
         composable("debate") {
             val game = vm.game ?: return@composable LaunchedEffect(Unit) { nav.goHome() }
             LaunchedEffect(vm.revision) { if (game.isOver) nav.navigate("result") { popUpTo("setup") } }
-            DebateScreen(
-                game = game,
-                alive = remember(vm.revision) { game.alive.map { it.player }.toSet() },
-                discussionSeconds = state.settings.discussionSeconds,
-                onVote = { nav.navigate("vote") },
-                onRevealAll = vm::revealAll,
-                onQuit = { nav.goHome() },
-            )
+            val alive = remember(vm.revision) { game.alive.map { it.player }.toSet() }
+            if (state.settings.drawing) {
+                DrawingScreen(
+                    game = game,
+                    alive = alive,
+                    strokes = vm.strokes,
+                    discussionSeconds = state.settings.discussionSeconds,
+                    onVote = { nav.navigate("vote") },
+                    onTimeUp = { vm.voteForced = true; nav.navigate("time_up") },
+                    onRevealAll = vm::revealAll,
+                    onQuit = { nav.goHome() },
+                )
+            } else {
+                DebateScreen(
+                    game = game,
+                    alive = alive,
+                    discussionSeconds = state.settings.discussionSeconds,
+                    onVote = { nav.navigate("vote") },
+                    onTimeUp = { vm.voteForced = true; nav.navigate("time_up") },
+                    onRevealAll = vm::revealAll,
+                    onQuit = { nav.goHome() },
+                )
+            }
+        }
+        composable("time_up") {
+            TimeUpScreen(onDone = { nav.navigate("vote") { popUpTo("time_up") { inclusive = true } } })
         }
         composable("vote") {
             val game = vm.game ?: return@composable LaunchedEffect(Unit) { nav.goHome() }
             VotingScreen(
                 game = game,
                 alive = remember(vm.revision) { game.alive.map { it.player }.toSet() },
+                forced = vm.voteForced,
                 onConfirm = { player ->
                     vm.eliminate(player)
                     nav.navigate("expose") { popUpTo("debate") }
@@ -119,12 +150,30 @@ fun WhosLyingApp(app: WhosLyingApplication) {
         }
         composable("result") {
             val game = vm.game ?: return@composable LaunchedEffect(Unit) { nav.goHome() }
+            val context = LocalContext.current
+            val caption = stringResource(R.string.drawing_share_caption, game.civilianWord, PLAY_STORE_URL)
             ResultScreen(
                 game = game,
                 lastElimination = vm.lastElimination,
-                onReport = null,
+                drawing = vm.strokes,
+                onShareDrawing = { shareDrawing(context, vm.strokes, caption) },
+                onScores = { showScores = true },
+                roundsLeft = state.settings.rounds.takeIf { it > 0 }?.let { Match.remaining(state.roundsPlayed, it) },
+                onSeeWinner = { nav.navigate("podium") { popUpTo("setup") } },
+                onReport = { showReport = true },
                 onPlayAgain = { if (vm.startGame()) nav.navigate("reveal") { popUpTo("setup") } },
                 onHome = { nav.goHome() },
+            )
+        }
+        composable("podium") {
+            PodiumScreen(
+                players = state.players,
+                scores = state.scores,
+                onNewMatch = {
+                    vm.resetScores()
+                    nav.popBackStack("setup", inclusive = false)
+                },
+                onHome = { vm.resetScores(); nav.goHome() },
             )
         }
         composable("pick_packs") {
@@ -159,6 +208,17 @@ fun WhosLyingApp(app: WhosLyingApplication) {
     if (showHowTo) HowToSheet(onDismiss = { showHowTo = false })
     if (showAbout) SettingsSheet(onHowTo = { showHowTo = true }, onModes = { showModes = true }, onDismiss = { showAbout = false })
     if (showModes) ModesSheet(onDismiss = { showModes = false })
+    val reported = vm.game
+    if (showReport && reported != null) {
+        ReportSheet(
+            word = reported.civilianWord,
+            decoy = reported.cards.firstNotNullOfOrNull { card -> card.word?.takeIf { it != reported.civilianWord } },
+            pack = reported.category,
+            language = language,
+            onDismiss = { showReport = false },
+        )
+    }
+    if (showScores) ScoresSheet(state.players, state.scores, vm.lastPoints, state.roundsPlayed, state.settings.rounds, onReset = vm::resetScores, onDismiss = { showScores = false })
 }
 
 private fun NavHostController.goHome() {

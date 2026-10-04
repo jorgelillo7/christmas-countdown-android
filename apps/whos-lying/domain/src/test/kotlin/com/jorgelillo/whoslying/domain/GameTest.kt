@@ -36,6 +36,17 @@ class GameTest {
     }
 
     @Test
+    fun drawingImpostorsGetNoWordInAnyMode() {
+        for (mode in GameMode.entries) {
+            val game = deal(GameSettings(mode, drawing = true))
+            val impostor = game.cards.first { it.role == Role.IMPOSTOR }
+            assertNull(impostor.word, "$mode")
+            assertTrue(impostor.knowsRole)
+            assertEquals("Lugares", impostor.hint)
+        }
+    }
+
+    @Test
     fun drifterModeAddsOneDrifterWhoNeverStarts() {
         repeat(30) { seed ->
             val game = deal(GameSettings(GameMode.DRIFTER), seed)
@@ -106,6 +117,46 @@ class GameTest {
         assertNull(game.outcome)
         game.reveal()
         assertEquals(Outcome.EndedEarly, game.outcome)
+    }
+
+    @Test
+    fun winnersScoreWhetherEliminatedOrNot() {
+        val civiliansWin = deal(GameSettings(GameMode.CLASSIC))
+        val civilians = civiliansWin.cards.filter { it.role == Role.CIVILIAN }.map { it.player }
+        civiliansWin.eliminate(civiliansWin.cards.single { it.role == Role.IMPOSTOR }.player)
+        assertEquals(civilians.associateWith { Scoring.CIVILIAN_WIN }, Scoring.points(civiliansWin))
+
+        val impostorsWin = deal(GameSettings(GameMode.CLASSIC), who = listOf("Ana", "Bea", "Carlos"))
+        impostorsWin.eliminate(impostorsWin.cards.first { it.role == Role.CIVILIAN }.player)
+        val impostor = impostorsWin.cards.single { it.role == Role.IMPOSTOR }.player
+        assertEquals(mapOf(impostor to Scoring.INFILTRATOR_WIN), Scoring.points(impostorsWin))
+
+        val drifterGame = Game.deal(players, GameSettings(GameMode.DRIFTER), pack, Entry("Café", listOf("Té")), Random(3))
+        val drifter = drifterGame.cards.single { it.role == Role.DRIFTER }.player
+        drifterGame.eliminate(drifter)
+        drifterGame.guess("café")
+        assertEquals(mapOf(drifter to Scoring.INFILTRATOR_WIN), Scoring.points(drifterGame))
+
+        val ended = deal(GameSettings(GameMode.CLASSIC))
+        ended.reveal()
+        assertTrue(Scoring.points(ended).isEmpty())
+    }
+
+    @Test
+    fun matchEndsAfterTheChosenRoundsAndTiesShareTheWin() {
+        assertFalse(Match.isOver(9, 10))
+        assertTrue(Match.isOver(10, 10))
+        assertFalse(Match.isOver(99, 0))
+        assertEquals(3, Match.remaining(7, 10))
+        assertFalse(Match.counts(Outcome.EndedEarly))
+        assertTrue(Match.counts(Outcome.NoCivilians))
+        assertEquals(listOf("Ana", "Bea"), Match.leaders(mapOf("Bea" to 20, "Ana" to 20, "Carlos" to 5)))
+        assertTrue(Match.leaders(mapOf("Ana" to 0)).isEmpty())
+        assertEquals(10, Match.recommendedRounds(4))
+        assertEquals(5, Match.recommendedRounds(10))
+        assertTrue(Match.recommendedRounds(24) in Match.ROUND_OPTIONS)
+        assertEquals(240, Rules.recommendedTimer(4))
+        assertTrue((3..24).all { Rules.recommendedTimer(it) in Rules.TIMER_OPTIONS })
     }
 
     @Test

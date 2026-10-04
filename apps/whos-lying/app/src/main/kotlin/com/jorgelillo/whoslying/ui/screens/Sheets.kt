@@ -19,6 +19,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -39,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jorgelillo.whoslying.BuildConfig
 import com.jorgelillo.whoslying.R
+import com.jorgelillo.whoslying.ui.WordReport
 import com.jorgelillo.whoslying.ui.theme.Neon
 
 const val PRIVACY_POLICY_URL = "https://jorgelillo7.github.io/privacy/whos-lying/"
@@ -92,6 +94,8 @@ fun ModesSheet(onDismiss: () -> Unit) {
                 }
             }
             listOf(
+                Triple("🎨", R.string.modes_drawing_title, R.string.modes_drawing),
+                Triple("🏆", R.string.modes_scores_title, R.string.modes_scores),
                 Triple("🌀", R.string.modes_chaos_title, R.string.modes_chaos),
                 Triple("💡", R.string.modes_hint_title, R.string.modes_hint),
                 Triple("⏱️", R.string.modes_timer_title, R.string.modes_timer),
@@ -112,6 +116,60 @@ private class ModeGuide(
     @param:StringRes val win: Int,
     @param:StringRes val tip: Int,
 )
+
+/** Lets the player say what's wrong with a word, then opens the prefilled report form. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ReportSheet(word: String, decoy: String?, pack: String, language: String, onDismiss: () -> Unit) {
+    val uriHandler = LocalUriHandler.current
+    val reasons = listOf(R.string.report_offensive, R.string.report_typo, R.string.report_not_similar, R.string.report_difficulty, R.string.report_other)
+        .map { stringResource(it) }
+    var chosen by rememberSaveable { mutableStateOf(listOf<String>()) }
+    var comment by rememberSaveable { mutableStateOf("") }
+    ModalBottomSheet(onDismissRequest = onDismiss, containerColor = Neon.Card) {
+        Column(
+            Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 24.dp).padding(bottom = 32.dp).then(DialogTags).testTag("report_sheet"),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Text("⚠️  " + stringResource(R.string.report_title), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Black)
+            Text(stringResource(R.string.report_word, word), color = Neon.Amber, fontWeight = FontWeight.Bold)
+            if (decoy != null) Text(stringResource(R.string.report_decoy, decoy), color = Neon.Amber, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.report_pick), color = Neon.Muted, style = MaterialTheme.typography.bodySmall)
+            reasons.forEachIndexed { i, reason ->
+                val selected = reason in chosen
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .clip(MaterialTheme.shapes.large)
+                        .background(Neon.Night)
+                        .clickable { chosen = if (selected) chosen - reason else chosen + reason }
+                        .padding(horizontal = 16.dp, vertical = 14.dp)
+                        .testTag("reason_$i"),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(reason, Modifier.weight(1f), fontWeight = FontWeight.SemiBold)
+                    Text(if (selected) "✅" else "⚪")
+                }
+            }
+            OutlinedTextField(
+                value = comment,
+                onValueChange = { comment = it },
+                placeholder = { Text(stringResource(R.string.report_comment)) },
+                modifier = Modifier.fillMaxWidth().testTag("report_comment"),
+            )
+            Text(stringResource(R.string.report_privacy), color = Neon.Muted, style = MaterialTheme.typography.bodySmall)
+            BigButton(
+                stringResource(R.string.report_send),
+                {
+                    uriHandler.openUri(WordReport.url(word, decoy, pack, language, chosen, comment).toString())
+                    onDismiss()
+                },
+                Modifier.testTag("report_send"),
+                enabled = chosen.isNotEmpty() || comment.isNotBlank(),
+            )
+        }
+    }
+}
 
 /** Settings and about: language, rules, sharing, rating and privacy. */
 @OptIn(ExperimentalMaterial3Api::class)

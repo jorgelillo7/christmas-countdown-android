@@ -4,6 +4,7 @@ import android.media.AudioManager
 import android.media.ToneGenerator
 import android.os.Handler
 import android.os.Looper
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -43,6 +44,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameNanos
@@ -67,8 +69,10 @@ import com.jorgelillo.whoslying.R
 import com.jorgelillo.whoslying.domain.Card
 import com.jorgelillo.whoslying.domain.Elimination
 import com.jorgelillo.whoslying.domain.Game
+import com.jorgelillo.whoslying.domain.Match
 import com.jorgelillo.whoslying.domain.Outcome
 import com.jorgelillo.whoslying.domain.Role
+import com.jorgelillo.whoslying.ui.DrawStroke
 import com.jorgelillo.whoslying.ui.theme.Neon
 import kotlinx.coroutines.delay
 import kotlin.random.Random
@@ -83,6 +87,7 @@ fun DebateScreen(
     alive: Set<String>,
     discussionSeconds: Int,
     onVote: () -> Unit,
+    onTimeUp: () -> Unit,
     onRevealAll: () -> Unit,
     onQuit: () -> Unit,
 ) {
@@ -118,7 +123,7 @@ fun DebateScreen(
             Spacer(Modifier.height(24.dp))
             if (discussionSeconds > 0) {
                 // Keyed by the players left, so every round of discussion gets the full time.
-                key(alive.size) { CircularTimer(discussionSeconds) }
+                key(alive.size) { CircularTimer(discussionSeconds, onTimeUp) }
             } else {
                 Emoji("🗣️", size = 110)
                 Text(stringResource(R.string.debate_no_timer), color = Color.White, textAlign = TextAlign.Center, modifier = Modifier.padding(top = 12.dp))
@@ -138,16 +143,20 @@ fun DebateScreen(
     }
 }
 
-/** Big round countdown. Tap to pause or resume; beeps once at zero. */
+/** Big round countdown. Tap to pause or resume; at zero it beeps and the vote is forced. */
 @Composable
-private fun CircularTimer(seconds: Int) {
+private fun CircularTimer(seconds: Int, onTimeUp: () -> Unit) {
     var left by rememberSaveable { mutableIntStateOf(seconds) }
     var paused by rememberSaveable { mutableStateOf(false) }
+    val timeUp by rememberUpdatedState(onTimeUp)
     LaunchedEffect(paused) {
         while (!paused && left > 0) {
             delay(1_000)
             left--
-            if (left == 0) beep()
+            if (left == 0) {
+                beep()
+                timeUp()
+            }
         }
     }
     val color = when {
@@ -199,7 +208,7 @@ private fun CircularTimer(seconds: Int) {
     }
 }
 
-private fun beep() {
+internal fun beep() {
     runCatching {
         val tone = ToneGenerator(AudioManager.STREAM_NOTIFICATION, ToneGenerator.MAX_VOLUME)
         tone.startTone(ToneGenerator.TONE_PROP_BEEP2, 600)
@@ -209,11 +218,19 @@ private fun beep() {
 
 /** The group picks who to vote out, then confirms. */
 @Composable
-fun VotingScreen(game: Game, alive: Set<String>, onConfirm: (String) -> Unit, onBack: () -> Unit) {
+fun VotingScreen(
+    game: Game,
+    alive: Set<String>,
+    /** Time ran out: no going back to the debate. */
+    forced: Boolean,
+    onConfirm: (String) -> Unit,
+    onBack: () -> Unit,
+) {
     var chosen by rememberSaveable { mutableStateOf<String?>(null) }
+    BackHandler(enabled = forced) {}
     Page(
         title = null,
-        onBack = onBack,
+        onBack = onBack.takeUnless { forced },
         background = Neon.RevealBackdrop,
         bottom = {
             BigButton(
@@ -224,8 +241,10 @@ fun VotingScreen(game: Game, alive: Set<String>, onConfirm: (String) -> Unit, on
                 color = GoGreen,
                 contentColor = Neon.Night,
             )
-            TextButton(onClick = onBack, modifier = Modifier.align(Alignment.CenterHorizontally).testTag("back_to_debate")) {
-                Text(stringResource(R.string.voting_back), color = Color.White.copy(alpha = 0.8f))
+            if (!forced) {
+                TextButton(onClick = onBack, modifier = Modifier.align(Alignment.CenterHorizontally).testTag("back_to_debate")) {
+                    Text(stringResource(R.string.voting_back), color = Color.White.copy(alpha = 0.8f))
+                }
             }
         },
     ) {
@@ -382,7 +401,19 @@ private fun EliminatedCard(card: Card, game: Game, guessResult: Boolean?, onGues
 
 /** End of the game: who won, the words, who was who, and confetti when someone won. */
 @Composable
-fun ResultScreen(game: Game, lastElimination: Elimination?, onReport: (() -> Unit)?, onPlayAgain: () -> Unit, onHome: () -> Unit) {
+fun ResultScreen(
+    game: Game,
+    lastElimination: Elimination?,
+    drawing: List<DrawStroke>,
+    onShareDrawing: () -> Unit,
+    onScores: () -> Unit,
+    /** Rounds left in the match after this game; null when there is no limit. */
+    roundsLeft: Int?,
+    onSeeWinner: () -> Unit,
+    onReport: (() -> Unit)?,
+    onPlayAgain: () -> Unit,
+    onHome: () -> Unit,
+) {
     val outcome = game.outcome
     val impostors = game.cards.filter { it.role == Role.IMPOSTOR }
     val drifter = game.cards.firstOrNull { it.role == Role.DRIFTER }
@@ -418,7 +449,18 @@ fun ResultScreen(game: Game, lastElimination: Elimination?, onReport: (() -> Uni
             onBack = null,
             background = background,
             bottom = {
-                BigButton(stringResource(R.string.play_again), onPlayAgain, Modifier.testTag("play_again"), color = GoGreen, contentColor = Neon.Night)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        Modifier.size(60.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.25f)).clickable(onClick = onScores).testTag("scores"),
+                        contentAlignment = Alignment.Center,
+                    ) { Text("🏆", fontSize = 26.sp) }
+                    Spacer(Modifier.width(12.dp))
+                    if (roundsLeft == 0) {
+                        BigButton(stringResource(R.string.result_see_winner), onSeeWinner, Modifier.weight(1f).testTag("see_winner"), color = Neon.Amber, contentColor = Neon.Night)
+                    } else {
+                        BigButton(stringResource(R.string.play_again), onPlayAgain, Modifier.weight(1f).testTag("play_again"), color = GoGreen, contentColor = Neon.Night)
+                    }
+                }
                 TextButton(onClick = onHome, modifier = Modifier.align(Alignment.CenterHorizontally).testTag("home")) {
                     Text(stringResource(R.string.home), color = Color.White.copy(alpha = 0.85f))
                 }
@@ -428,6 +470,14 @@ fun ResultScreen(game: Game, lastElimination: Elimination?, onReport: (() -> Uni
                 Text(emojis, fontSize = 64.sp)
                 Text(title, color = Color.White, fontSize = 36.sp, lineHeight = 42.sp, fontWeight = FontWeight.Black, textAlign = TextAlign.Center, modifier = Modifier.padding(top = 8.dp).testTag("result_title"))
                 Text(subtitle, color = Color.White.copy(alpha = 0.9f), style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center, modifier = Modifier.padding(top = 8.dp))
+                if (roundsLeft != null && roundsLeft > 0) {
+                    Text(
+                        pluralStringResource(R.plurals.scores_rounds_left, roundsLeft, roundsLeft),
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(top = 6.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.2f)).padding(horizontal = 14.dp, vertical = 4.dp),
+                    )
+                }
                 Spacer(Modifier.height(20.dp))
                 ResultPanel {
                     LabelValue(stringResource(R.string.result_secret_word), game.civilianWord)
@@ -438,6 +488,18 @@ fun ResultScreen(game: Game, lastElimination: Elimination?, onReport: (() -> Uni
                         LabelValue(pluralStringResource(R.plurals.result_impostors_label, impostors.size), impostors.joinToString { it.player })
                     }
                     drifter?.let { LabelValue(stringResource(R.string.role_drifter), it.player) }
+                }
+                if (drawing.isNotEmpty()) {
+                    Spacer(Modifier.height(12.dp))
+                    ResultPanel {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(stringResource(R.string.result_drawing), color = Color.White.copy(alpha = 0.7f), style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f))
+                            TextButton(onClick = onShareDrawing, modifier = Modifier.testTag("share_drawing")) {
+                                Text("↗ " + stringResource(R.string.result_share), color = Color.White)
+                            }
+                        }
+                        DrawingPreview(drawing, Modifier.fillMaxWidth(0.8f).padding(top = 6.dp))
+                    }
                 }
                 Spacer(Modifier.height(12.dp))
                 ResultPanel {
@@ -482,7 +544,7 @@ private class Piece(val x: Float, val speed: Float, val drift: Float, val spin: 
 
 /** A few seconds of falling confetti, drawn on a canvas (no assets, no library). */
 @Composable
-private fun Confetti(modifier: Modifier) {
+internal fun Confetti(modifier: Modifier) {
     val colors = listOf(Neon.Amber, Neon.Pink, Neon.Turquoise, Color.White, Color(0xFF7CFF6B), Neon.Violet)
     val pieces = remember {
         val random = Random(System.nanoTime())
@@ -539,4 +601,102 @@ internal fun roleColor(role: Role): Color = when (role) {
     Role.CIVILIAN -> Neon.Turquoise
     Role.IMPOSTOR -> Neon.Pink
     Role.DRIFTER -> Neon.Amber
+}
+
+/** End of a match: the podium, the full ranking and a fresh start. */
+@Composable
+fun PodiumScreen(players: List<String>, scores: Map<String, Int>, onNewMatch: () -> Unit, onHome: () -> Unit) {
+    val ranking = (players + scores.keys).distinct().sortedByDescending { scores[it] ?: 0 }
+    val leaders = Match.leaders(scores)
+    Box(Modifier.fillMaxSize()) {
+        Page(
+            title = null,
+            onBack = null,
+            background = Neon.RevealBackdrop,
+            bottom = {
+                BigButton(stringResource(R.string.podium_new_match), onNewMatch, Modifier.testTag("new_match"), color = GoGreen, contentColor = Neon.Night)
+                TextButton(onClick = onHome, modifier = Modifier.align(Alignment.CenterHorizontally).testTag("home")) {
+                    Text(stringResource(R.string.home), color = Color.White.copy(alpha = 0.85f))
+                }
+            },
+        ) {
+            Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.CenterHorizontally) {
+                Text("🏆", fontSize = 72.sp)
+                Text(
+                    when (leaders.size) {
+                        0 -> stringResource(R.string.podium_nobody)
+                        1 -> stringResource(R.string.podium_winner, leaders.single())
+                        else -> stringResource(R.string.podium_tie, leaders.joinToString(" · "))
+                    },
+                    color = Color.White,
+                    fontSize = 34.sp,
+                    lineHeight = 40.sp,
+                    fontWeight = FontWeight.Black,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.testTag("podium_title"),
+                )
+                Spacer(Modifier.height(24.dp))
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.Bottom) {
+                    // Classic podium order: second, first, third.
+                    listOf(1 to 120.dp, 0 to 170.dp, 2 to 90.dp).forEach { (place, height) ->
+                        val player = ranking.getOrNull(place)
+                        Column(Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+                            if (player != null) {
+                                Text(if ((scores[player] ?: 0) > 0) listOf("🥇", "🥈", "🥉")[place] else " ", fontSize = 30.sp)
+                                Text(player, color = Color.White, fontWeight = FontWeight.Bold, maxLines = 1)
+                                Box(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .height(height)
+                                        .padding(top = 6.dp)
+                                        .clip(MaterialTheme.shapes.medium)
+                                        .background(listOf(Neon.Amber, Color(0xFFD9DCEB), Color(0xFFE09A5B))[place]),
+                                    contentAlignment = Alignment.TopCenter,
+                                ) {
+                                    Text("${scores[player] ?: 0}", color = Neon.Night, fontSize = 26.sp, fontWeight = FontWeight.Black, modifier = Modifier.padding(top = 10.dp))
+                                }
+                            }
+                        }
+                    }
+                }
+                if (ranking.size > 3) {
+                    Spacer(Modifier.height(16.dp))
+                    ResultPanel {
+                        ranking.drop(3).forEachIndexed { i, player ->
+                            Row(Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                                Text("${i + 4}", color = Color.White.copy(alpha = 0.7f), modifier = Modifier.width(32.dp))
+                                Text(player, Modifier.weight(1f), color = Color.White, fontWeight = FontWeight.SemiBold)
+                                Text("${scores[player] ?: 0}", color = Neon.Amber, fontWeight = FontWeight.Black)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (leaders.isNotEmpty()) Confetti(Modifier.fillMaxSize())
+    }
+}
+
+/** "Time's up!" for a moment, then straight to the vote. */
+@Composable
+fun TimeUpScreen(onDone: () -> Unit) {
+    LaunchedEffect(Unit) {
+        delay(1_800)
+        onDone()
+    }
+    BackHandler {}
+    Page(title = null, onBack = null, background = Neon.ImpostorsBackdrop) {
+        Column(Modifier.weight(1f).fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+            Emoji("⏰", size = 110)
+            Text(
+                stringResource(R.string.time_up),
+                color = Color.White,
+                fontSize = 44.sp,
+                lineHeight = 50.sp,
+                fontWeight = FontWeight.Black,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 16.dp).testTag("time_up"),
+            )
+        }
+    }
 }

@@ -36,7 +36,7 @@ Lines are pruned as items ship. What has **shipped** lives in `apps/<app>/releas
 | 👤 | Play a real game with friends: word pairs, flow, readability | You · `./gradlew :apps:whos-lying:app:installDebug` |
 | 🔨 | Upload key, privacy page `privacy/whos-lying/`, store screenshots, Play Console | v1 feeling right after real games |
 | ⏳ | Open-source license (GPL-3.0 was the candidate) | Your decision · not licensed for now |
-| ⏳ | Drawing mode, scores across rounds, debate/vote/reveal screens and celebration result (ideas from the reference app) | Your go-ahead on the plan |
+| 🔨 | Privacy page must mention the report form (Google Forms, opened in the browser, only the word + what the player writes) | Before publishing `privacy/whos-lying/` |
 | ⏳ | Sharing packs between phones (QR or text) | Feedback after real use |
 
 ## repo

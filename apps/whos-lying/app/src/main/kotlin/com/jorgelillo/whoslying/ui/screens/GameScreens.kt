@@ -1,6 +1,9 @@
 package com.jorgelillo.whoslying.ui.screens
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
@@ -8,35 +11,44 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jorgelillo.whoslying.R
@@ -44,57 +56,89 @@ import com.jorgelillo.whoslying.domain.Card
 import com.jorgelillo.whoslying.domain.Game
 import com.jorgelillo.whoslying.domain.Role
 import com.jorgelillo.whoslying.ui.theme.Neon
+import kotlin.math.roundToInt
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /** Dialogs live in their own window: expose their test tags as resource ids too (scripts/tap-text.sh). */
 @OptIn(ExperimentalComposeUiApi::class)
 internal val DialogTags = Modifier.semantics { testTagsAsResourceId = true }
 
-/** Pass-the-phone reveal: each player taps to see their word, then hides it before passing on. */
+/**
+ * Pass-the-phone reveal. The word sits under a curtain the player slides up while holding it; on
+ * release it drops back on its own, so the word is visible as briefly as possible. "Next player"
+ * only shows up once the curtain has been lifted.
+ */
 @Composable
 fun RevealScreen(game: Game, onDone: () -> Unit, onQuit: () -> Unit) {
     var index by rememberSaveable(game) { mutableIntStateOf(0) }
-    var shown by rememberSaveable(game) { mutableStateOf(false) }
+    var peeked by rememberSaveable(game) { mutableStateOf(false) }
     val card = game.cards[index]
+    val lift = remember(index) { Animatable(0f) }
+    val scope = rememberCoroutineScope()
 
     Page(
         title = stringResource(R.string.reveal_counter, index + 1, game.cards.size),
         onBack = onQuit,
         background = Neon.RevealBackdrop,
         bottom = {
-            if (shown) {
+            if (peeked) {
                 BigButton(stringResource(R.string.reveal_hide), {
-                    shown = false
+                    peeked = false
                     if (index == game.cards.lastIndex) onDone() else index++
-                }, color = Neon.Night, modifier = Modifier.testTag("hide"))
+                }, color = Color(0xFF00D26A), contentColor = Neon.Night, modifier = Modifier.testTag("hide"))
+            } else {
+                Spacer(Modifier.height(60.dp))
             }
         },
     ) {
-        AnimatedContent(
-            targetState = shown to index,
-            transitionSpec = { (fadeIn() + scaleIn(initialScale = 0.92f)) togetherWith fadeOut() },
-            modifier = Modifier.weight(1f).fillMaxWidth(),
-            label = "reveal",
-        ) { (isShown, _) ->
-            if (!isShown) {
-                Column(
-                    Modifier.fillMaxSize().clickable { shown = true }.testTag("tap_to_reveal"),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                ) {
-                    Text(stringResource(R.string.reveal_pass_to), color = Color.White.copy(alpha = 0.8f), style = MaterialTheme.typography.titleMedium)
-                    Text(card.player, style = MaterialTheme.typography.displayMedium, fontWeight = FontWeight.Black, color = Color.White, textAlign = TextAlign.Center)
-                    Spacer(Modifier.height(40.dp))
-                    Emoji("👀", size = 90)
-                    Spacer(Modifier.height(24.dp))
-                    Text(stringResource(R.string.reveal_tap), color = Color.White, style = MaterialTheme.typography.titleMedium)
-                }
-            } else {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { SecretCard(card) }
+        // Clipped so the lifted curtain never covers the header.
+        BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().clipToBounds()) {
+            val height = constraints.maxHeight.toFloat()
+            Box(Modifier.fillMaxSize().padding(bottom = 8.dp), contentAlignment = Alignment.BottomCenter) { SecretCard(card) }
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .offset { IntOffset(0, -lift.value.roundToInt()) }
+                    .clip(MaterialTheme.shapes.extraLarge)
+                    .background(Curtain)
+                    .border(2.dp, Color.White.copy(alpha = 0.25f), MaterialTheme.shapes.extraLarge)
+                    .pointerInput(index) {
+                        val drop: () -> Unit = { scope.launch { lift.animateTo(0f, spring(dampingRatio = Spring.DampingRatioMediumBouncy)) } }
+                        detectVerticalDragGestures(onDragEnd = drop, onDragCancel = drop) { change, dy ->
+                            change.consume()
+                            scope.launch {
+                                lift.snapTo((lift.value - dy).coerceIn(0f, height * 0.85f))
+                                if (lift.value > height * PEEK_SHARE) peeked = true
+                            }
+                        }
+                    }
+                    .testTag("tap_to_reveal"),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Text(stringResource(R.string.reveal_pass_to), color = Color.White.copy(alpha = 0.8f), style = MaterialTheme.typography.titleMedium)
+                Text(card.player, style = MaterialTheme.typography.displayMedium, fontWeight = FontWeight.Black, color = Color.White, textAlign = TextAlign.Center)
+                Spacer(Modifier.height(32.dp))
+                Emoji("🤫", size = 84)
+                Spacer(Modifier.height(24.dp))
+                Text("⬆", color = Color.White, fontSize = 36.sp)
+                Text(
+                    stringResource(R.string.reveal_tap),
+                    color = Color.White,
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 24.dp),
+                )
             }
         }
     }
 }
+
+/** How far the curtain must be lifted (share of its height) to count as "seen". */
+private const val PEEK_SHARE = 0.22f
+
+private val Curtain = Brush.verticalGradient(listOf(Color(0xFF9B7DFF), Color(0xFF5A35E6)))
 
 @Composable
 private fun SecretCard(card: Card) {

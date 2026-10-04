@@ -12,6 +12,12 @@ object Rules {
     /** Civilians must outnumber impostors at the start: impostors < (players - drifters) / 2. */
     fun maxImpostors(players: Int, mode: GameMode): Int = ((players - drifters(mode) - 1) / 2).coerceAtLeast(0)
 
+    /** Discussion timer choices in seconds: off, then 1 to 24 minutes. */
+    val TIMER_OPTIONS = listOf(0) + (1..24).map { it * 60 }
+
+    /** About a minute of discussion per player. */
+    fun recommendedTimer(players: Int): Int = players.coerceIn(1, 24) * 60
+
     fun minPlayers(mode: GameMode): Int = if (mode == GameMode.DRIFTER) 4 else MIN_PLAYERS
 
     fun canStart(players: Int, settings: GameSettings): Boolean =
@@ -123,7 +129,8 @@ class Game private constructor(
                 }
                 val word = when {
                     role == Role.CIVILIAN -> entry.word
-                    role == Role.IMPOSTOR && settings.mode != GameMode.BLIND -> decoy
+                    // Drawing a similar word would give impostors away, so they draw blind.
+                    role == Role.IMPOSTOR && settings.mode != GameMode.BLIND && !settings.drawing -> decoy
                     else -> null
                 }
                 val hint = if (word == null && settings.categoryHint) pack.name else null

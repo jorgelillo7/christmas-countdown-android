@@ -24,3 +24,7 @@ Short, one line each. Add to it whenever something bites.
   not reach them; set it on the dialog modifier too, or UI scripts cannot find their buttons.
 - **Keep `@Serializable` classes in a module with the serialization plugin.** Missing it compiles
   fine and crashes at runtime ("Serializer for class … is not found").
+
+- **Screenshots in the middle of a drag:** `adb shell input swipe` releases at the end, so a
+  "hold to reveal" screen is already closed when you capture it. Drive the finger by hand:
+  `adb shell input motionevent DOWN x y`, a few `MOVE x y`, `screencap`, then `UP x y`.
