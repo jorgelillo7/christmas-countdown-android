@@ -26,7 +26,6 @@ Lines are pruned as items ship. What has **shipped** lives in `apps/<app>/releas
 |---|---|---|
 | 👤 | Try it on a real phone: feel of the spin, tick sound, haptics, presets | You · `./gradlew :apps:decision-wheel:app:installDebug` |
 | ⏳ | v1 in Google Play review (sent to production 2026-10-05) · then install it from Play on a real phone | Google's review |
-| ⏳ | App card in the pinned "Apps" block of jorgelillo7.github.io (both languages), replacing "coming soon" | The app being live on Google Play (the Play link must work) |
 | ⏳ | Group veto turns (each person vetoes one, passing the phone) | Feedback after real use · v1 vetoes are free taps |
 
 ## whos-lying
