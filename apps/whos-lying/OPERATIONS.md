@@ -32,9 +32,22 @@ UI test tags (usable with `scripts/tap-text.sh`, dialogs included): `play`, `how
 
 ## Release
 
-Not published yet. Before the first release: upload key (`scripts/new-upload-key.sh whos-lying`),
-privacy page `privacy/whos-lying/` on jorgelillo7.github.io, store screenshots. Then the
-`release-android-app` skill.
+Not published yet. Releases follow the `release-android-app` skill.
+
+Upload key (created 5 Oct 2026 with `scripts/new-upload-key.sh`, see [docs/signing.md](../../docs/signing.md)):
+
+| | |
+|---|---|
+| File | `~/Projects/documentation/keys/whos-lying/upload-whos-lying.jks` (+ off-Mac backup) |
+| Alias | `upload` |
+| Serial | `bd4c0d6a8362aa0` (valid until Feb 2054) |
+| SHA-1 | `A9:9E:E3:39:4B:17:81:7F:0E:21:D5:C7:FC:BA:8C:35:33:02:73:A3` |
+| SHA-256 | `85:7F:D2:53:4D:0A:5A:BE:FF:67:B8:8E:06:4B:B0:FB:9C:5B:BE:CF:DE:85:4B:08:6C:14:37:B7:34:B8:1A:3D` |
+
+```bash
+./gradlew :apps:whos-lying:app:bundleRelease
+scripts/verify-bundle.sh apps/whos-lying/app/build/outputs/bundle/release/app-release.aab
+```
 
 ## Report-a-word form
 
