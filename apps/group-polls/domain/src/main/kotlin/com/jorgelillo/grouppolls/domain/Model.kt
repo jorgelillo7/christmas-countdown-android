@@ -25,8 +25,10 @@ data class Poll(
     val red: String,
     val blue: String,
     val creatorId: String,
-    /** Shown on private polls only; public polls never show names. */
+    /** Shown on every poll; emptied when the creator deletes their data. */
     val creatorName: String,
+    /** The creator's language ("es", "en"…): the public feed has one section per language. */
+    val language: String,
     val createdAt: Long,
     val closesAt: Long?,
     val redVotes: Int = 0,
@@ -37,6 +39,13 @@ data class Poll(
     val totalVotes: Int get() = redVotes + blueVotes
 
     fun isOpen(now: Long): Boolean = closesAt == null || now < closesAt
+
+    /** In the public feed: public, not hidden by reports, and created in the last week. */
+    fun inFeed(now: Long): Boolean = visibility == Visibility.PUBLIC && !hidden && now - createdAt < FEED_WINDOW
+
+    companion object {
+        const val FEED_WINDOW = 7L * 24 * 60 * 60 * 1000
+    }
 
     fun label(side: Side): String = if (side == Side.RED) red else blue
 }

@@ -35,5 +35,5 @@ include(":apps:whos-lying:app")
 include(":apps:whos-lying:domain")
 
 // ¿Qué votáis? (group polls)
-// include(":apps:group-polls:app") (added with the app module)
+include(":apps:group-polls:app")
 include(":apps:group-polls:domain")

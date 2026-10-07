@@ -10,7 +10,7 @@ class DomainTest {
 
     private fun poll(red: Int = 0, blue: Int = 0, closesAt: Long? = null) = Poll(
         code = "abcdefghijkm", visibility = Visibility.PUBLIC, question = "¿Tortilla con cebolla?",
-        red = "Con", blue = "Sin", creatorId = "u1", creatorName = "Jorge", createdAt = 0, closesAt = closesAt,
+        red = "Con", blue = "Sin", creatorId = "u1", creatorName = "Jorge", language = "es", createdAt = 0, closesAt = closesAt,
         redVotes = red, blueVotes = blue,
     )
 
@@ -21,6 +21,15 @@ class DomainTest {
         assertTrue(poll(closesAt = 10).isOpen(9))
         assertFalse(poll(closesAt = 10).isOpen(10))
         assertTrue(poll(closesAt = null).isOpen(Long.MAX_VALUE))
+    }
+
+    @Test
+    fun feedShowsLastWeekPublicUnhiddenPolls() {
+        val day = 24L * 60 * 60 * 1000
+        assertTrue(poll().inFeed(now = 6 * day))
+        assertFalse(poll().inFeed(now = 7 * day))
+        assertFalse(poll().copy(hidden = true).inFeed(now = 0))
+        assertFalse(poll().copy(visibility = Visibility.PRIVATE).inFeed(now = 0))
     }
 
     @Test
