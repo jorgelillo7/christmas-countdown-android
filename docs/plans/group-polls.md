@@ -8,21 +8,33 @@ A friend wants to know what the group voted. One person asks a question, shares 
 and the people they invite answer with their names visible. Android only for v1 (iPhone users left
 out on purpose, fine for now).
 
-## v1 scope
+## v1 scope (decided 2026-10-07)
 
-1. First launch: type your name (no accounts, no passwords).
-2. Create a question: text plus type, either **two options** (Wii "Everybody Votes" style, red vs
-   blue) or **free text**.
-3. "Invite" opens the share sheet with `https://jorgelillo7.github.io/q/?c=<code>`.
-4. A friend taps the link: the app opens on that question (Android App Links), or Google Play if
-   it isn't installed. They enter their name once and answer.
-5. Results show who answered what (not anonymous inside a group).
-6. Home: questions you created and questions you were invited to, with answer counts.
-7. Play requirements for a networked app with user content: "Delete my data", "Report question",
-   short terms of use.
+Two kinds of poll, both with exactly **two answers, red vs blue**:
 
-Out of v1: public daily questions (Obviously-style, written by Jorge), Google sign-in, web page to
-answer from iPhone, predicting the majority.
+- **Public**: anyone can create one; it shows in the feed for everyone; results are percentages,
+  never names. Shareable by link too.
+- **Private**: only people with the link can open it; results show **who voted what**.
+
+Common rules:
+
+1. First launch: type your name (no accounts). Anonymous Firebase auth underneath.
+2. Create: question + red label + blue label, public/private, duration chosen by the creator
+   (**1 day / 7 days / no limit**).
+3. Vote is **final**, followed by a **prediction** of which side wins (Wii homage); your prediction
+   accuracy is kept on the device.
+4. Share on every poll: `https://jorgelillo7.github.io/q/?c=<code>` (App Link into the app,
+   fallback page to Google Play).
+5. Moderation from day one (public UGC by anyone, Google Play UGC policy): terms accepted before the
+   first public poll, report on every public poll, hide polls from a creator, auto-hide after N
+   reports, es/en word blocklist on create, manual removal by Jorge.
+6. "Borrar mis datos" in the app and on a web page.
+
+Out of v1: free-text answers, Google sign-in, answering from iPhone/web.
+
+Infra note: **lillorepo is not touched for now**. The GCP/Firebase project is created by hand;
+adopting it in `lillorepo/infra` Terraform comes later. Spark plan (no billing) means no Cloud
+Functions: every invariant lives in security rules + client.
 
 ## Architecture
 

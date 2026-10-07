@@ -33,3 +33,7 @@ include(":apps:decision-wheel:domain")
 // Who's lying? (impostor party game)
 include(":apps:whos-lying:app")
 include(":apps:whos-lying:domain")
+
+// ¿Qué votáis? (group polls)
+// include(":apps:group-polls:app") (added with the app module)
+include(":apps:group-polls:domain")
