@@ -40,7 +40,9 @@ Lines are pruned as items ship. What has **shipped** lives in `apps/<app>/releas
 
 | | What is missing | Waiting on |
 |---|---|---|
-| 🔨 | "¿Qué votáis?" group polls app in progress: plan in [docs/plans/group-polls.md](docs/plans/group-polls.md) | Firebase project (you), then wiring |
+| 👤 | Create the app in Play Console (`com.jorgelillo.grouppolls`, App · Social) and its upload key (`scripts/new-upload-key.sh group-polls`) | You · answers in `apps/group-polls/OPERATIONS.md` → "Play Console answers" |
+| 👤 | Create the Firebase project and give the OK | You · lillorepo `packages/group_polls/OPERATIONS.md` → "Create the project" |
+| 🔨 | Then: `firebase.properties`, App Check (Play Integrity + debug token), Play signing SHA-256 in `assetlinks.json`, publish the site pages (`/q/`, assetlinks, privacy), Terraform on, internal test | The two steps above · plan in [docs/plans/group-polls.md](docs/plans/group-polls.md) |
 
 ## repo
 

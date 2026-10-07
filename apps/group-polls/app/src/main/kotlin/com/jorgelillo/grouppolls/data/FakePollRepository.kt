@@ -19,8 +19,8 @@ import kotlinx.coroutines.flow.update
 class FakePollRepository(private val now: () -> Long = System::currentTimeMillis) : PollRepository {
 
     private val me = "local-user"
-    private val polls = MutableStateFlow(samplePolls())
-    private val votes = MutableStateFlow<Map<String, Map<String, Vote>>>(emptyMap())
+    private val polls = MutableStateFlow(samplePolls() + samplePrivate())
+    private val votes = MutableStateFlow(sampleVotes())
     private val reports = mutableMapOf<String, MutableSet<String>>()
 
     override suspend fun userId(): String = me
@@ -67,6 +67,25 @@ class FakePollRepository(private val now: () -> Long = System::currentTimeMillis
         votes.update { all -> all.mapValues { (_, byVoter) -> byVoter.mapValues { (id, v) -> if (id == me) v.copy(voterName = null) else v } } }
     }
 
+    /** A private poll with friends' votes, opened by link (store screenshots, manual checks). */
+    private fun samplePrivate(): Map<String, Poll> {
+        val t = now()
+        val spanish = java.util.Locale.getDefault().language == "es"
+        return mapOf(
+            SAMPLE_PRIVATE to Poll(
+                SAMPLE_PRIVATE, Visibility.PRIVATE, if (spanish) "¿Cena del viernes?" else "Friday dinner?", "Pizza", "Sushi",
+                "sample-Lucía", "Lucía", if (spanish) "es" else "en",
+                t - 3 * 60 * 60 * 1000L, Duration.ONE_DAY.closesAt(t - 3 * 60 * 60 * 1000L), redVotes = 2, blueVotes = 1,
+            ),
+        )
+    }
+
+    private fun sampleVotes(): Map<String, Map<String, Vote>> {
+        val t = now()
+        val friends = listOf("Lucía" to Side.RED, "Dani" to Side.RED, "Marta" to Side.BLUE)
+        return mapOf(SAMPLE_PRIVATE to friends.mapIndexed { i, (name, side) -> "sample-$name" to Vote("sample-$name", name, side, Side.RED, t - (3 - i) * 600_000L) }.toMap())
+    }
+
     private fun samplePolls(): Map<String, Poll> {
         val t = now()
         val hour = 60L * 60 * 1000
@@ -79,5 +98,10 @@ class FakePollRepository(private val now: () -> Long = System::currentTimeMillis
             sample("en", "Cats or dogs?", "Cats", "Dogs", 1044, 1201, 3 * hour, "Sam"),
             sample("en", "Coffee or tea in the morning?", "Coffee", "Tea", 640, 288, 30 * hour, "Alex", Duration.NO_LIMIT),
         ).associateBy { it.code }
+    }
+
+    companion object {
+        /** Fixed code so a link can open the sample private poll. */
+        const val SAMPLE_PRIVATE = "DemPrivateX2"
     }
 }

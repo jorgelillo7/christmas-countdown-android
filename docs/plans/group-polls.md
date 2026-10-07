@@ -1,6 +1,9 @@
 # Plan: "¿Qué votáis?" group polls app
 
-Status: **planned, not started.** Starts after the Who's lying? internal test is released.
+Status: **built, waiting on the Firebase project and the Play Console app** (2026-10-07). App on an
+in-memory backend + Firestore implementation (lillo-android-apps), rules + 22 emulator tests +
+moderation + Terraform (lillorepo `packages/group_polls`, `infra/group_polls.tf`), `/q/`,
+`assetlinks.json` and privacy page (jorgelillo7.github.io), all local until the OK.
 
 ## Why
 
