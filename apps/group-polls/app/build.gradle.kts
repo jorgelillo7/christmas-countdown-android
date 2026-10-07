@@ -12,6 +12,14 @@ val keystoreProperties = Properties().apply {
     if (keystorePropertiesFile.exists()) keystorePropertiesFile.inputStream().use { load(it) }
 }
 
+// Firebase client config (public identifiers, not secrets) from the Firebase console. Without the
+// file the app runs on its in-memory backend.
+val firebasePropertiesFile = file("../firebase.properties")
+val firebaseProperties = Properties().apply {
+    if (firebasePropertiesFile.exists()) firebasePropertiesFile.inputStream().use { load(it) }
+}
+fun firebase(key: String) = "\"" + firebaseProperties.getProperty(key, "").trim() + "\""
+
 android {
     namespace = "com.jorgelillo.grouppolls"
 
@@ -20,6 +28,9 @@ android {
         minSdk = 24 // navigation-compose needs API 24
         versionCode = 1
         versionName = "1.0"
+        buildConfigField("String", "FIREBASE_PROJECT_ID", firebase("projectId"))
+        buildConfigField("String", "FIREBASE_APP_ID", firebase("appId"))
+        buildConfigField("String", "FIREBASE_API_KEY", firebase("apiKey"))
     }
 
     signingConfigs {
@@ -57,6 +68,13 @@ android {
 dependencies {
     implementation(projects.apps.groupPolls.domain)
     implementation(libs.kotlinx.serialization.json)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.appcheck.playintegrity)
+    debugImplementation(libs.firebase.appcheck.debug)
+    implementation(libs.kotlinx.coroutines.play.services)
     implementation(projects.core.designsystem)
 
     implementation(libs.androidx.activity.compose)
