@@ -657,7 +657,7 @@ internal val spanishPacks = listOf(
         Mosquito / Mosca / Tábano
         Tormenta de verano / Ola de calor / Sequía
         Chapuzón / Bomba / Salto de cabeza
-        Tinto de verano / Sangría / Horchata
+        Té helado / Horchata / Batido de fresa
         Tumbona / Hamaca / Silla plegable
         Puesta de sol / Amanecer / Noche estrellada
         Piscina municipal / Piscina hinchable / Spa
@@ -670,7 +670,7 @@ internal val spanishPacks = listOf(
         Nevera portátil / Bolsa de hielo / Cantimplora
         Pelota de playa / Palas / Frisbee
         Paseo marítimo / Muelle / Puerto deportivo
-        Agua de coco / Cóctel / Granizada de limón
+        Agua de coco / Zumo de piña / Granizada de limón
         Cometa / Molinillo / Pompas de jabón
         """,
     ),
@@ -705,7 +705,7 @@ internal val spanishPacks = listOf(
         Piñata / Globos / Confeti
         Juego de rol / Dungeons & Dragons / Warhammer
         Scrabble / Apalabrados / Wordle
-        Verdad o reto / Yo nunca / La botella
+        Verdad o reto / Adivina quién / Simón dice
         Cubo de Rubik / Spinner / Slime
         """,
     ),
@@ -731,7 +731,7 @@ internal val spanishPacks = listOf(
         Soplar las velas / Pedir un deseo / Cantar cumpleaños feliz
         Amigo invisible / Lotería de Navidad / Cesta de Navidad
         Noche de San Juan / Hoguera / Verbena de San Juan
-        Oktoberfest / San Patricio / Carnaval de Río
+        Carnaval de Venecia / San Patricio / Carnaval de Río
         Año Nuevo chino / Diwali / Holi
         Telaraña / Ataúd / Lápida
         Papel de regalo / Lazo / Tarjeta de felicitación

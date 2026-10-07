@@ -32,7 +32,12 @@ UI test tags (usable with `scripts/tap-text.sh`, dialogs included): `play`, `how
 
 ## Release
 
-Not published yet. Releases follow the `release-android-app` skill.
+Releases follow the `release-android-app` skill.
+
+| versionCode | versionName | Date | Track | Notes |
+|---|---|---|---|---|
+| 1 | 1.0 | 2026-10-07 | — | Uploaded to the bundle library by mistake, never released. **Code 1 is burnt.** |
+| 2 | 1.0 | 2026-10-07 | Internal testing | First test with friends. Word packs without alcohol / drinking games, for a PEGI 3 rating |
 
 Upload key (created 5 Oct 2026 with `scripts/new-upload-key.sh`, see [docs/signing.md](../../docs/signing.md)):
 

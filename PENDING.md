@@ -38,6 +38,12 @@ Lines are pruned as items ship. What has **shipped** lives in `apps/<app>/releas
 | 🔨 | Privacy page must mention the report form (Google Forms, opened in the browser, only the word + what the player writes) | Before publishing `privacy/whos-lying/` |
 | ⏳ | Sharing packs between phones (QR or text) | Feedback after real use |
 
+## group-polls (new app)
+
+| | What is missing | Waiting on |
+|---|---|---|
+| ⏳ | "¿Qué votáis?" group polls app: plan in [docs/plans/group-polls.md](docs/plans/group-polls.md) | Who's lying? internal test released |
+
 ## repo
 
 | | What is missing | Waiting on |

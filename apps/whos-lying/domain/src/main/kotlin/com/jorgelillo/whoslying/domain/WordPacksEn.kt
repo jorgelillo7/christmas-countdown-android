@@ -657,7 +657,7 @@ internal val englishPacks = listOf(
         Mosquito / Fly / Horsefly
         Summer storm / Heatwave / Drought
         Cannonball / Belly flop / Dive
-        Iced tea / Sangria / Horchata
+        Iced tea / Horchata / Strawberry milkshake
         Sun lounger / Hammock / Deck chair
         Sunset / Sunrise / Starry night
         Paddling pool / Public pool / Spa
@@ -670,7 +670,7 @@ internal val englishPacks = listOf(
         Cool box / Ice pack / Water bottle
         Beach ball / Frisbee / Beach tennis
         Promenade / Pier / Marina
-        Coconut water / Cocktail / Slushie
+        Coconut water / Pineapple juice / Slushie
         Kite / Pinwheel / Soap bubbles
         """,
     ),
@@ -705,7 +705,7 @@ internal val englishPacks = listOf(
         Piñata / Balloons / Confetti
         Role-playing game / Dungeons & Dragons / Warhammer
         Scrabble / Words With Friends / Wordle
-        Truth or dare / Never have I ever / Spin the bottle
+        Truth or dare / Guess Who / Simon says
         Rubik's Cube / Fidget spinner / Slime
         """,
     ),
@@ -714,7 +714,7 @@ internal val englishPacks = listOf(
         """
         Christmas / New Year / Thanksgiving
         Halloween / Day of the Dead / Carnival
-        New Year's Eve / Champagne toast / Party hats
+        New Year's Eve / Countdown party / Party hats
         Christmas tree / Nativity scene / Advent calendar
         Gingerbread house / Panettone / Christmas pudding
         Running of the bulls / La Tomatina / Fallas
@@ -731,7 +731,7 @@ internal val englishPacks = listOf(
         Blowing out candles / Making a wish / Singing happy birthday
         Secret Santa / Christmas hamper / Christmas cracker
         Bonfire Night / Midsummer / Fourth of July
-        Oktoberfest / St. Patrick's Day / Rio Carnival
+        Venice Carnival / St. Patrick's Day / Rio Carnival
         Chinese New Year / Diwali / Holi
         Cobweb / Coffin / Gravestone
         Wrapping paper / Bow / Greeting card
