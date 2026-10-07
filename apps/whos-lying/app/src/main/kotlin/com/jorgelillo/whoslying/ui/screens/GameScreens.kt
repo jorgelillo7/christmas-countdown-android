@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +24,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -95,7 +97,9 @@ fun RevealScreen(game: Game, onDone: () -> Unit, onQuit: () -> Unit) {
         // Clipped so the lifted curtain never covers the header.
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().clipToBounds()) {
             val height = constraints.maxHeight.toFloat()
-            Box(Modifier.fillMaxSize().padding(bottom = 8.dp), contentAlignment = Alignment.BottomCenter) { SecretCard(card) }
+            // Short screens (landscape phones, handhelds like the AYN Thor): smaller curtain content so it all fits.
+            val compact = maxHeight < 440.dp
+            Box(Modifier.fillMaxSize().padding(bottom = 8.dp), contentAlignment = Alignment.BottomCenter) { SecretCard(card, compact) }
             Column(
                 Modifier
                     .fillMaxSize()
@@ -117,19 +121,33 @@ fun RevealScreen(game: Game, onDone: () -> Unit, onQuit: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                Text(stringResource(R.string.reveal_pass_to), color = Color.White.copy(alpha = 0.8f), style = MaterialTheme.typography.titleMedium)
-                Text(card.player, style = MaterialTheme.typography.displayMedium, fontWeight = FontWeight.Black, color = Color.White, textAlign = TextAlign.Center)
-                Spacer(Modifier.height(32.dp))
-                Emoji("🤫", size = 84)
-                Spacer(Modifier.height(24.dp))
-                Text("⬆", color = Color.White, fontSize = 36.sp)
-                Text(
-                    stringResource(R.string.reveal_tap),
-                    color = Color.White,
-                    style = MaterialTheme.typography.titleMedium,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 24.dp),
-                )
+                if (compact) {
+                    // Short screens: side by side, so the whole instruction fits.
+                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 24.dp)) {
+                        Emoji("🤫", size = 56)
+                        Spacer(Modifier.width(24.dp))
+                        Column {
+                            Text(stringResource(R.string.reveal_pass_to), color = Color.White.copy(alpha = 0.8f), style = MaterialTheme.typography.titleMedium)
+                            Text(card.player, style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Black, color = Color.White)
+                            Spacer(Modifier.height(6.dp))
+                            Text("⬆  " + stringResource(R.string.reveal_tap), color = Color.White, style = MaterialTheme.typography.bodyMedium)
+                        }
+                    }
+                } else {
+                    Text(stringResource(R.string.reveal_pass_to), color = Color.White.copy(alpha = 0.8f), style = MaterialTheme.typography.titleMedium)
+                    Text(card.player, style = MaterialTheme.typography.displayMedium, fontWeight = FontWeight.Black, color = Color.White, textAlign = TextAlign.Center)
+                    Spacer(Modifier.height(32.dp))
+                    Emoji("🤫", size = 84)
+                    Spacer(Modifier.height(24.dp))
+                    Text("⬆", color = Color.White, fontSize = 36.sp)
+                    Text(
+                        stringResource(R.string.reveal_tap),
+                        color = Color.White,
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = 24.dp),
+                    )
+                }
             }
         }
     }
@@ -141,7 +159,7 @@ private const val PEEK_SHARE = 0.22f
 private val Curtain = Brush.verticalGradient(listOf(Color(0xFF9B7DFF), Color(0xFF5A35E6)))
 
 @Composable
-private fun SecretCard(card: Card) {
+private fun SecretCard(card: Card, compact: Boolean) {
     val accent = if (card.knowsRole) Neon.Pink else Neon.Turquoise
     Column(
         Modifier
@@ -149,25 +167,29 @@ private fun SecretCard(card: Card) {
             .clip(MaterialTheme.shapes.extraLarge)
             .background(Neon.Night)
             .border(3.dp, accent, MaterialTheme.shapes.extraLarge)
-            .padding(28.dp),
+            .padding(if (compact) 14.dp else 28.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(card.player, color = Neon.Muted, style = MaterialTheme.typography.titleMedium)
-        Spacer(Modifier.height(18.dp))
+        // Short screens drop the name (it is on the curtain) and shrink everything so the word fits.
+        if (!compact) {
+            Text(card.player, color = Neon.Muted, style = MaterialTheme.typography.titleMedium)
+            Spacer(Modifier.height(18.dp))
+        }
         if (card.knowsRole) {
-            Emoji(if (card.role == Role.DRIFTER) "🤷" else "🕵️", size = 64)
+            Emoji(if (card.role == Role.DRIFTER) "🤷" else "🕵️", size = if (compact) 36 else 64)
             Text(
                 stringResource(if (card.role == Role.DRIFTER) R.string.reveal_you_are_drifter else R.string.reveal_you_are_impostor),
                 color = accent,
-                style = MaterialTheme.typography.headlineMedium,
+                style = if (compact) MaterialTheme.typography.titleLarge else MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Black,
                 textAlign = TextAlign.Center,
             )
             Text(
                 stringResource(if (card.role == Role.DRIFTER) R.string.reveal_drifter_desc else R.string.reveal_impostor_desc),
                 color = Neon.Muted,
+                style = if (compact) MaterialTheme.typography.bodySmall else MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 8.dp),
+                modifier = Modifier.padding(top = if (compact) 2.dp else 8.dp),
             )
         } else {
             // CLASSIC impostors also land here: same layout as civilians, so nothing gives them away.
@@ -175,15 +197,15 @@ private fun SecretCard(card: Card) {
             Text(
                 card.word.orEmpty(),
                 color = accent,
-                fontSize = 44.sp,
+                fontSize = if (compact) 32.sp else 44.sp,
                 fontWeight = FontWeight.Black,
                 textAlign = TextAlign.Center,
-                lineHeight = 48.sp,
-                modifier = Modifier.padding(vertical = 8.dp).testTag("secret_word"),
+                lineHeight = if (compact) 36.sp else 48.sp,
+                modifier = Modifier.padding(vertical = if (compact) 2.dp else 8.dp).testTag("secret_word"),
             )
         }
         card.hint?.let { hint ->
-            Text(stringResource(R.string.reveal_hint, hint), color = Neon.Amber, modifier = Modifier.padding(top = 14.dp))
+            Text(stringResource(R.string.reveal_hint, hint), color = Neon.Amber, modifier = Modifier.padding(top = if (compact) 4.dp else 14.dp))
         }
     }
 }

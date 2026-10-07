@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -87,6 +88,12 @@ fun BigButton(
 
 /** Player colors for avatars, by position in the group. */
 val avatarColors = listOf(Neon.Pink, Neon.Turquoise, Neon.Violet, Neon.Amber)
+
+/** Landscape phones and handhelds (e.g. AYN Thor): too short for the full vertical layouts. */
+@Composable
+fun isShortScreen(): Boolean = LocalConfiguration.current.screenHeightDp < SHORT_SCREEN_DP
+
+private const val SHORT_SCREEN_DP = 480
 
 /** Big emoji used as illustration (no image assets needed). */
 @Composable

@@ -227,6 +227,7 @@ fun VotingScreen(
     onBack: () -> Unit,
 ) {
     var chosen by rememberSaveable { mutableStateOf<String?>(null) }
+    val short = isShortScreen()
     BackHandler(enabled = forced) {}
     Page(
         title = null,
@@ -249,20 +250,23 @@ fun VotingScreen(
         },
     ) {
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Emoji("🗳️", size = 56)
-            Text(stringResource(R.string.voting_title), color = Color.White, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Black)
-            Text(stringResource(R.string.voting_desc), color = Color.White.copy(alpha = 0.85f), textAlign = TextAlign.Center)
+            // Short screens keep only the question, so the players stay visible.
+            if (!short) {
+                Emoji("🗳️", size = 56)
+                Text(stringResource(R.string.voting_title), color = Color.White, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Black)
+                Text(stringResource(R.string.voting_desc), color = Color.White.copy(alpha = 0.85f), textAlign = TextAlign.Center)
+            }
             Text(
                 stringResource(R.string.voting_question),
                 color = Neon.Amber,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Black,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(vertical = 12.dp),
+                modifier = Modifier.padding(vertical = if (short) 4.dp else 12.dp),
             )
         }
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(140.dp),
+            columns = GridCells.Adaptive(if (short) 120.dp else 140.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
@@ -277,14 +281,14 @@ fun VotingScreen(
                         .clickable { chosen = card.player }
                         .testTag("vote_${card.player}"),
                 ) {
-                    Column(Modifier.fillMaxWidth().padding(vertical = 18.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(Modifier.fillMaxWidth().padding(vertical = if (short) 8.dp else 18.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                         Box(
-                            Modifier.size(64.dp).clip(CircleShape).background(avatarColors[index % avatarColors.size]),
+                            Modifier.size(if (short) 40.dp else 64.dp).clip(CircleShape).background(avatarColors[index % avatarColors.size]),
                             contentAlignment = Alignment.Center,
                         ) {
-                            Text(card.player.take(1).uppercase(), color = Neon.Night, fontSize = 30.sp, fontWeight = FontWeight.Black)
+                            Text(card.player.take(1).uppercase(), color = Neon.Night, fontSize = if (short) 20.sp else 30.sp, fontWeight = FontWeight.Black)
                         }
-                        Text(card.player, color = Color.White, fontWeight = FontWeight.Bold, maxLines = 1, modifier = Modifier.padding(top = 10.dp))
+                        Text(card.player, color = Color.White, fontWeight = FontWeight.Bold, maxLines = 1, modifier = Modifier.padding(top = if (short) 4.dp else 10.dp))
                     }
                     if (selected) {
                         Box(

@@ -189,17 +189,20 @@ fun SetupScreen(
     onBack: () -> Unit,
 ) {
     val maxImpostors = Rules.maxImpostors(playerCount, settings.mode).coerceAtLeast(1)
+    // On short screens a fixed button would leave almost no room to scroll: it goes at the end of the list.
+    val short = isShortScreen()
+    val startButton: @Composable () -> Unit = {
+        BigButton(
+            stringResource(R.string.start),
+            onStart,
+            enabled = Rules.canStart(playerCount, settings),
+            modifier = Modifier.testTag("start"),
+        )
+    }
     Page(
         title = stringResource(R.string.setup_title),
         onBack = onBack,
-        bottom = {
-            BigButton(
-                stringResource(R.string.start),
-                onStart,
-                enabled = Rules.canStart(playerCount, settings),
-                modifier = Modifier.testTag("start"),
-            )
-        },
+        bottom = { if (!short) startButton() },
     ) {
         Column(Modifier.verticalScroll(rememberScrollState())) {
             TextButton(onClick = onModesInfo, modifier = Modifier.align(Alignment.End).testTag("modes_info")) {
@@ -331,6 +334,10 @@ fun SetupScreen(
                 Text(stringResource(R.string.setup_running_out), style = MaterialTheme.typography.bodySmall, color = Neon.Amber, modifier = Modifier.padding(top = 6.dp))
             }
             Spacer(Modifier.height(16.dp))
+            if (short) {
+                startButton()
+                Spacer(Modifier.height(16.dp))
+            }
         }
     }
 }

@@ -11,6 +11,7 @@ OUT="$ROOT/build/smoke-test"
 APK="$ROOT/apps/christmas-countdown/app/build/outputs/apk/release/app-release.apk"
 
 (cd "$ROOT" && ./gradlew -q :apps:christmas-countdown:app:assembleRelease)
+"$ADB" uninstall "$PKG" >/dev/null 2>&1 || true  # a debug build has another signature
 "$ADB" install -r "$APK" | tail -1
 "$ADB" shell cmd locale set-app-locales "$PKG" --locales en-US   # labels below are English
 "$ADB" logcat -c
