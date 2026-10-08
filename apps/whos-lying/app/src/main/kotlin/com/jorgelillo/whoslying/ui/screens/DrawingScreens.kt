@@ -8,11 +8,16 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -73,18 +78,14 @@ fun DrawingScreen(
     onQuit: () -> Unit,
 ) {
     var ink by rememberSaveable { mutableIntStateOf(0) }
-    Page(
-        title = null,
-        onBack = onQuit,
-        background = Neon.Backdrop,
-        bottom = {
-            BigButton(stringResource(R.string.vote_button), onVote, Modifier.testTag("go_vote"), color = Color(0xFF00D26A), contentColor = Neon.Night)
-            TextButton(onClick = onRevealAll, modifier = Modifier.align(Alignment.CenterHorizontally).testTag("reveal_all")) {
-                Text(stringResource(R.string.vote_reveal_all), color = Neon.Muted)
-            }
-        },
-    ) {
-        val starter = game.starter.takeIf { it in alive } ?: game.cards.first { it.player in alive && it.role != Role.DRIFTER }.player
+    val starter = game.starter.takeIf { it in alive } ?: game.cards.first { it.player in alive && it.role != Role.DRIFTER }.player
+    val voteButtons: @Composable ColumnScope.() -> Unit = {
+        BigButton(stringResource(R.string.vote_button), onVote, Modifier.testTag("go_vote"), color = Color(0xFF00D26A), contentColor = Neon.Night)
+        TextButton(onClick = onRevealAll, modifier = Modifier.align(Alignment.CenterHorizontally).testTag("reveal_all")) {
+            Text(stringResource(R.string.vote_reveal_all), color = Neon.Muted)
+        }
+    }
+    val turns: @Composable () -> Unit = {
         Text(
             stringResource(R.string.drawing_turns, starter),
             color = Neon.Amber,
@@ -92,34 +93,67 @@ fun DrawingScreen(
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth(),
         )
-        if (discussionSeconds > 0) {
-            Spacer(Modifier.height(8.dp))
-            key(alive.size) { TimerBar(discussionSeconds, onTimeUp) }
+    }
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+        if (maxWidth > maxHeight) {
+            // Landscape (and wide handhelds): the canvas takes the full height, controls go to the side.
+            Page(title = null, onBack = onQuit, background = Neon.Backdrop) {
+                Row(Modifier.weight(1f).fillMaxWidth().padding(bottom = 12.dp), horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+                    Box(Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.Center) {
+                        DrawingCanvas(strokes, InkColors[ink], Modifier.fillMaxHeight().aspectRatio(4f / 5f, matchHeightConstraintsFirst = true))
+                    }
+                    Column(Modifier.width(300.dp).fillMaxHeight().verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        turns()
+                        if (discussionSeconds > 0) key(alive.size) { TimerBar(discussionSeconds, onTimeUp) }
+                        Tools(ink, strokes, columns = 5) { ink = it }
+                        Spacer(Modifier.height(4.dp))
+                        voteButtons()
+                    }
+                }
+            }
+        } else {
+            Page(title = null, onBack = onQuit, background = Neon.Backdrop, bottom = voteButtons) {
+                turns()
+                if (discussionSeconds > 0) {
+                    Spacer(Modifier.height(8.dp))
+                    key(alive.size) { TimerBar(discussionSeconds, onTimeUp) }
+                }
+                Spacer(Modifier.height(10.dp))
+                Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    DrawingCanvas(strokes, InkColors[ink], Modifier.aspectRatio(4f / 5f))
+                }
+                Spacer(Modifier.height(10.dp))
+                Tools(ink, strokes, columns = InkColors.size + 2) { ink = it }
+            }
         }
-        Spacer(Modifier.height(10.dp))
-        Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
-            DrawingCanvas(
-                strokes = strokes,
-                ink = InkColors[ink],
-                modifier = Modifier.aspectRatio(4f / 5f),
-            )
-        }
-        Spacer(Modifier.height(10.dp))
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-            InkColors.forEachIndexed { i, color ->
+    }
+}
+
+/** Inks, undo and clear, in rows of [columns]. */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun Tools(ink: Int, strokes: SnapshotStateList<DrawStroke>, columns: Int, onInk: (Int) -> Unit) {
+    FlowRow(
+        Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        maxItemsInEachRow = columns,
+    ) {
+        InkColors.forEachIndexed { i, color ->
+            Box(Modifier.size(40.dp), contentAlignment = Alignment.Center) {
                 Box(
                     Modifier
                         .size(if (i == ink) 34.dp else 28.dp)
                         .clip(CircleShape)
                         .background(color)
                         .border(3.dp, if (i == ink) Color.White else Color.White.copy(alpha = 0.15f), CircleShape)
-                        .clickable { ink = i }
+                        .clickable { onInk(i) }
                         .testTag("ink_$i"),
                 )
             }
-            ToolButton("↶", "undo", enabled = strokes.isNotEmpty()) { strokes.removeAt(strokes.lastIndex) }
-            ToolButton("🗑", "clear", enabled = strokes.isNotEmpty()) { strokes.clear() }
         }
+        ToolButton("↶", "undo", enabled = strokes.isNotEmpty()) { strokes.removeAt(strokes.lastIndex) }
+        ToolButton("🗑", "clear", enabled = strokes.isNotEmpty()) { strokes.clear() }
     }
 }
 
@@ -137,7 +171,7 @@ private fun ToolButton(symbol: String, tag: String, enabled: Boolean, onClick: (
 }
 
 @Composable
-private fun DrawingCanvas(strokes: SnapshotStateList<DrawStroke>, ink: Color, modifier: Modifier) {
+private fun DrawingCanvas(strokes: SnapshotStateList<DrawStroke>, ink: Color, modifier: Modifier = Modifier) {
     val currentInk by rememberUpdatedState(ink)
     Canvas(
         modifier

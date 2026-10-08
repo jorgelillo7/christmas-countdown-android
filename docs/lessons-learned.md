@@ -28,3 +28,13 @@ Short, one line each. Add to it whenever something bites.
 - **Screenshots in the middle of a drag:** `adb shell input swipe` releases at the end, so a
   "hold to reveal" screen is already closed when you capture it. Drive the finger by hand:
   `adb shell input motionevent DOWN x y`, a few `MOVE x y`, `screencap`, then `UP x y`.
+
+- **Test short landscape screens too.** Handhelds like the AYN Thor run phone apps on a wide, low
+  screen: a layout that only fits portrait cut the reveal text, shrank the drawing canvas to a
+  stamp and hid the players on the vote screen. Rotate the emulator
+  (`adb shell settings put system user_rotation 1`) and check every screen; `isShortScreen()`
+  (height < 480 dp) switches to compact layouts.
+- **Smoke tests uninstall first.** Once an app has an upload key, its release build is signed
+  differently from the debug build on the emulator and `adb install -r` fails with
+  `INSTALL_FAILED_UPDATE_INCOMPATIBLE`.
+

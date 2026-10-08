@@ -12,6 +12,7 @@ OUT="$ROOT/build/smoke-test/decision-wheel"
 APK="$ROOT/apps/decision-wheel/app/build/outputs/apk/release/app-release.apk"
 
 (cd "$ROOT" && ./gradlew -q :apps:decision-wheel:app:assembleRelease)
+"$ADB" uninstall "$PKG" >/dev/null 2>&1 || true  # a debug build has another signature
 "$ADB" install -r "$APK" | tail -1
 "$ADB" shell pm clear "$PKG" >/dev/null                         # fresh presets, empty history
 "$ADB" shell cmd locale set-app-locales "$PKG" --locales en-US
