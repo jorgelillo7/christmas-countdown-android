@@ -1,5 +1,6 @@
 package com.jorgelillo.whoslying.ui.screens
 
+import com.jorgelillo.core.designsystem.TestTagsAsResourceIds
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -62,9 +63,8 @@ import kotlin.math.roundToInt
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-/** Dialogs live in their own window: expose their test tags as resource ids too (scripts/tap-text.sh). */
-@OptIn(ExperimentalComposeUiApi::class)
-internal val DialogTags = Modifier.semantics { testTagsAsResourceId = true }
+/** Dialogs live in their own window: expose their test tags as resource ids too. */
+internal val DialogTags = TestTagsAsResourceIds
 
 /**
  * Pass-the-phone reveal. The word sits under a curtain the player slides up while holding it; on

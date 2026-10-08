@@ -6,12 +6,6 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-// Release signing values live in a git-ignored keystore.properties next to this app's folder.
-val keystorePropertiesFile = file("../keystore.properties")
-val keystoreProperties = Properties().apply {
-    if (keystorePropertiesFile.exists()) keystorePropertiesFile.inputStream().use { load(it) }
-}
-
 // Firebase client config (public identifiers, not secrets) from the Firebase console. Without the
 // file the app runs on its in-memory backend.
 val firebasePropertiesFile = file("../firebase.properties")
@@ -33,27 +27,7 @@ android {
         buildConfigField("String", "FIREBASE_API_KEY", firebase("apiKey"))
     }
 
-    signingConfigs {
-        create("release") {
-            if (keystorePropertiesFile.exists()) {
-                storeFile = file(keystoreProperties.getProperty("storeFile").trim())
-                storePassword = keystoreProperties.getProperty("storePassword")?.trim()
-                keyAlias = keystoreProperties.getProperty("keyAlias")?.trim()
-                keyPassword = keystoreProperties.getProperty("keyPassword")?.trim()
-            }
-        }
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            // Until the app has its upload key, sign release builds with the debug key so the
-            // R8-shrunk build can be smoke tested. Play rejects debug-signed bundles.
-            signingConfig = signingConfigs.getByName(if (keystorePropertiesFile.exists()) "release" else "debug")
-        }
-    }
+    // Release signing and R8: the jorgelillo.android.application convention plugin.
 
     buildFeatures {
         buildConfig = true

@@ -5,23 +5,8 @@
 #
 # Usage: apps/whos-lying/tools/smoke_test.sh
 set -euo pipefail
-ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
-source "$ROOT/scripts/env.sh"
-PKG=com.jorgelillo.whoslying
-OUT="$ROOT/build/smoke-test/whos-lying"
-APK="$ROOT/apps/whos-lying/app/build/outputs/apk/release/app-release.apk"
-
-(cd "$ROOT" && ./gradlew -q :apps:whos-lying:app:assembleRelease)
-"$ADB" uninstall "$PKG" >/dev/null 2>&1 || true  # a debug build has another signature
-"$ADB" install -r "$APK" | tail -1
-"$ADB" shell pm clear "$PKG" >/dev/null
-"$ADB" shell cmd locale set-app-locales "$PKG" --locales en-US
-"$ADB" logcat -c
-"$ADB" shell am start -W -n "$PKG/.MainActivity" >/dev/null
-sleep 4
-
-tap() { "$ROOT/scripts/tap-text.sh" "$@"; }
-shot() { "$ROOT/scripts/screenshot.sh" "$OUT/$1.png" >/dev/null; echo "screen: $1"; }
+source "$(dirname "$0")/../../../scripts/smoke_lib.sh"
+smoke_start whos-lying com.jorgelillo.whoslying
 
 shot home
 tap play 3
@@ -52,9 +37,4 @@ tap keep_playing 2 2>/dev/null || true      # only shown when the game goes on
 tap reveal_all 3 2>/dev/null || true        # end it if it's still running
 sleep 1; shot result
 
-crashes="$("$ADB" logcat -d -b crash | grep -c FATAL || true)"
-pid="$("$ADB" shell pidof "$PKG" || true)"
-"$ADB" shell cmd locale set-app-locales "$PKG" --locales ""
-echo "crashes: $crashes"
-echo "screenshots: $OUT"
-[ -n "$pid" ] && [ "$crashes" = 0 ] && echo "SMOKE TEST PASSED" || { echo "SMOKE TEST FAILED"; exit 1; }
+smoke_finish

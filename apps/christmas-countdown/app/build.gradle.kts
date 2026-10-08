@@ -1,14 +1,6 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.jorgelillo.android.application)
     alias(libs.plugins.jorgelillo.android.compose)
-}
-
-// Release signing values live in a git-ignored keystore.properties next to this app's folder.
-val keystorePropertiesFile = file("../keystore.properties")
-val keystoreProperties = Properties().apply {
-    if (keystorePropertiesFile.exists()) keystorePropertiesFile.inputStream().use { load(it) }
 }
 
 android {
@@ -20,27 +12,7 @@ android {
         versionName = "4.0"
     }
 
-    signingConfigs {
-        create("release") {
-            if (keystorePropertiesFile.exists()) {
-                storeFile = file(keystoreProperties.getProperty("storeFile").trim())
-                storePassword = keystoreProperties.getProperty("storePassword")?.trim()
-                keyAlias = keystoreProperties.getProperty("keyAlias")?.trim()
-                keyPassword = keystoreProperties.getProperty("keyPassword")?.trim()
-            }
-        }
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            if (keystorePropertiesFile.exists()) {
-                signingConfig = signingConfigs.getByName("release")
-            }
-        }
-    }
+    // Release signing and R8: the jorgelillo.android.application convention plugin.
 
     buildFeatures {
         buildConfig = true

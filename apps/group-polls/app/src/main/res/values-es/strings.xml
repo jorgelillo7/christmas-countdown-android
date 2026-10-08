@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">¿Qué votáis?</string>
-    <string name="action_back">Atrás</string>
     <string name="action_share">Compartir</string>
     <string name="cancel">Cancelar</string>
     <string name="ok">Vale</string>

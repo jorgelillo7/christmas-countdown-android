@@ -21,7 +21,7 @@ plugins { alias(libs.plugins.jorgelillo.jvm.library) }
 dependencies { testImplementation(libs.kotlin.test) }
 ```
 
-`apps/roulette/app/build.gradle.kts` (copy signing and build types from Christmas Countdown)
+`apps/roulette/app/build.gradle.kts`
 ```kotlin
 plugins {
     alias(libs.plugins.jorgelillo.android.application)
@@ -41,6 +41,11 @@ dependencies {
 }
 ```
 
+Release signing and R8 come from the `jorgelillo.android.application` plugin: it reads
+`apps/<app>/keystore.properties` (created by `scripts/new-upload-key.sh`) and falls back to the
+debug key without it, so the release build can be smoke tested before the app has its key. Each
+app still needs its own `proguard-rules.pro`.
+
 Register both in `settings.gradle.kts`:
 ```kotlin
 include(":apps:roulette:app")
@@ -53,22 +58,26 @@ Notes from app #2:
 - An app may override `minSdk` in its own `defaultConfig` when a library needs it (the decision
   wheel uses 24 for navigation-compose); never raise it for an app that already has users without
   reason.
-- Until the app has an upload key, sign release builds with the debug key
-  (`signingConfig = … if (keystorePropertiesFile.exists()) "release" else "debug"`) so
-  `tools/smoke_test.sh` can install the R8 build. Play rejects debug-signed bundles.
 - Wrap the content in `Modifier.semantics { testTagsAsResourceId = true }` and give buttons a
   `testTag`: some Compose components (e.g. extended FABs) don't expose their text to UI Automator.
 
-## 2. Theme
+## 2. Theme and shared components
 
-Wrap the UI in `LilloTheme(colorScheme = RouletteColorScheme) { … }` from `:core:designsystem`.
-If a component is useful to a second app, move it into `core/designsystem` then, not before.
+Wrap the UI in `LilloTheme(colorScheme = RouletteColorScheme) { … }` from `:core:designsystem`, and
+put `TestTagsAsResourceIds` on the root and on every dialog or sheet. Also in core: `LilloPage`
+(header with back button, content, bottom actions), `LilloBigButton` and `isShortScreen()` for
+landscape phones and handhelds. Apps wrap them with their own colours (see `whos-lying` and
+`group-polls` `ui/screens/Common.kt`). If a component is useful to a second app, move it into
+`core/designsystem` then, not before.
 
 ## 3. Icon and store assets
 
 - Copy `apps/christmas-countdown/tools/generate_icon.py`, change the geometry and palette.
-- Copy `tools/generate_store_assets.py` and `tools/capture_store_screenshots.sh`; update headlines
-  and tap coordinates.
+- `tools/generate_store_assets.py`: copy one, keep only the app's `Style` (colours) and
+  `LOCALES` (headlines); the drawing is `scripts/store_assets.py`.
+- `tools/capture_store_screenshots.sh`: copy one and change the steps.
+- `tools/smoke_test.sh`: `source scripts/smoke_lib.sh`, `smoke_start <app> <package>`, the app's
+  steps with `tap`/`shot`, then `smoke_finish`.
 - `scripts/setup-python.sh` creates the Python environment once.
 
 ## 4. Privacy policy

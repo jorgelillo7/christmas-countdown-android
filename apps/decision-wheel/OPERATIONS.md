@@ -24,7 +24,8 @@ UI test tags (usable with `scripts/tap-text.sh`): `new_wheel`, `more`, `spin`, `
 
 ## Release
 
-Not published yet.
+Live on Google Play since October 2026 (v1, production). Releases follow the
+`release-android-app` skill.
 
 Upload key (created 4 Oct 2026 with `scripts/new-upload-key.sh`, see [docs/signing.md](../../docs/signing.md)):
 

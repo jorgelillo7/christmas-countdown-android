@@ -8,17 +8,14 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.jorgelillo.core.designsystem.LilloTheme
+import com.jorgelillo.core.designsystem.TestTagsAsResourceIds
 import com.jorgelillo.whoslying.ui.WhosLyingApp
 import com.jorgelillo.whoslying.ui.theme.NeonColorScheme
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         // The design is always dark, so system bar icons are always light.
@@ -31,7 +28,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             LilloTheme(colorScheme = NeonColorScheme) {
                 // Test tags become resource ids so scripts/tap-text.sh can find buttons by tag.
-                Box(Modifier.fillMaxSize().semantics { testTagsAsResourceId = true }) {
+                Box(Modifier.fillMaxSize().then(TestTagsAsResourceIds)) {
                     WhosLyingApp(app)
                 }
             }

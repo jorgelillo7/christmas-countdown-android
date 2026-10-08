@@ -1,5 +1,8 @@
 package com.jorgelillo.grouppolls.ui.screens
 
+import com.jorgelillo.core.designsystem.LilloBigButton
+import com.jorgelillo.core.designsystem.LilloPage
+import com.jorgelillo.core.designsystem.TestTagsAsResourceIds
 import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -53,8 +56,7 @@ const val PRIVACY_POLICY_URL = "https://jorgelillo7.github.io/privacy/group-poll
 const val PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.jorgelillo.grouppolls"
 
 /** Dialogs and sheets live in their own window: expose their test tags as resource ids too. */
-@OptIn(ExperimentalComposeUiApi::class)
-val DialogTags = Modifier.semantics { testTagsAsResourceId = true }
+val DialogTags = TestTagsAsResourceIds
 
 /** Full-screen page with a back button and an optional bottom action area. */
 @Composable
@@ -66,30 +68,7 @@ fun Page(
     actions: @Composable RowScope.() -> Unit = {},
     bottom: @Composable ColumnScope.() -> Unit = {},
     content: @Composable ColumnScope.() -> Unit,
-) = CompositionLocalProvider(LocalContentColor provides Polls.Ink) {
-    Column(modifier.fillMaxSize().background(background).statusBarsPadding().navigationBarsPadding()) {
-        Row(Modifier.fillMaxWidth().height(56.dp).padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-            if (onBack != null) {
-                IconButton(onClick = onBack, modifier = Modifier.testTag("back")) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.action_back))
-                }
-            } else {
-                Spacer(Modifier.width(16.dp))
-            }
-            Text(
-                title.orEmpty(),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Black,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.weight(1f),
-            )
-            actions()
-        }
-        Column(Modifier.weight(1f).fillMaxWidth().padding(horizontal = 20.dp), content = content)
-        Column(Modifier.fillMaxWidth().padding(20.dp), content = bottom)
-    }
-}
+) = LilloPage(title, onBack, background, Polls.Ink, modifier, FontWeight.Black, actions, bottom, content)
 
 @Composable
 fun BigButton(
@@ -98,15 +77,7 @@ fun BigButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     color: Color = Polls.Blue,
-) {
-    Button(
-        onClick = onClick,
-        enabled = enabled,
-        modifier = modifier.fillMaxWidth().height(56.dp),
-        shape = CircleShape,
-        colors = ButtonDefaults.buttonColors(containerColor = color, contentColor = Color.White),
-    ) { Text(text, fontSize = 18.sp, fontWeight = FontWeight.Black) }
-}
+) = LilloBigButton(text, onClick, color, Color.White, modifier, enabled, height = 56.dp, fontSize = 18.sp, shape = CircleShape)
 
 /** The red/blue bar: proportional to the votes, half and half while nobody has voted. */
 @Composable
