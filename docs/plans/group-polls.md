@@ -1,6 +1,9 @@
 # Plan: "¿Qué votáis?" group polls app
 
-Status: **planned, not started.** Starts after the Who's lying? internal test is released.
+Status: **built, waiting on the Firebase project and the Play Console app** (2026-10-07). App on an
+in-memory backend + Firestore implementation (lillo-android-apps), rules + 22 emulator tests +
+moderation + Terraform (lillorepo `packages/group_polls`, `infra/group_polls.tf`), `/q/`,
+`assetlinks.json` and privacy page (jorgelillo7.github.io), all local until the OK.
 
 ## Why
 
@@ -8,28 +11,63 @@ A friend wants to know what the group voted. One person asks a question, shares 
 and the people they invite answer with their names visible. Android only for v1 (iPhone users left
 out on purpose, fine for now).
 
-## v1 scope
+## v1 scope (decided 2026-10-07)
 
-1. First launch: type your name (no accounts, no passwords).
-2. Create a question: text plus type, either **two options** (Wii "Everybody Votes" style, red vs
-   blue) or **free text**.
-3. "Invite" opens the share sheet with `https://jorgelillo7.github.io/q/?c=<code>`.
-4. A friend taps the link: the app opens on that question (Android App Links), or Google Play if
-   it isn't installed. They enter their name once and answer.
-5. Results show who answered what (not anonymous inside a group).
-6. Home: questions you created and questions you were invited to, with answer counts.
-7. Play requirements for a networked app with user content: "Delete my data", "Report question",
-   short terms of use.
+Two kinds of poll, both with exactly **two answers, red vs blue**:
 
-Out of v1: public daily questions (Obviously-style, written by Jorge), Google sign-in, web page to
-answer from iPhone, predicting the majority.
+- **Public**: anyone can create one; it shows in the feed for everyone; results are percentages,
+  never names. Shareable by link too.
+- **Private**: only people with the link can open it; results show **who voted what**.
+
+Common rules:
+
+1. First launch: type your name (no accounts). Anonymous Firebase auth underneath.
+2. Create: question + red label + blue label, public/private, duration chosen by the creator
+   (**1 day / 7 days / no limit**).
+3. Vote is **final**, followed by a **prediction** of which side wins (Wii homage); your prediction
+   accuracy is kept on the device.
+4. Share on every poll: `https://jorgelillo7.github.io/q/?c=<code>` (App Link into the app,
+   fallback page to Google Play).
+5. Moderation from day one (public UGC by anyone, Google Play UGC policy): terms accepted before the
+   first public poll, report on every public poll, hide polls from a creator, auto-hide after N
+   reports, es/en word blocklist on create, manual removal by Jorge.
+6. "Borrar mis datos" in the app and on a web page.
+
+Out of v1: free-text answers, Google sign-in, answering from iPhone/web.
+
+Infra note: **lillorepo is not touched for now**. The GCP/Firebase project is created by hand;
+adopting it in `lillorepo/infra` Terraform comes later. Spark plan (no billing) means no Cloud
+Functions: every invariant lives in security rules + client.
+
+## Decisions (2026-10-07, round 2)
+
+- Feed: **last 7 days**, **sections per language** (es / en; the poll stores the creator's language).
+- Public polls **show the creator's name**.
+- The creator can **close** a poll, never delete it (nobody loses their vote).
+- **App Check (Play Integrity) from day one**, enforced on Firestore; debug provider for emulators.
+- "Borrar mis datos" **anonymises**: name and own polls' creator name removed, votes stay counted.
+
+## How lillorepo does it, and what differs here
+
+- `biwenger-tools` and `be-water-app`: Firestore `(default)`, Native, **`europe-southwest1`**,
+  delete protection on, €1 budget alert, settings in `lillorepo/infra` Terraform.
+  **Same for this project.**
+- Access there is **server-side only** (Cloud Run service accounts, ADC). No client SDK, so no
+  security rules, no Firebase Auth/App Check and no Firebase CLI: nothing to reuse for that part.
+- Here the Android app talks to Firestore directly, so rules are the security boundary:
+  - **Deploy rules** with Terraform (`google_firebaserules_ruleset` + `release`) once the project is
+    adopted in lillorepo; until then from the Firebase console (copy of the file in the repo).
+  - **Test rules** against the Firestore emulator. Options: gcloud's `cloud-firestore-emulator`
+    component (official, `gcloud components install`), or `firebase-tools` pinned as a local
+    (not global) dev dependency from npm. Needs Java 21 for the emulator (the Mac default is 8;
+    use the JBR that `scripts/env.sh` sets).
 
 ## Architecture
 
 | Piece | Where | Notes |
 |---|---|---|
 | Android app | `lillo-android-apps/apps/group-polls/` (`domain` + `app`), package `com.jorgelillo.grouppolls` | Same conventions as the other apps |
-| Firestore + anonymous auth | Its **own new GCP project** (third one, next to `biwenger-tools` and `be-water-app`; nothing shared with them) | Firebase Spark/free tier at this scale; anonymous auth gives one answer per device |
+| Firestore + anonymous auth + App Check | Its **own new GCP project**, Firestore in `europe-southwest1` (third one, next to `biwenger-tools` and `be-water-app`; nothing shared with them) | Firebase Spark/free tier at this scale; anonymous auth gives one answer per device |
 | GCP project infra | `lillorepo/infra` Terraform, third project next to `biwenger-tools` and `be-water-app` | Project created by hand then adopted: APIs, `(default)` Firestore database, anonymous auth config, €1 budget alert |
 | Firestore security rules + indexes | Next to the app in `lillo-android-apps` | Change with the code; tested with the Firebase emulator; deployed with the Firebase CLI |
 | Invite links | `jorgelillo7.github.io`: `/.well-known/assetlinks.json` + `/q/` fallback page | Query string because GitHub Pages can't serve made-up paths |

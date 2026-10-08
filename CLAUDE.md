@@ -10,8 +10,10 @@ configuration lives in `build-logic/`. Human docs are in `docs/` (index `docs/RE
 each app has its own `apps/<app>/OPERATIONS.md` (exact commands) and `release-notes.md` (version history).
 
 Apps today: `christmas-countdown` (`com.jorgelillo.christmascountdown`, live on Play) and
-`decision-wheel` ("What next?", `com.jorgelillo.decisionwheel`) and `whos-lying`
-("Who's lying?", `com.jorgelillo.whoslying`), the last two not released yet. Write code,
+`decision-wheel` ("What next?", `com.jorgelillo.decisionwheel`), `whos-lying`
+("Who's lying?", `com.jorgelillo.whoslying`) and `group-polls` ("¿Qué votáis?",
+`com.jorgelillo.grouppolls`), the last three not released yet. `group-polls` is the only one
+with a backend (Firestore; its rules, tests and infra live in lillorepo `packages/group_polls`). Write code,
 docs and scripts so they work for any app.
 
 ## Environment

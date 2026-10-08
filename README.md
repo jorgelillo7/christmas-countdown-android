@@ -20,6 +20,7 @@
 | 🎄 [Christmas Countdown](apps/christmas-countdown) | [On Google Play](https://play.google.com/store/apps/details?id=com.jorgelillo.christmascountdown) | `apps/christmas-countdown` |
 | 🎡 [What next? · Decision Wheel](apps/decision-wheel) | In development | `apps/decision-wheel` |
 | 🕵️ [Who's lying? · Impostor game](apps/whos-lying) | In development | `apps/whos-lying` |
+| 🔴🔵 [What do you vote? · Group polls](apps/group-polls) | In development (needs its Firebase project) | `apps/group-polls` |
 
 ## 🗂️ Repository layout
 

@@ -33,16 +33,16 @@ Lines are pruned as items ship. What has **shipped** lives in `apps/<app>/releas
 | | What is missing | Waiting on |
 |---|---|---|
 | 👤 | Internal test with 4–5 friends from Google Play: word pairs, flow, readability | You · Play Console internal testing |
-| 🔨 | Privacy page `privacy/whos-lying/` on jorgelillo7.github.io, then Play Console + internal testing | Your OK to publish the page |
 | ⏳ | Open-source license (GPL-3.0 was the candidate) | Your decision · not licensed for now |
-| 🔨 | Privacy page must mention the report form (Google Forms, opened in the browser, only the word + what the player writes) | Before publishing `privacy/whos-lying/` |
 | ⏳ | Sharing packs between phones (QR or text) | Feedback after real use |
 
 ## group-polls (new app)
 
 | | What is missing | Waiting on |
 |---|---|---|
-| ⏳ | "¿Qué votáis?" group polls app: plan in [docs/plans/group-polls.md](docs/plans/group-polls.md) | Who's lying? internal test released |
+| 👤 | Create the app in Play Console (`com.jorgelillo.grouppolls`, App · Social) and its upload key (`scripts/new-upload-key.sh group-polls`) | You · answers in `apps/group-polls/OPERATIONS.md` → "Play Console answers" |
+| 👤 | Create the Firebase project and give the OK | You · lillorepo `packages/group_polls/OPERATIONS.md` → "Create the project" |
+| 🔨 | Then: `firebase.properties`, App Check (Play Integrity + debug token), Play signing SHA-256 in `assetlinks.json`, publish the site pages (`/q/`, assetlinks, privacy), Terraform on, internal test | The two steps above · plan in [docs/plans/group-polls.md](docs/plans/group-polls.md) |
 
 ## repo
 
