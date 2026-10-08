@@ -24,9 +24,7 @@ Lines are pruned as items ship. What has **shipped** lives in `apps/<app>/releas
 
 | | What is missing | Waiting on |
 |---|---|---|
-| 👤 | Try it on a real phone: feel of the spin, tick sound, haptics, presets | You · `./gradlew :apps:decision-wheel:app:installDebug` |
-| ⏳ | v1 in Google Play review (sent to production 2026-10-05) · then install it from Play on a real phone | Google's review |
-| ⏳ | Group veto turns (each person vetoes one, passing the phone) | Feedback after real use · v1 vetoes are free taps |
+| ⏳ | Next small release: pick from the proposals in the chat (clear history, …) | Your choice |
 
 ## whos-lying
 
@@ -48,5 +46,5 @@ Lines are pruned as items ship. What has **shipped** lives in `apps/<app>/releas
 
 | | What is missing | Waiting on |
 |---|---|---|
-| ⏳ | Card tournament manager (Room) | After the decision wheel ships |
+| 🔨 | Card tournament manager (Room) | Ready: the decision wheel is live |
 | ⏳ | Move into `lillorepo` (Bazel) | Gradle builds or the Play publishing loop slowing you down · domain modules are pure Kotlin to make it easy |

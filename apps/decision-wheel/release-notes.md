@@ -5,4 +5,4 @@ Newest first. User-facing notes per language are in
 
 | versionCode | Version | Date | Notes |
 |---|---|---|---|
-| 1 | 1.0 | — (not released) | First version: weighted wheel with friction spin, avoid repeats, vetoes, history, presets |
+| 1 | 1.0 | 2026-10 (production) | First version: weighted wheel with friction spin, avoid repeats, vetoes, history, presets |
