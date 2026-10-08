@@ -1,5 +1,7 @@
 package com.jorgelillo.whoslying.ui.screens
 
+import com.jorgelillo.core.designsystem.LilloBigButton
+import com.jorgelillo.core.designsystem.LilloPage
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,28 +48,7 @@ fun Page(
     background: Brush = Neon.Backdrop,
     bottom: @Composable ColumnScope.() -> Unit = {},
     content: @Composable ColumnScope.() -> Unit,
-) = CompositionLocalProvider(LocalContentColor provides Neon.Ink) {
-    Column(
-        modifier
-            .fillMaxSize()
-            .background(background)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-    ) {
-        Row(Modifier.fillMaxWidth().height(56.dp).padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically) {
-            if (onBack != null) {
-                IconButton(onClick = onBack, modifier = Modifier.testTag("back")) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.action_back))
-                }
-            } else {
-                Spacer(Modifier.width(12.dp))
-            }
-            if (title != null) Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-        }
-        Column(Modifier.weight(1f).fillMaxWidth().padding(horizontal = 20.dp), content = content)
-        Column(Modifier.fillMaxWidth().padding(20.dp), content = bottom)
-    }
-}
+) = LilloPage(title, onBack, background, Neon.Ink, modifier, bottom = bottom, content = content)
 
 @Composable
 fun BigButton(
@@ -77,23 +58,11 @@ fun BigButton(
     enabled: Boolean = true,
     color: Color = Neon.Violet,
     contentColor: Color = Color.White,
-) {
-    Button(
-        onClick = onClick,
-        enabled = enabled,
-        modifier = modifier.fillMaxWidth().height(60.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = color, contentColor = contentColor),
-    ) { Text(text, fontSize = 20.sp, fontWeight = FontWeight.Black) }
-}
+) = LilloBigButton(text, onClick, color, contentColor, modifier, enabled)
 
 /** Player colors for avatars, by position in the group. */
 val avatarColors = listOf(Neon.Pink, Neon.Turquoise, Neon.Violet, Neon.Amber)
 
-/** Landscape phones and handhelds (e.g. AYN Thor): too short for the full vertical layouts. */
-@Composable
-fun isShortScreen(): Boolean = LocalConfiguration.current.screenHeightDp < SHORT_SCREEN_DP
-
-private const val SHORT_SCREEN_DP = 480
 
 /** Big emoji used as illustration (no image assets needed). */
 @Composable

@@ -10,12 +10,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.jorgelillo.core.designsystem.LilloTheme
+import com.jorgelillo.core.designsystem.TestTagsAsResourceIds
 import com.jorgelillo.grouppolls.ui.GroupPollsApp
 import com.jorgelillo.grouppolls.ui.PollsViewModel
 import com.jorgelillo.grouppolls.ui.theme.PollsColorScheme
@@ -27,7 +25,6 @@ class MainActivity : ComponentActivity() {
         PollsViewModel.factory(app.repository, app.store, resources.configuration.locales[0].language)
     }
 
-    @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         // The design is light, so system bar icons are dark.
@@ -40,7 +37,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             LilloTheme(colorScheme = PollsColorScheme) {
                 // Test tags become resource ids so scripts/tap-text.sh can find buttons by tag.
-                Box(Modifier.fillMaxSize().semantics { testTagsAsResourceId = true }) {
+                Box(Modifier.fillMaxSize().then(TestTagsAsResourceIds)) {
                     GroupPollsApp(vm)
                 }
             }

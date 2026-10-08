@@ -1,5 +1,6 @@
 package com.jorgelillo.whoslying.ui.screens
 
+import com.jorgelillo.core.designsystem.isShortScreen
 import android.media.AudioManager
 import android.media.ToneGenerator
 import android.os.Handler

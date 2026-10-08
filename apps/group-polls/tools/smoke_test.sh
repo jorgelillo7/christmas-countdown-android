@@ -6,22 +6,8 @@
 #
 # Usage: apps/group-polls/tools/smoke_test.sh
 set -euo pipefail
-ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
-source "$ROOT/scripts/env.sh"
-PKG=com.jorgelillo.grouppolls
-OUT="$ROOT/build/smoke-test/group-polls"
-APK="$ROOT/apps/group-polls/app/build/outputs/apk/release/app-release.apk"
-
-(cd "$ROOT" && ./gradlew -q :apps:group-polls:app:assembleRelease)
-"$ADB" install -r "$APK" | tail -1
-"$ADB" shell pm clear "$PKG" >/dev/null
-"$ADB" shell cmd locale set-app-locales "$PKG" --locales en-US
-"$ADB" logcat -c
-"$ADB" shell am start -W -n "$PKG/.MainActivity" >/dev/null
-sleep 4
-
-tap() { "$ROOT/scripts/tap-text.sh" "$@"; }
-shot() { "$ROOT/scripts/screenshot.sh" "$OUT/$1.png" >/dev/null; echo "screen: $1"; }
+source "$(dirname "$0")/../../../scripts/smoke_lib.sh"
+smoke_start group-polls com.jorgelillo.grouppolls
 type_in() { tap "$1" 1; "$ADB" shell input text "$2"; }
 
 shot welcome
@@ -56,9 +42,4 @@ shot mine
 tap settings 2
 shot settings
 
-crashes="$("$ADB" logcat -d -b crash | grep -c FATAL || true)"
-pid="$("$ADB" shell pidof "$PKG" || true)"
-"$ADB" shell cmd locale set-app-locales "$PKG" --locales ""
-echo "crashes: $crashes"
-echo "screenshots: $OUT"
-[ -n "$pid" ] && [ "$crashes" = 0 ] && echo "SMOKE TEST PASSED" || { echo "SMOKE TEST FAILED"; exit 1; }
+smoke_finish

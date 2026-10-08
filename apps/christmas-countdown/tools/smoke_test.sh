@@ -4,23 +4,8 @@
 #
 # Usage: apps/christmas-countdown/tools/smoke_test.sh
 set -euo pipefail
-ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
-source "$ROOT/scripts/env.sh"
-PKG=com.jorgelillo.christmascountdown
-OUT="$ROOT/build/smoke-test"
-APK="$ROOT/apps/christmas-countdown/app/build/outputs/apk/release/app-release.apk"
-
-(cd "$ROOT" && ./gradlew -q :apps:christmas-countdown:app:assembleRelease)
-"$ADB" uninstall "$PKG" >/dev/null 2>&1 || true  # a debug build has another signature
-"$ADB" install -r "$APK" | tail -1
-"$ADB" shell cmd locale set-app-locales "$PKG" --locales en-US   # labels below are English
-"$ADB" logcat -c
-"$ADB" shell am force-stop "$PKG"
-"$ADB" shell am start -n "$PKG/.MainActivity" >/dev/null
-sleep 12
-
-tap() { "$ROOT/scripts/tap-text.sh" "$@"; }
-shot() { "$ROOT/scripts/screenshot.sh" "$OUT/$1.png" >/dev/null; echo "screen: $1"; }
+source "$(dirname "$0")/../../../scripts/smoke_lib.sh"
+smoke_start christmas-countdown com.jorgelillo.christmascountdown 12
 tap "Time"; shot countdown
 tap "Sleeps"; shot sleeps
 tap "Advent" 5; shot advent
@@ -31,10 +16,4 @@ tap "Play carols" 6                                    # music on
 pid="$("$ADB" shell pidof "$PKG" || true)"
 audio="$("$ADB" shell dumpsys audio | grep "/$pid " | grep -c 'AudioTrack.*state:started' || true)"
 tap "Stop carols" 2                                    # music off
-"$ADB" shell cmd locale set-app-locales "$PKG" --locales ""
-crashes="$("$ADB" logcat -d -b crash | grep -c FATAL || true)"
-
-echo "music playing: $([ "$audio" -gt 0 ] && echo yes || echo NO)"
-echo "crashes: $crashes"
-echo "screenshots: $OUT"
-[ -n "$pid" ] && [ "$crashes" = 0 ] && [ "$audio" -gt 0 ] && echo "SMOKE TEST PASSED" || { echo "SMOKE TEST FAILED"; exit 1; }
+smoke_finish "$([ "$audio" -gt 0 ] && echo 1 || echo 0)" "music playing: $([ "$audio" -gt 0 ] && echo yes || echo NO)"

@@ -1,5 +1,6 @@
 package com.jorgelillo.whoslying.ui.screens
 
+import com.jorgelillo.core.designsystem.isShortScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
