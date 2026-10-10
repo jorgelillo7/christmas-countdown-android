@@ -11,7 +11,7 @@ from PIL import ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT.parent.parent / "scripts"))
-from icon_lib import fill, write_icon  # noqa: E402
+from icon_lib import circle_path, f, fill, poly_path, write_icon  # noqa: E402
 
 # Palette
 BG_START, BG_END = "#D7263D", "#7A0F1C"
@@ -44,10 +44,6 @@ def star_points(cx, cy, r):
     return pts
 
 
-def f(v):
-    return f"{v:g}"
-
-
 def rr_path(x0, y0, x1, y1, r):
     return (f"M{f(x0 + r)},{f(y0)} H{f(x1 - r)} A{f(r)},{f(r)} 0 0 1 {f(x1)},{f(y0 + r)} "
             f"V{f(y1 - r)} A{f(r)},{f(r)} 0 0 1 {f(x1 - r)},{f(y1)} H{f(x0 + r)} "
@@ -57,15 +53,6 @@ def rr_path(x0, y0, x1, y1, r):
 def top_rounded_path(x0, y0, x1, y1, r):
     return (f"M{f(x0)},{f(y1)} V{f(y0 + r)} A{f(r)},{f(r)} 0 0 1 {f(x0 + r)},{f(y0)} "
             f"H{f(x1 - r)} A{f(r)},{f(r)} 0 0 1 {f(x1)},{f(y0 + r)} V{f(y1)} Z")
-
-
-def poly_path(points):
-    head, *rest = points
-    return f"M{f(head[0])},{f(head[1])} " + " ".join(f"L{f(x)},{f(y)}" for x, y in rest) + " Z"
-
-
-def circle_path(cx, cy, r):
-    return f"M{f(cx - r)},{f(cy)} a{f(r)},{f(r)} 0 1 0 {f(2 * r)},0 a{f(r)},{f(r)} 0 1 0 {f(-2 * r)},0 Z"
 
 
 def rect_path(x0, y0, x1, y1):
