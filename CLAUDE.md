@@ -11,8 +11,9 @@ each app has its own `apps/<app>/OPERATIONS.md` (exact commands) and `release-no
 
 Apps today: `christmas-countdown` (`com.jorgelillo.christmascountdown`) and `decision-wheel`
 ("What next?", `com.jorgelillo.decisionwheel`), both live on Play; `whos-lying` ("Who's lying?",
-`com.jorgelillo.whoslying`, internal testing) and `group-polls` ("¿Qué votáis?",
-`com.jorgelillo.grouppolls`, not released). `group-polls` is the only one with a backend
+`com.jorgelillo.whoslying`, internal testing), `group-polls` ("¿Qué votáis?",
+`com.jorgelillo.grouppolls`, not released) and `tournaments` ("¿Solo quedará uno?",
+`com.jorgelillo.tournaments`, in development). `group-polls` is the only one with a backend
 (Firestore; its rules, tests and infra live in lillorepo `packages/group_polls`). Write code,
 docs and scripts so they work for any app.
 

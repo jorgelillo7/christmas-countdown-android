@@ -1,0 +1,126 @@
+<resources>
+    <string name="app_name">Last one standing?</string>
+
+    <!-- Home -->
+    <string name="new_tournament">New tournament</string>
+    <string name="home_empty_title">Who will be the only one?</string>
+    <string name="home_empty_body">Cards, ping-pong, FIFA, padel… Create a tournament in seconds and keep the record. No account, nothing to install on the other phones.</string>
+    <plurals name="players_count">
+        <item quantity="one">%d player</item>
+        <item quantity="other">%d players</item>
+    </plurals>
+    <string name="status_champion">🏆 %s</string>
+    <plurals name="status_pending">
+        <item quantity="one">In progress · %d match to play</item>
+        <item quantity="other">In progress · %d matches to play</item>
+    </plurals>
+    <string name="status_next_round">Ready for the next round</string>
+    <string name="action_import">Import</string>
+    <string name="action_about">About</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_close">Close</string>
+    <string name="action_more">More</string>
+    <string name="action_share">Share</string>
+    <string name="action_delete">Delete</string>
+    <string name="about_body">Tournaments among friends, on your phone only: no account, no servers, no ads. To carry a tournament to another phone, share its link or QR code: the whole tournament travels inside it.</string>
+    <string name="about_privacy">Privacy policy: %s</string>
+    <string name="about_open_privacy">Privacy policy</string>
+    <string name="about_version">Version %s</string>
+
+    <!-- Import -->
+    <string name="import_title">Import a tournament</string>
+    <string name="import_body">Paste the link someone sent you (or the whole message). You can also share it straight to this app from the chat.</string>
+    <string name="import_invalid">That isn\'t a tournament link (or it got cut off)</string>
+    <string name="import_added">Tournament added</string>
+    <string name="import_updated">Tournament updated with the latest results</string>
+    <string name="import_same">You already had this tournament, up to date</string>
+    <string name="import_newer_here">Your copy has more recent results: kept yours</string>
+
+    <!-- New tournament -->
+    <string name="setup_name">Name</string>
+    <string name="setup_default_name">Tournament %s</string>
+    <string name="setup_game">Game (optional)</string>
+    <string name="setup_game_hint">Magic, ping-pong, FIFA…</string>
+    <string name="setup_date">Date</string>
+    <string name="setup_today">Today, %s</string>
+    <string name="setup_format">Format</string>
+    <string name="format_elimination">Knockout</string>
+    <string name="format_swiss">Swiss</string>
+    <string name="format_elimination_help">Lose and you\'re out. The draw is random; with an odd field some players go straight to round 2.</string>
+    <string name="format_swiss_help">Everyone plays every round against someone with a similar score, and nobody is out. Optionally the best go on to a knockout.</string>
+    <string name="setup_matches">Each match</string>
+    <string name="best_of_one">One game</string>
+    <string name="best_of_n">Best of %d</string>
+    <string name="setup_swiss_rounds">Rounds</string>
+    <string name="setup_top_cut">Then a knockout with</string>
+    <string name="setup_top_cut_none">No</string>
+    <string name="setup_top_cut_n">Top %d</string>
+    <string name="setup_player_hint">Player name (or paste a list)</string>
+    <string name="setup_add">Add player</string>
+    <string name="setup_remove">Remove %s</string>
+    <string name="setup_duplicate">%s is already in</string>
+    <plurals name="setup_byes">
+        <item quantity="one">%d player goes straight to round 2 (bye)</item>
+        <item quantity="other">%d players go straight to round 2 (bye)</item>
+    </plurals>
+    <string name="setup_start">Draw and start</string>
+
+    <!-- Tournament -->
+    <string name="tab_matches">Matches</string>
+    <string name="tab_bracket">Bracket</string>
+    <string name="tab_standings">Standings</string>
+    <string name="round_n">Round %d</string>
+    <string name="round_final">Final</string>
+    <string name="round_semifinals">Semifinals</string>
+    <string name="round_quarterfinals">Quarterfinals</string>
+    <string name="round_of_16">Round of 16</string>
+    <string name="top_cut_prefix">Top cut</string>
+    <string name="champion_label">Champion</string>
+    <string name="match_bye">%s goes straight through (bye)</string>
+    <string name="match_draw">Draw</string>
+    <string name="match_tbd">To be decided</string>
+    <string name="match_tap_to_score">Tap to enter the result</string>
+    <string name="bracket_fit">Fit</string>
+    <string name="bracket_bye">bye</string>
+    <string name="action_redraw">Draw again</string>
+    <string name="action_unpair">Undo last round\'s pairings</string>
+    <string name="action_pair_round">Pair round %d</string>
+    <string name="action_start_top_cut">Start the knockout: top %d</string>
+    <string name="export_image">Share as image</string>
+    <string name="export_csv">Export results (CSV)</string>
+    <string name="export_image_short">Image</string>
+    <string name="export_csv_short">CSV</string>
+    <string name="delete_title">Delete “%s”?</string>
+    <string name="delete_body">It is removed from this phone only. Copies shared with others stay with them.</string>
+    <string name="standings_player">Player</string>
+    <string name="standings_points">Pts</string>
+    <string name="standings_record">W-D-L</string>
+
+    <!-- Result -->
+    <string name="result_who_won">Who won?</string>
+    <string name="result_draw">Draw</string>
+    <string name="result_comment">Comment (optional)</string>
+    <string name="result_comment_hint">e.g. 20 life to 0</string>
+    <string name="result_sentence">%1$s beat %2$s %3$d–%4$d</string>
+    <string name="result_draw_sentence">%1$s and %2$s drew %3$d–%4$d</string>
+    <string name="result_resets_later">Changing this result clears the matches that came after it.</string>
+    <string name="result_save">Save result</string>
+    <string name="result_clear">Clear result</string>
+
+    <!-- Share -->
+    <string name="share_title">Take it to another phone</string>
+    <string name="share_qr_help">Scan it with the other phone\'s camera. The whole tournament is inside the code: no internet or account needed.</string>
+    <string name="share_send_link">Send link</string>
+    <string name="share_message">🏆 %1$s\n%2$s</string>
+    <string name="share_snapshot_note">It\'s a snapshot: share again after new results. Whoever opens a newer link gets the latest results.</string>
+
+    <!-- Stats -->
+    <string name="stats_title">Hall of fame</string>
+    <string name="stats_all_games">All</string>
+    <plurals name="stats_tournaments">
+        <item quantity="one">%d tournament</item>
+        <item quantity="other">%d tournaments</item>
+    </plurals>
+    <string name="stats_line">Tournaments: %1$d · Finals: %2$d · W-D-L: %3$d-%4$d-%5$d</string>
+    <string name="stats_win_rate">%d%% wins</string>
+</resources>

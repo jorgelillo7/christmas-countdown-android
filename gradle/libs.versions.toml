@@ -13,6 +13,8 @@ androidxGlance = "1.2.0"
 androidxLifecycle = "2.11.0"
 androidxNavigation = "2.10.2"
 
+zxing = "3.5.4"
+
 junit = "4.13.2"
 
 # Shared Android configuration, read by the convention plugins in build-logic.
@@ -42,6 +44,9 @@ androidx-glance-material3 = { group = "androidx.glance", name = "glance-material
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
+
+# QR codes (encoding only) for the tournaments app.
+zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing" }
 
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

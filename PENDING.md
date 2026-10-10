@@ -45,9 +45,16 @@ Lines are pruned as items ship. What has **shipped** lives in `apps/<app>/releas
 | 👤 | Create the Firebase project and give the OK | You · lillorepo `packages/group_polls/OPERATIONS.md` → "Create the project" |
 | 🔨 | Then: `firebase.properties`, App Check (Play Integrity + debug token), Play signing SHA-256 in `assetlinks.json`, publish the site pages (`/q/`, assetlinks, privacy), Terraform on, internal test | The two steps above · plan in [docs/plans/group-polls.md](docs/plans/group-polls.md) |
 
+## tournaments (new app)
+
+| | What is missing | Waiting on |
+|---|---|---|
+| 👤 | Create the app in Play Console (`com.jorgelillo.tournaments`, App · Tools or Board games) and its upload key (`scripts/new-upload-key.sh tournaments`) | You |
+| 🔨 | Then: Play signing SHA-256 in `assetlinks.json`, the `/t/` fallback page on the website, store screenshots and listing texts, internal test | The step above · plan in [docs/plans/tournaments.md](docs/plans/tournaments.md) |
+| ⏳ | Double elimination and round robin | Feedback after real use |
+
 ## repo
 
 | | What is missing | Waiting on |
 |---|---|---|
-| 🔨 | Card tournament manager (Room) | Ready: the decision wheel is live |
 | ⏳ | Move into `lillorepo` (Bazel) | Gradle builds or the Play publishing loop slowing you down · domain modules are pure Kotlin to make it easy |

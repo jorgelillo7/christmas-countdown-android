@@ -1,0 +1,35 @@
+plugins {
+    alias(libs.plugins.jorgelillo.android.application)
+    alias(libs.plugins.jorgelillo.android.compose)
+}
+
+android {
+    namespace = "com.jorgelillo.tournaments"
+
+    defaultConfig {
+        applicationId = "com.jorgelillo.tournaments"
+        minSdk = 24 // navigation-compose needs API 24
+        versionCode = 1
+        versionName = "1.0"
+    }
+
+    // Release signing and R8: the jorgelillo.android.application convention plugin.
+
+    buildFeatures {
+        buildConfig = true
+    }
+}
+
+dependencies {
+    implementation(projects.apps.tournaments.domain)
+    implementation(projects.core.designsystem)
+
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.dataStore.preferences)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.lifecycle.viewModelCompose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.zxing.core)
+}
