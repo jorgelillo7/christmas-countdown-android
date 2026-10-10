@@ -1,10 +1,11 @@
 """Generates the launcher and store icons of "¿Qué votáis?" from one geometry definition.
 
-Two result bars, red on top (the winner, with a check) and a shorter blue one, on a light sky
-background: a poll at a glance.
+A speech bubble split red | blue (the two answers) with a cream question mark, on the same deep
+blue night as the tournaments icon: ask your friends, two answers.
 
 Usage (repo root): .venv/bin/python apps/group-polls/tools/generate_icon.py
 """
+import math
 from pathlib import Path
 
 from PIL import Image, ImageDraw
@@ -12,14 +13,17 @@ from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parent.parent
 RES = ROOT / "app/src/main/res"
 
-TOP, BOTTOM = "#DDEBFF", "#B9D3FF"
-RED, BLUE, TRACK, WHITE = "#F2384A", "#2D6BFF", "#FFFFFF", "#FFFFFF"
+TOP, BOTTOM = "#1E3A52", "#12202D"
+RED, BLUE, CREAM = "#F2384A", "#2D6BFF", "#F4F1EA"
 
 # 108x108 adaptive viewport, content inside the r=33 safe circle.
-X0, X1, H, R = 28.0, 80.0, 16.0, 8.0
-RED_Y, BLUE_Y = 37.0, 57.0
-RED_END, BLUE_END = 74.0, 52.0
-CHECK = [(36, 45), (40.5, 49.5), (48, 41)]
+BX0, BY0, BX1, BY1, BR = 28.0, 30.0, 80.0, 71.0, 9.0   # bubble body
+SPLIT = 54.0                                           # red left of it, blue right
+TAIL = [(68.0, 69.0), (56.0, 69.0), (70.0, 82.0)]      # on the blue side (the impostor's bubble points left)
+Q_CX, Q_CY, Q_R, Q_W = 54.0, 44.0, 6.8, 4.2           # question mark: hook centre, radius, width
+Q_FROM, Q_SWEEP = 200.0, 250.0                         # hook from 200 deg, clockwise, ends straight below
+Q_STEM = Q_R * 0.35
+Q_DOT_Y, Q_DOT_R = Q_CY + Q_R + Q_STEM + Q_W * 1.6, Q_W * 0.62
 
 
 def f(v):
@@ -41,18 +45,36 @@ def stroke(d, color, width):
             f'        android:strokeLineCap="round"\n        android:strokeLineJoin="round"\n        android:pathData="{d}" />')
 
 
-def check_path():
-    (x, y), *rest = CHECK
-    return f"M{f(x)},{f(y)} " + " ".join(f"L{f(a)},{f(b)}" for a, b in rest)
+def point(angle_deg, r=Q_R):
+    a = math.radians(angle_deg)
+    return Q_CX + r * math.cos(a), Q_CY + r * math.sin(a)
 
 
-def bars(color_for):
-    return [
-        fill(rr(X0, RED_Y, X1, RED_Y + H, R), color_for("track")),
-        fill(rr(X0, BLUE_Y, X1, BLUE_Y + H, R), color_for("track")),
-        fill(rr(X0, RED_Y, RED_END, RED_Y + H, R), color_for("red")),
-        fill(rr(X0, BLUE_Y, BLUE_END, BLUE_Y + H, R), color_for("blue")),
-    ]
+def half(left):
+    """One half of the bubble body, rounded only on its outer corners."""
+    x, sweep = (BX0, 0) if left else (BX1, 1)
+    inward = BR if left else -BR
+    return (f"M{f(SPLIT)},{f(BY0)} H{f(x + inward)} A{f(BR)},{f(BR)} 0 0 {sweep} {f(x)},{f(BY0 + BR)} "
+            f"V{f(BY1 - BR)} A{f(BR)},{f(BR)} 0 0 {sweep} {f(x + inward)},{f(BY1)} H{f(SPLIT)} Z")
+
+
+def tail_path():
+    (x, y), *rest = TAIL
+    return f"M{f(x)},{f(y)} " + " ".join(f"L{f(a)},{f(b)}" for a, b in rest) + " Z"
+
+
+def question_path():
+    sx, sy = point(Q_FROM)
+    ex, ey = point(Q_FROM + Q_SWEEP)
+    return f"M{f(sx)},{f(sy)} A{f(Q_R)},{f(Q_R)} 0 1 1 {f(ex)},{f(ey)} V{f(ey + Q_STEM)}"
+
+
+def dot_path():
+    return f"M{f(Q_CX - Q_DOT_R)},{f(Q_DOT_Y)} a{f(Q_DOT_R)},{f(Q_DOT_R)} 0 1 0 {f(2 * Q_DOT_R)},0 a{f(Q_DOT_R)},{f(Q_DOT_R)} 0 1 0 {f(-2 * Q_DOT_R)},0 Z"
+
+
+def bubble_outline():
+    return rr(BX0, BY0, BX1, BY1, BR)
 
 
 def vector(paths, ns=""):
@@ -72,10 +94,15 @@ def write_vectors():
         f'                android:endX="54" android:endY="108"\n                android:startColor="{TOP}"\n'
         f'                android:endColor="{BOTTOM}" />\n        </aapt:attr>\n    </path>'],
         ns='\n    xmlns:aapt="http://schemas.android.com/aapt"'))
-    colours = {"track": TRACK, "red": RED, "blue": BLUE}
-    (d / "ic_launcher_foreground.xml").write_text(vector(bars(colours.get) + [stroke(check_path(), WHITE, 3.2)]))
-    mono = {"track": "#55000000", "red": "#FF000000", "blue": "#FF000000"}
-    (d / "ic_launcher_monochrome.xml").write_text(vector(bars(mono.get)))
+    (d / "ic_launcher_foreground.xml").write_text(vector([
+        fill(half(left=True), RED), fill(half(left=False), BLUE), fill(tail_path(), BLUE),
+        stroke(question_path(), CREAM, Q_W), fill(dot_path(), CREAM),
+    ]))
+    # Monochrome (themed icons): the bubble's outline and the question mark.
+    (d / "ic_launcher_monochrome.xml").write_text(vector([
+        stroke(bubble_outline(), "#FF000000", 3.4), fill(tail_path(), "#FF000000"),
+        stroke(question_path(), "#FF000000", Q_W), fill(dot_path(), "#FF000000"),
+    ]))
     adaptive = ('<?xml version="1.0" encoding="utf-8"?>\n<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\n'
                 '    <background android:drawable="@drawable/ic_launcher_background" />\n'
                 '    <foreground android:drawable="@drawable/ic_launcher_foreground" />\n'
@@ -95,13 +122,25 @@ def render(size, crop=(0, 108), ss=4):
     grad.putdata([int(255 * ((y / k + lo) / 108)) for y in range(s) for _ in range(s)])
     img = Image.composite(Image.new("RGB", (s, s), BOTTOM), Image.new("RGB", (s, s), TOP), grad)
     d = ImageDraw.Draw(img, "RGBA")
-    for y, end, color in ((RED_Y, X1, TRACK), (BLUE_Y, X1, TRACK), (RED_Y, RED_END, RED), (BLUE_Y, BLUE_END, BLUE)):
-        d.rounded_rectangle([P(X0, y), P(end, y + H)], radius=R * k, fill=color)
-    d.line([P(*p) for p in CHECK], fill=WHITE, width=int(3.2 * k), joint="curve")
-    for p in (CHECK[0], CHECK[-1]):
+    body = Image.new("L", (s, s), 0)
+    bd = ImageDraw.Draw(body)
+    bd.rounded_rectangle([P(BX0, BY0), P(BX1, BY1)], radius=BR * k, fill=255)
+    bd.polygon([P(*p) for p in TAIL], fill=255)
+    left = Image.new("L", (s, s), 0)
+    ImageDraw.Draw(left).rectangle([(0, 0), (P(SPLIT, 0)[0], s)], fill=255)
+    zero = Image.new("L", (s, s), 0)
+    img.paste(Image.new("RGB", (s, s), RED), (0, 0), Image.composite(body, zero, left))
+    img.paste(Image.new("RGB", (s, s), BLUE), (0, 0), Image.composite(zero, body, left))
+    d = ImageDraw.Draw(img)
+    hook = [point(Q_FROM + Q_SWEEP * i / 48) for i in range(49)]
+    hook.append((Q_CX, hook[-1][1] + Q_STEM))
+    w = Q_W * k
+    d.line([P(*p) for p in hook], fill=CREAM, width=int(w), joint="curve")
+    for p in (hook[0], hook[-1]):
         cx, cy = P(*p)
-        r = 1.6 * k
-        d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=WHITE)
+        d.ellipse([cx - w / 2, cy - w / 2, cx + w / 2, cy + w / 2], fill=CREAM)
+    cx, cy = P(Q_CX, Q_DOT_Y)
+    d.ellipse([cx - Q_DOT_R * k, cy - Q_DOT_R * k, cx + Q_DOT_R * k, cy + Q_DOT_R * k], fill=CREAM)
     return img.resize((size, size), Image.LANCZOS)
 
 
