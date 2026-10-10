@@ -12,6 +12,9 @@
     <string name="settings_avoid_repeats">Avoid repeats</string>
     <string name="settings_sound">Sound</string>
     <string name="action_about">About</string>
+    <string name="favorite_add">Add %s to favourites</string>
+    <string name="favorite_remove">Remove %s from favourites</string>
+    <string name="restore_presets">Restore example wheels</string>
     <string name="action_more">More</string>
 
     <!-- Wheel -->

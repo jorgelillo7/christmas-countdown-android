@@ -20,7 +20,9 @@ Package: `com.jorgelillo.decisionwheel` (minSdk 24: navigation-compose needs it)
 | Regenerate icons | `.venv/bin/python apps/decision-wheel/tools/generate_icon.py` |
 
 UI test tags (usable with `scripts/tap-text.sh`): `new_wheel`, `more`, `spin`, `accept`, `again`,
-`history`, `edit`, `back`, `name`, `new_option`, `save`.
+`history`, `edit`, `back`, `name`, `new_option`, `save`, `favorite_<wheel id>` (home cards and
+the wheel's top bar), `restore_presets` (overflow menu). Launcher shortcuts open
+`MainActivity` with the extra `wheel_id`.
 
 ## Release
 

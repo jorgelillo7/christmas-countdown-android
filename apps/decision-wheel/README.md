@@ -18,6 +18,8 @@
 - 📒 **History:** results you accept with *Let's go!* are kept per wheel
 - 📋 **Ready-made wheels** in Spanish and English, plus your own lists
 - 🚫 No ads, no tracking, no network: everything stays on the phone
+- ⭐ Favourite wheels first, and launcher shortcuts (long-press the icon) to favourite / recent wheels
+- ♻️ Restore the example wheels you deleted, without touching your own
 
 ## 🏗️ Architecture
 

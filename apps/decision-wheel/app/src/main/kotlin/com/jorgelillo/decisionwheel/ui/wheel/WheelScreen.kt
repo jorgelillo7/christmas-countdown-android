@@ -81,6 +81,7 @@ import com.jorgelillo.decisionwheel.domain.AppState
 import com.jorgelillo.decisionwheel.domain.DecisionEngine
 import com.jorgelillo.decisionwheel.domain.Spin
 import com.jorgelillo.decisionwheel.domain.Wheel
+import com.jorgelillo.decisionwheel.ui.home.FavoriteButton
 import com.jorgelillo.decisionwheel.ui.theme.WheelColors
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -99,6 +100,7 @@ fun WheelScreen(
     onAccept: (String) -> Unit,
     onClearHistory: () -> Unit,
     onTick: () -> Unit,
+    onToggleFavorite: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val view = LocalView.current
@@ -167,6 +169,7 @@ fun WheelScreen(
                     }
                 },
                 actions = {
+                    FavoriteButton(wheel, onToggleFavorite)
                     IconButton(onClick = { showHistory = true }, modifier = Modifier.testTag("history")) {
                         Icon(Icons.Filled.DateRange, contentDescription = stringResource(R.string.action_history))
                     }

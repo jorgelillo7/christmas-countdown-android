@@ -9,8 +9,8 @@ android {
     defaultConfig {
         applicationId = "com.jorgelillo.decisionwheel"
         minSdk = 24 // navigation-compose needs API 24; new app, so no existing users lose updates
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
     }
 
     // Release signing and R8: the jorgelillo.android.application convention plugin.

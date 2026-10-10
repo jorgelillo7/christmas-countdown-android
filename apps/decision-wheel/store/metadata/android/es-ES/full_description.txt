@@ -15,6 +15,9 @@ Deslízala o pulsa Gira. Frena de forma natural, suena y vibra en cada sector y 
 📋 LISTA PARA USAR
 Ruletas preparadas para dónde comer, planes de finde, qué cenar en casa y sí o no. Edítalas o crea las tuyas.
 
+⭐ TUS FAVORITAS A MANO
+Marca con la estrella las que más usáis: salen las primeras y, manteniendo pulsado el icono de la app, se abren directamente.
+
 📒 HISTORIAL
 Cada resultado que aceptas se guarda en su ruleta.
 
