@@ -1,0 +1,4 @@
+New name! 🎄 It's now "Is it Christmas yet?"
+- Same countdown, advent calendar, widget and carols
+- Refreshed About screen
+- Under-the-hood improvements so everything keeps working just as well

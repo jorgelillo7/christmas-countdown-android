@@ -1,0 +1,4 @@
+New icon 🕵️ and small fixes
+- New icon: which of the three is the impostor?
+- Clearer round and score texts
+- Under-the-hood improvements

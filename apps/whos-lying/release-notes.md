@@ -5,4 +5,5 @@ Newest first. User-facing notes per language are in
 
 | versionCode | Version | Date | Notes |
 |---|---|---|---|
+| 4 | 1.0 | — (internal testing) | New icon (line-up with the liar in a fedora), clearer round/score texts, shared core code |
 | 1 | 1.0 | — (not released) | First version: Classic, Blind and Drifter modes, Chaos, 6 packs per language, custom packs |
