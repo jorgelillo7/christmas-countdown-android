@@ -75,6 +75,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jorgelillo.core.designsystem.ConfettiBurst
 import com.jorgelillo.decisionwheel.R
 import com.jorgelillo.decisionwheel.domain.AppState
 import com.jorgelillo.decisionwheel.domain.DecisionEngine
@@ -218,7 +219,7 @@ fun WheelScreen(
                 contentAlignment = Alignment.Center,
             ) {
                 WheelCanvas(segments, { colorByOption[it] ?: WheelColors.Muted }, rotation.value, winner, Modifier.fillMaxSize())
-                ConfettiBurst(celebration, Modifier.fillMaxSize())
+                ConfettiBurst(celebration, WheelColors.Segments, Modifier.fillMaxSize())
             }
 
             Spacer(Modifier.height(12.dp))
