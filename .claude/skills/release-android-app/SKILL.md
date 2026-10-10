@@ -49,8 +49,8 @@ Check in the `verify-bundle.sh` output:
   in their own terminal (docs/signing.md); never ask them to paste passwords into the chat.
 - New permissions vs. the previous release → the Data safety form may need updating.
 
-If the app has no `tools/smoke_test.sh` yet, create one from
-`apps/christmas-countdown/tools/smoke_test.sh` (adapt package and tap coordinates).
+If the app has no `tools/smoke_test.sh` yet, create one on `scripts/smoke_lib.sh` like
+`apps/tournaments/tools/smoke_test.sh` (taps by test tag, never coordinates).
 
 ## 4. Store listing (only if features changed)
 

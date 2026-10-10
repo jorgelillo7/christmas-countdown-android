@@ -9,8 +9,8 @@ self-contained folder under `apps/<app>/`; shared Compose code lives in `core/`;
 configuration lives in `build-logic/`. Human docs are in `docs/` (index `docs/README.md`, repo runbook `docs/operations.md`); open work in `PENDING.md`;
 each app has its own `apps/<app>/OPERATIONS.md` (exact commands) and `release-notes.md` (version history).
 
-Apps today: `christmas-countdown` (`com.jorgelillo.christmascountdown`) and `decision-wheel`
-("What next?", `com.jorgelillo.decisionwheel`), both live on Play; `whos-lying` ("Who's lying?",
+Apps today: `christmas-countdown` ("¿Ya es Navidad?", `com.jorgelillo.christmascountdown`) and
+`decision-wheel` ("¿Qué hacemos?", `com.jorgelillo.decisionwheel`), both live on Play; `whos-lying` ("Who's lying?",
 `com.jorgelillo.whoslying`, internal testing), `group-polls` ("¿Qué votáis?",
 `com.jorgelillo.grouppolls`, not released) and `tournaments` ("¿Solo quedará uno?",
 `com.jorgelillo.tournaments`, in development). `group-polls` is the only one with a backend
@@ -47,7 +47,8 @@ apps/<app>/tools/smoke_test.sh                            # release APK on emula
 
 Asset generators (icons, store graphics, developer profile) are Python + Pillow:
 `scripts/setup-python.sh` once, then `.venv/bin/python <script>`. Generated images are committed;
-regenerate them instead of editing by hand.
+regenerate them instead of editing by hand. Shared pieces: `scripts/store_assets.py` (store
+graphics) and `scripts/smoke_lib.sh` (smoke tests); each app's `tools/` only holds its own part.
 
 Project skills in `.claude/skills/`: `new-android-app` (competitor study → design → scaffold),
 `upgrade-android-deps` (toolchain/dependency upgrades) and `release-android-app` (ship a version).
@@ -75,8 +76,11 @@ Project skills in `.claude/skills/`: `new-android-app` (competitor study → des
 - `:apps:<app>:app`: Compose + Material 3, MVVM (`ViewModel` + `StateFlow`, collected with
   `collectAsStateWithLifecycle`). No DI framework: app-wide singletons live on the app's
   `Application` subclass and reach ViewModels through `viewModelFactory` companions.
-- `:core:designsystem` holds `LilloTheme` (each app passes its own `ColorScheme`) and shared
-  components (`GlassCard`, `GradientBackground`). Move code here only once a second app needs it.
+- `:core:designsystem` holds `LilloTheme` (each app passes its own `ColorScheme`) and what two or
+  more apps share: `LilloPage` / `LilloBigButton` (apps wrap them with their colours in
+  `ui/…/Common.kt`), `isShortScreen()` for landscape and handhelds, `TestTagsAsResourceIds`,
+  `ConfettiBurst`, plus Christmas's `GlassCard` / `GradientBackground`. Move code here only once a
+  second app needs it.
 - Strings ship in English (`values/`) and Spanish (`values-es/`); keep both in sync, including
   plurals (Spanish needs `one`/`many`/`other`).
 - Snapshot tests pin anything users already see that is derived algorithmically (e.g. Christmas

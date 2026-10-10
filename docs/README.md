@@ -27,10 +27,16 @@ One entry per document. Runbooks first, then setup, then reference.
 
 | App | Operations | Release notes |
 |---|---|---|
-| Christmas Countdown | [`OPERATIONS.md`](../apps/christmas-countdown/OPERATIONS.md) | [`release-notes.md`](../apps/christmas-countdown/release-notes.md) |
+| Is it Christmas yet? (Christmas countdown) | [`OPERATIONS.md`](../apps/christmas-countdown/OPERATIONS.md) | [`release-notes.md`](../apps/christmas-countdown/release-notes.md) |
 | What next? (decision wheel) | [`OPERATIONS.md`](../apps/decision-wheel/OPERATIONS.md) | [`release-notes.md`](../apps/decision-wheel/release-notes.md) |
 | Who's lying? (impostor game) | [`OPERATIONS.md`](../apps/whos-lying/OPERATIONS.md) | [`release-notes.md`](../apps/whos-lying/release-notes.md) |
 | What do you vote? (group polls) | [`OPERATIONS.md`](../apps/group-polls/OPERATIONS.md) | [`release-notes.md`](../apps/group-polls/release-notes.md) |
+| Last one standing? (tournaments) | [`OPERATIONS.md`](../apps/tournaments/OPERATIONS.md) | [`release-notes.md`](../apps/tournaments/release-notes.md) |
+
+## Plans
+
+Design decisions of apps that needed a plan before coding:
+[`plans/group-polls.md`](plans/group-polls.md), [`plans/tournaments.md`](plans/tournaments.md).
 
 Shared scripts: [`scripts/`](../scripts). Branding: [`branding/`](../branding).
 Claude Code skills: [`.claude/skills/`](../.claude/skills) — `new-android-app`, `upgrade-android-deps`, `release-android-app`.
