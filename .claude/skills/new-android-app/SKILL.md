@@ -5,7 +5,7 @@ description: Create a new Android app in this repo from idea to first Play-ready
 
 # New Android app
 
-Process used for the decision wheel (app #2). Keep the user in the loop at the three decision
+Process used for the apps after Christmas Countdown. Keep the user in the loop at the three decision
 points marked **🛑 ask**; everything else you can do on your own. Write in English; talk to the
 user in their language.
 
@@ -56,25 +56,30 @@ Follow [docs/adding-a-new-app.md](../../../docs/adding-a-new-app.md). Checklist:
   (see the upgrade-android-deps skill) and add it to `gradle/libs.versions.toml`.
 - Persistence: DataStore (+ kotlinx.serialization JSON for small object graphs). Room only when
   queries/relations justify it.
-- Copy from Christmas Countdown: signing block and build types in `app/build.gradle.kts`,
-  `proguard-rules.pro` (RoomDatabase keep rule if WorkManager/Glance/Room is pulled in),
-  splash theme, edge-to-edge in `MainActivity`, About sheet with privacy + rate links.
+- Signing and R8 come from the `jorgelillo.android.application` plugin: the app only needs a
+  `proguard-rules.pro` (RoomDatabase keep rule if WorkManager/Glance/Room is pulled in).
+- Reuse `core/designsystem` (`LilloTheme`, `LilloPage`, `LilloBigButton`, `isShortScreen`,
+  `TestTagsAsResourceIds`…) and copy the splash theme, `MainActivity` and About sheet of the most
+  similar app (`group-polls` or `tournaments` for the newest patterns).
 - Strings in `values/` and `values-es/` from the start.
 - `./gradlew :apps:<app>:domain:test :apps:<app>:app:lintDebug :apps:<app>:app:assembleDebug`
 
 ## 5. Assets
 
-- Icon: copy `apps/christmas-countdown/tools/generate_icon.py`, change geometry/palette; it emits
-  adaptive + monochrome + legacy PNGs + `store/play-icon-512.png`. Look at the result.
-- `tools/smoke_test.sh` and `tools/capture_store_screenshots.sh` from Christmas Countdown, using
-  `scripts/tap-text.sh` labels (never coordinates).
+- Icon: copy the most similar app's `tools/generate_icon.py` and change geometry/palette; it
+  emits adaptive + monochrome + legacy PNGs + `store/play-icon-512.png`. House style: flat shapes
+  on a dark gradient, checked at 48/72 px next to the other apps; study the competitors' icons
+  first.
+- `tools/smoke_test.sh` on `scripts/smoke_lib.sh` (`smoke_start` … `smoke_finish`), tapping test
+  tags with `tap` (never coordinates); `tools/capture_store_screenshots.sh` and
+  `tools/generate_store_assets.py` (only `STYLE` + `LOCALES`, the drawing is `scripts/store_assets.py`).
 - `store/metadata/android/{en-US,es-ES}/` with title (≤30), short (≤80), full description,
   `changelogs/1.txt`.
 
 ## 6. Repo bookkeeping
 
 - Privacy policy: `privacy/<app>/index.html` in `~/Projects/jorgelillo7.github.io` (copy the
-  Christmas Countdown one) and an app card in the pinned "Apps" block of `index.html` and
+  closest one: no-data apps → `tournaments`, backend → `group-polls`) and an app card in the pinned "Apps" block of `index.html` and
   `en/index.html`. Publish only after the user previews it.
 - `apps/<app>/README.md`, `OPERATIONS.md` (uppercase), `release-notes.md`; add the app to the
   root README table, `docs/README.md` per-app table and `PENDING.md` (its own section).
