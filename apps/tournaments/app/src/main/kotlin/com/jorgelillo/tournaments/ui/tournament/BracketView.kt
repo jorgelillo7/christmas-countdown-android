@@ -4,10 +4,11 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculateZoom
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.TransformOrigin
@@ -31,6 +32,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -52,6 +54,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jorgelillo.core.designsystem.isShortScreen
 import com.jorgelillo.tournaments.R
 import com.jorgelillo.tournaments.domain.BracketLayout
 import com.jorgelillo.tournaments.domain.Match
@@ -86,8 +89,9 @@ data class BracketGeometry(val cardW: Float, val cardH: Float, val pitch: Float,
 
 /**
  * Two-sided bracket: first half on the left, second half on the right, final in the centre.
- * Scrolls both ways. A decided match sends a gold line (the victory line) towards the winner's
- * next match; the champion's path is thicker.
+ * Opens fitted to the screen (down to MIN_ZOOM: below that names are unreadable, so it scrolls),
+ * re-fits on rotation, and zooms with a pinch or the -/+ buttons. A decided match sends a gold
+ * line (the victory line) towards the winner's next match; the champion's path is thicker.
  */
 @Composable
 fun BracketView(t: Tournament, onEdit: (Match) -> Unit) {
@@ -96,65 +100,78 @@ fun BracketView(t: Tournament, onEdit: (Match) -> Unit) {
     val geometry = BracketGeometry(CARD_W.value, CARD_H.value, PITCH.value, GAP.value, HEADER.value)
     val champion = t.champion
     val championPath = champion?.let { BracketLayout.pathOf(t, it).map { m -> m.round to m.slot }.toSet() }.orEmpty()
+    val contentWidth = geometry.width(grid)
+    val contentHeight = geometry.height(grid) + 16
+    // Null = follow the fit, so rotating re-fits; set once the user zooms by hand.
+    var userZoom by rememberSaveable(rounds) { mutableStateOf<Float?>(null) }
+    val short = isShortScreen()
 
     BoxWithConstraints(Modifier.fillMaxSize()) {
-    // Opens fitted to the screen width (down to MIN_ZOOM: below that names are unreadable, so it
-    // scrolls); pinch or the buttons to zoom. Landscape usually shows the whole bracket at 1x.
-    val contentWidth = geometry.width(grid)
-    val fit = (maxWidth.value / contentWidth).coerceIn(MIN_ZOOM, 1f)
-    var zoom by rememberSaveable(rounds) { mutableFloatStateOf(fit) }
-    Box(
-        Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) { detectPinch { factor -> zoom = (zoom * factor).coerceIn(MIN_ZOOM, MAX_ZOOM) } }
-            .horizontalScroll(rememberScrollState())
-            .verticalScroll(rememberScrollState())
-            .testTag("bracket"),
-    ) {
-        Box(Modifier.scaled(zoom).size(contentWidth.dp, (geometry.height(grid) + 16).dp)) {
-            Canvas(Modifier.matchParentSize()) {
-                grid.cells.forEach { cell ->
-                    val points = geometry.connector(grid, cell) ?: return@forEach
-                    val match = t.round(Stage.ELIMINATION, cell.round).getOrNull(cell.slot)
-                    val won = match != null && !match.isBye && match.winner(t.bestOf) != null
-                    val path = Path().apply {
-                        moveTo(points[0].x.dp.toPx(), points[0].y.dp.toPx())
-                        points.drop(1).forEach { lineTo(it.x.dp.toPx(), it.y.dp.toPx()) }
+        val screenWidth = maxWidth
+        val fit = minOf(maxWidth.value / contentWidth, maxHeight.value / contentHeight).coerceIn(MIN_ZOOM, 1f)
+        val zoom = userZoom ?: fit
+        Box(
+            Modifier
+                .fillMaxSize()
+                .pointerInput(Unit) { detectPinch { factor -> userZoom = ((userZoom ?: fit) * factor).coerceIn(MIN_ZOOM, MAX_ZOOM) } }
+                .horizontalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState())
+                .testTag("bracket"),
+        ) {
+            // Centred when it is narrower than the screen.
+            Box(Modifier.widthIn(min = screenWidth), contentAlignment = Alignment.TopCenter) {
+                Box(Modifier.scaled(zoom).size(contentWidth.dp, contentHeight.dp)) {
+                    Connectors(t, grid, geometry, championPath)
+                    // Round names over each column.
+                    grid.cells.distinctBy { it.column }.forEach { cell ->
+                        Text(
+                            roundName(t, Stage.ELIMINATION, cell.round),
+                            color = Arena.Gold, fontSize = 12.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, maxLines = 1,
+                            modifier = Modifier.offset(x = geometry.x(cell).dp).width(CARD_W),
+                        )
                     }
-                    val width = when {
-                        (cell.round to cell.slot) in championPath -> 5.dp
-                        won -> 3.dp
-                        else -> 1.5.dp
+                    grid.cells.forEach { cell ->
+                        val match = t.round(Stage.ELIMINATION, cell.round).getOrNull(cell.slot) ?: return@forEach
+                        BracketCard(
+                            t, match,
+                            isFinal = cell.side == BracketLayout.Side.CENTER,
+                            onEdit = onEdit,
+                            modifier = Modifier.offset(x = geometry.x(cell).dp, y = geometry.y(cell).dp),
+                        )
                     }
-                    drawPath(path, if (won) Arena.Gold else Arena.Faint, style = Stroke(width.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
                 }
             }
-            // Round names over each column.
-            grid.cells.distinctBy { it.column }.forEach { cell ->
-                Text(
-                    roundName(t, Stage.ELIMINATION, cell.round),
-                    color = Arena.Gold, fontSize = 12.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, maxLines = 1,
-                    modifier = Modifier.offset(x = geometry.x(cell).dp).width(CARD_W),
-                )
-            }
-            grid.cells.forEach { cell ->
-                val match = t.round(Stage.ELIMINATION, cell.round).getOrNull(cell.slot) ?: return@forEach
-                BracketCard(
-                    t, match,
-                    isFinal = cell.side == BracketLayout.Side.CENTER,
-                    onEdit = onEdit,
-                    modifier = Modifier.offset(x = geometry.x(cell).dp, y = geometry.y(cell).dp),
-                )
-            }
+        }
+        // Only in portrait, where it doesn't fit at full size; in landscape they'd cover cards (pinch still works).
+        if (fit < 1f && !short) {
+            ZoomButtons(
+                onOut = { userZoom = (zoom / ZOOM_STEP).coerceAtLeast(MIN_ZOOM) },
+                onIn = { userZoom = (zoom * ZOOM_STEP).coerceAtMost(MAX_ZOOM) },
+                onFit = { userZoom = null },
+                modifier = Modifier.align(Alignment.BottomEnd).padding(8.dp),
+            )
         }
     }
-    // Only when the bracket doesn't fit at full size (portrait); in landscape they'd cover cards.
-    if (fit < 1f) ZoomButtons(
-        onOut = { zoom = (zoom / ZOOM_STEP).coerceAtLeast(MIN_ZOOM) },
-        onIn = { zoom = (zoom * ZOOM_STEP).coerceAtMost(MAX_ZOOM) },
-        onFit = { zoom = fit },
-        modifier = Modifier.align(Alignment.BottomEnd).padding(8.dp),
-    )
+}
+
+@Composable
+private fun BoxScope.Connectors(t: Tournament, grid: BracketLayout.Grid, geometry: BracketGeometry, championPath: Set<Pair<Int, Int>>) {
+    Canvas(Modifier.matchParentSize()) {
+        grid.cells.forEach { cell ->
+            val points = geometry.connector(grid, cell) ?: return@forEach
+            val match = t.round(Stage.ELIMINATION, cell.round).getOrNull(cell.slot)
+            val won = match != null && !match.isBye && match.winner(t.bestOf) != null
+            val path = Path().apply {
+                moveTo(points[0].x.dp.toPx(), points[0].y.dp.toPx())
+                points.drop(1).forEach { lineTo(it.x.dp.toPx(), it.y.dp.toPx()) }
+            }
+            val width = when {
+                (cell.round to cell.slot) in championPath -> 5.dp
+                won -> 3.dp
+                else -> 1.5.dp
+            }
+            drawPath(path, if (won) Arena.Gold else Arena.Faint, style = Stroke(width.toPx(), cap = StrokeCap.Round, join = StrokeJoin.Round))
+        }
     }
 }
 
