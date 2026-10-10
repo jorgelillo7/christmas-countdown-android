@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Cuenta atrás para Navidad</string>
+    <string name="app_name">¿Ya es Navidad?</string>
 
     <string name="tab_countdown">Cuenta atrás</string>
     <string name="tab_advent">Adviento</string>
@@ -52,7 +52,7 @@
     <string name="advent_door_locked">La puerta %1$d aún está cerrada</string>
     <string name="advent_close">Cerrar</string>
 
-    <string name="about_title">Cuenta atrás para Navidad</string>
+    <string name="about_title">¿Ya es Navidad? Cuenta atrás</string>
     <string name="about_version">Versión %1$s</string>
     <string name="about_body">Sin anuncios, sin rastreo y sin recoger datos. Hecha con cariño por Jorge Lillo.</string>
     <string name="about_privacy">Política de privacidad</string>

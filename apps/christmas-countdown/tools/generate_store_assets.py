@@ -17,8 +17,8 @@ GOLD, SNOW = (255, 200, 87), (255, 248, 238)
 
 LOCALES = {
     "en-US": {
-        "title": "Christmas Countdown",
-        "tagline": "Countdown · Advent calendar · Widget · Carols",
+        "title": "Is it Christmas yet? Countdown",
+        "tagline": "Days left · Advent calendar · Widget · Carols",
         "headlines": {
             "01-countdown": ("Every second", "until Christmas"),
             "02-sleeps": ("Count the sleeps,", "just like kids do"),
@@ -28,8 +28,8 @@ LOCALES = {
         },
     },
     "es-ES": {
-        "title": "Cuenta atrás para Navidad",
-        "tagline": "Cuenta atrás · Adviento · Widget · Villancicos",
+        "title": "¿Ya es Navidad? Cuenta atrás",
+        "tagline": "Días que faltan · Adviento · Widget · Villancicos",
         "headlines": {
             "01-countdown": ("Cada segundo", "hasta Navidad"),
             "02-sleeps": ("Cuenta las noches,", "como los peques"),
