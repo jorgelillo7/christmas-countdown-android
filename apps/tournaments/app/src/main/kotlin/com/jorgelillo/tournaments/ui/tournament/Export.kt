@@ -1,7 +1,6 @@
 package com.jorgelillo.tournaments.ui.tournament
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.LinearGradient
@@ -9,12 +8,13 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.Typeface
-import android.text.TextUtils
 import android.text.TextPaint
+import android.text.TextUtils
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.core.content.FileProvider
 import androidx.core.graphics.createBitmap
+import com.jorgelillo.core.platform.shareFile
+import com.jorgelillo.core.platform.sharedCacheFile
 import com.jorgelillo.tournaments.R
 import com.jorgelillo.tournaments.domain.BracketLayout
 import com.jorgelillo.tournaments.domain.Stage
@@ -24,7 +24,6 @@ import com.jorgelillo.tournaments.domain.Tournament
 import com.jorgelillo.tournaments.ui.formatDay
 import com.jorgelillo.tournaments.ui.roundName
 import com.jorgelillo.tournaments.ui.theme.Arena
-import java.io.File
 
 private const val MARGIN = 48f
 private const val TITLE_H = 150f
@@ -33,28 +32,17 @@ private const val MAX_SIDE = 4096f
 /** The bracket (or the Swiss table if there is no bracket yet) as a PNG, to the share sheet. */
 fun shareImage(context: Context, t: Tournament) {
     val bitmap = if (t.eliminationRounds > 0) bracketBitmap(context, t) else standingsBitmap(context, t)
-    val file = cacheFile(context, "tournament.png")
+    val file = context.sharedCacheFile("tournament.png")
     file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
-    share(context, file, "image/png", t.name)
+    context.shareFile(file, "image/png", subject = t.name)
 }
 
 fun shareCsv(context: Context, t: Tournament) {
-    val file = cacheFile(context, "tournament.csv")
+    val file = context.sharedCacheFile("tournament.csv")
     file.writeText(Stats.csv(t) { context.resources.roundName(t, it) })
-    share(context, file, "text/csv", t.name)
+    context.shareFile(file, "text/csv", subject = t.name)
 }
 
-private fun cacheFile(context: Context, name: String) = File(File(context.cacheDir, "shared").apply { mkdirs() }, name)
-
-private fun share(context: Context, file: File, type: String, subject: String) {
-    val uri = FileProvider.getUriForFile(context, "${context.packageName}.files", file)
-    val send = Intent(Intent.ACTION_SEND)
-        .setType(type)
-        .putExtra(Intent.EXTRA_STREAM, uri)
-        .putExtra(Intent.EXTRA_SUBJECT, subject)
-        .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    context.startActivity(Intent.createChooser(send, null))
-}
 
 private fun paint(color: Color, size: Float, bold: Boolean = false) = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
     this.color = color.toArgb()

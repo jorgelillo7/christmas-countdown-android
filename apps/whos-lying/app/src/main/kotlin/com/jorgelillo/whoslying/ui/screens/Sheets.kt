@@ -1,7 +1,6 @@
 package com.jorgelillo.whoslying.ui.screens
 
 import android.app.LocaleManager
-import android.content.Intent
 import android.os.Build
 import android.os.LocaleList
 import androidx.annotation.RequiresApi
@@ -38,13 +37,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.jorgelillo.core.platform.LilloLinks
+import com.jorgelillo.core.platform.shareText
 import com.jorgelillo.whoslying.BuildConfig
 import com.jorgelillo.whoslying.R
 import com.jorgelillo.whoslying.ui.WordReport
 import com.jorgelillo.whoslying.ui.theme.Neon
 
-const val PRIVACY_POLICY_URL = "https://jorgelillo7.github.io/privacy/whos-lying/"
-const val PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.jorgelillo.whoslying"
+val PRIVACY_POLICY_URL = LilloLinks.privacyPolicy("whos-lying")
+val PLAY_STORE_URL = LilloLinks.playStore(BuildConfig.APPLICATION_ID)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -192,9 +193,7 @@ fun SettingsSheet(onHowTo: () -> Unit, onModes: () -> Unit, onDismiss: () -> Uni
             SettingsRow("📖", stringResource(R.string.how_to_play), null, "settings_how_to") { onDismiss(); onHowTo() }
             SettingsRow("🎭", stringResource(R.string.modes_title), null, "settings_modes") { onDismiss(); onModes() }
             SettingsRow("💌", stringResource(R.string.settings_share), stringResource(R.string.settings_share_desc), "share") {
-                val send = Intent(Intent.ACTION_SEND).setType("text/plain")
-                    .putExtra(Intent.EXTRA_TEXT, shareText)
-                context.startActivity(Intent.createChooser(send, null))
+                context.shareText(shareText)
             }
             SettingsRow("⭐", stringResource(R.string.about_rate), null, "rate") { uriHandler.openUri(PLAY_STORE_URL) }
             SettingsRow("🔒", stringResource(R.string.about_privacy), null, "privacy") { uriHandler.openUri(PRIVACY_POLICY_URL) }

@@ -1,7 +1,5 @@
 package com.jorgelillo.tournaments.ui
 
-import android.content.Context
-import android.content.Intent
 import android.content.res.Resources
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
@@ -73,8 +71,3 @@ fun Resources.resultSentence(t: Tournament, m: Match): String? {
 
 fun Resources.bestOfLabel(bestOf: Int): String =
     if (bestOf == 1) getString(R.string.best_of_one) else getString(R.string.best_of_n, bestOf)
-
-fun Context.shareText(text: String) {
-    val send = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, text)
-    startActivity(Intent.createChooser(send, null))
-}

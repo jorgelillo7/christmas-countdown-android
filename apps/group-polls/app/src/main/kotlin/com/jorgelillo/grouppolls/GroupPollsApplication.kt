@@ -8,12 +8,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.jorgelillo.grouppolls.data.FakePollRepository
 import com.jorgelillo.grouppolls.data.FirestorePollRepository
-import com.jorgelillo.grouppolls.data.LocalStore
+import com.jorgelillo.grouppolls.data.localStore
 import com.jorgelillo.grouppolls.data.PollRepository
 
 /** App-wide singletons (manual DI: the app is small enough not to need Hilt). */
 class GroupPollsApplication : Application() {
-    val store by lazy { LocalStore(this) }
+    val store by lazy { localStore(this) }
 
     /** Firestore when `firebase.properties` was present at build time; in-memory otherwise. */
     val repository: PollRepository by lazy {

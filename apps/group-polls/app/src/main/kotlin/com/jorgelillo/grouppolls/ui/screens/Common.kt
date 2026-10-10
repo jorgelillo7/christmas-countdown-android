@@ -1,10 +1,6 @@
 package com.jorgelillo.grouppolls.ui.screens
 
-import com.jorgelillo.core.designsystem.LilloBigButton
-import com.jorgelillo.core.designsystem.LilloPage
-import com.jorgelillo.core.designsystem.TestTagsAsResourceIds
 import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,14 +42,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jorgelillo.core.designsystem.LilloBigButton
+import com.jorgelillo.core.designsystem.LilloPage
+import com.jorgelillo.core.designsystem.TestTagsAsResourceIds
+import com.jorgelillo.core.platform.LilloLinks
+import com.jorgelillo.core.platform.shareText
+import com.jorgelillo.grouppolls.BuildConfig
 import com.jorgelillo.grouppolls.R
 import com.jorgelillo.grouppolls.domain.Poll
 import com.jorgelillo.grouppolls.domain.Split
 import com.jorgelillo.grouppolls.ui.theme.Polls
 
 const val LINK_BASE = "https://jorgelillo7.github.io/q/?c="
-const val PRIVACY_POLICY_URL = "https://jorgelillo7.github.io/privacy/group-polls/"
-const val PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.jorgelillo.grouppolls"
+val PRIVACY_POLICY_URL = LilloLinks.privacyPolicy("group-polls")
+val PLAY_STORE_URL = LilloLinks.playStore(BuildConfig.APPLICATION_ID)
 
 /** Dialogs and sheets live in their own window: expose their test tags as resource ids too. */
 val DialogTags = TestTagsAsResourceIds
@@ -91,10 +93,7 @@ fun SplitBar(poll: Poll, modifier: Modifier = Modifier, height: Int = 14) {
 }
 
 /** Opens the share sheet with the poll's link. */
-fun sharePoll(context: Context, poll: Poll, text: String) {
-    val send = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, "$text\n$LINK_BASE${poll.code}")
-    context.startActivity(Intent.createChooser(send, null))
-}
+fun sharePoll(context: Context, poll: Poll, text: String) = context.shareText("$text\n$LINK_BASE${poll.code}")
 
 /** "2 h", "3 d"… for the feed cards. */
 @Composable

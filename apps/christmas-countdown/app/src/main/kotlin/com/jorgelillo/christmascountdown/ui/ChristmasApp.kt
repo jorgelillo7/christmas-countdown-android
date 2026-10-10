@@ -1,7 +1,6 @@
 package com.jorgelillo.christmascountdown.ui
 
 import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -46,6 +45,7 @@ import com.jorgelillo.christmascountdown.ui.countdown.CountdownScreen
 import com.jorgelillo.christmascountdown.ui.countdown.CountdownViewModel
 import com.jorgelillo.christmascountdown.ui.theme.ChristmasColors
 import com.jorgelillo.core.designsystem.GradientBackground
+import com.jorgelillo.core.platform.shareText
 
 private enum class Tab(val label: Int) { Countdown(R.string.tab_countdown), Advent(R.string.tab_advent) }
 
@@ -158,9 +158,5 @@ private fun Context.shareCountdown(state: CountdownState, sleepsMode: Boolean) {
             }
         }
     }
-    val send = Intent(Intent.ACTION_SEND).apply {
-        type = "text/plain"
-        putExtra(Intent.EXTRA_TEXT, "$message\n$PLAY_STORE_URL")
-    }
-    startActivity(Intent.createChooser(send, getString(R.string.share_chooser)))
+    shareText("$message\n$PLAY_STORE_URL", getString(R.string.share_chooser))
 }

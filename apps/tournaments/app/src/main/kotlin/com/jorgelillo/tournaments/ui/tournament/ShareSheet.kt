@@ -40,11 +40,11 @@ import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import com.jorgelillo.core.designsystem.TestTagsAsResourceIds
+import com.jorgelillo.core.platform.shareText
 import com.jorgelillo.tournaments.R
 import com.jorgelillo.tournaments.domain.Share
 import com.jorgelillo.tournaments.domain.Tournament
 import com.jorgelillo.tournaments.ui.BigButton
-import com.jorgelillo.tournaments.ui.shareText
 import com.jorgelillo.tournaments.ui.theme.Arena
 
 /**

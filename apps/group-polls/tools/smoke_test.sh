@@ -8,7 +8,6 @@
 set -euo pipefail
 source "$(dirname "$0")/../../../scripts/smoke_lib.sh"
 smoke_start group-polls com.jorgelillo.grouppolls
-type_in() { tap "$1" 1; "$ADB" shell input text "$2"; }
 
 shot welcome
 type_in name_input "Alex"
