@@ -39,4 +39,5 @@ include(":apps:group-polls:app")
 include(":apps:group-polls:domain")
 
 // ¿Quién gana? (tournaments)
+include(":apps:tournaments:app")
 include(":apps:tournaments:domain")

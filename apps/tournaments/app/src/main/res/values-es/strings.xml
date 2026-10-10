@@ -1,0 +1,130 @@
+<resources>
+    <string name="app_name">¿Solo quedará uno?</string>
+
+    <!-- Home -->
+    <string name="new_tournament">Nuevo torneo</string>
+    <string name="home_empty_title">¿Quién será el único?</string>
+    <string name="home_empty_body">Cartas, ping-pong, FIFA, pádel… Crea un torneo en segundos y guarda el historial. Sin cuentas y sin instalar nada en los otros móviles.</string>
+    <plurals name="players_count">
+        <item quantity="one">%d jugador</item>
+        <item quantity="many">%d jugadores</item>
+        <item quantity="other">%d jugadores</item>
+    </plurals>
+    <string name="status_champion">🏆 %s</string>
+    <plurals name="status_pending">
+        <item quantity="one">En juego · falta %d partida</item>
+        <item quantity="many">En juego · faltan %d partidas</item>
+        <item quantity="other">En juego · faltan %d partidas</item>
+    </plurals>
+    <string name="status_next_round">Listo para la siguiente ronda</string>
+    <string name="action_import">Importar</string>
+    <string name="action_about">Información</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_close">Cerrar</string>
+    <string name="action_more">Más</string>
+    <string name="action_share">Compartir</string>
+    <string name="action_delete">Borrar</string>
+    <string name="about_body">Torneos entre amigos, solo en tu móvil: sin cuentas, sin servidores y sin anuncios. Para llevar un torneo a otro móvil, comparte su enlace o su código QR: el torneo entero viaja dentro.</string>
+    <string name="about_privacy">Política de privacidad: %s</string>
+    <string name="about_open_privacy">Política de privacidad</string>
+    <string name="about_version">Versión %s</string>
+
+    <!-- Import -->
+    <string name="import_title">Importar un torneo</string>
+    <string name="import_body">Pega el enlace que te han mandado (o el mensaje entero). También puedes compartirlo directamente a esta app desde el chat.</string>
+    <string name="import_invalid">Eso no es un enlace de torneo (o ha llegado cortado)</string>
+    <string name="import_added">Torneo añadido</string>
+    <string name="import_updated">Torneo actualizado con los últimos resultados</string>
+    <string name="import_same">Ya tenías este torneo al día</string>
+    <string name="import_newer_here">Tu copia tiene resultados más recientes: se queda la tuya</string>
+
+    <!-- New tournament -->
+    <string name="setup_name">Nombre</string>
+    <string name="setup_default_name">Torneo %s</string>
+    <string name="setup_game">Juego (opcional)</string>
+    <string name="setup_game_hint">Magic, ping-pong, FIFA…</string>
+    <string name="setup_date">Fecha</string>
+    <string name="setup_today">Hoy, %s</string>
+    <string name="setup_format">Formato</string>
+    <string name="format_elimination">Eliminatoria</string>
+    <string name="format_swiss">Suizo</string>
+    <string name="format_elimination_help">Quien pierde, fuera. El sorteo es al azar; si no cuadran los números, algunos pasan directos a la segunda ronda.</string>
+    <string name="format_swiss_help">Todos juegan todas las rondas contra alguien con una puntuación parecida, y nadie queda eliminado. Si quieres, los mejores pasan a una eliminatoria.</string>
+    <string name="setup_matches">Cada partida</string>
+    <string name="best_of_one">A una</string>
+    <string name="best_of_n">Al mejor de %d</string>
+    <string name="setup_swiss_rounds">Rondas</string>
+    <string name="setup_top_cut">Después, eliminatoria con</string>
+    <string name="setup_top_cut_none">No</string>
+    <string name="setup_top_cut_n">Top %d</string>
+    <string name="setup_player_hint">Nombre del jugador (o pega una lista)</string>
+    <string name="setup_add">Añadir jugador</string>
+    <string name="setup_remove">Quitar a %s</string>
+    <string name="setup_duplicate">%s ya está apuntado</string>
+    <plurals name="setup_byes">
+        <item quantity="one">%d jugador pasa directo a la segunda ronda</item>
+        <item quantity="many">%d jugadores pasan directos a la segunda ronda</item>
+        <item quantity="other">%d jugadores pasan directos a la segunda ronda</item>
+    </plurals>
+    <string name="setup_start">Sortear y empezar</string>
+
+    <!-- Tournament -->
+    <string name="tab_matches">Partidas</string>
+    <string name="tab_bracket">Cuadro</string>
+    <string name="tab_standings">Clasificación</string>
+    <string name="round_n">Ronda %d</string>
+    <string name="round_final">Final</string>
+    <string name="round_semifinals">Semifinales</string>
+    <string name="round_quarterfinals">Cuartos</string>
+    <string name="round_of_16">Octavos</string>
+    <string name="top_cut_prefix">Eliminatoria</string>
+    <string name="champion_label">Campeón</string>
+    <string name="match_bye">%s pasa directo</string>
+    <string name="match_draw">Empate</string>
+    <string name="match_tbd">Por decidir</string>
+    <string name="match_tap_to_score">Toca para apuntar el resultado</string>
+    <string name="bracket_fit">Ajustar</string>
+    <string name="bracket_bye">pase directo</string>
+    <string name="action_redraw">Volver a sortear</string>
+    <string name="action_unpair">Deshacer emparejamientos de la última ronda</string>
+    <string name="action_pair_round">Emparejar ronda %d</string>
+    <string name="action_start_top_cut">Empezar la eliminatoria: top %d</string>
+    <string name="export_image">Compartir como imagen</string>
+    <string name="export_csv">Exportar resultados (CSV)</string>
+    <string name="export_image_short">Imagen</string>
+    <string name="export_csv_short">CSV</string>
+    <string name="delete_title">¿Borrar «%s»?</string>
+    <string name="delete_body">Solo se borra de este móvil. Las copias que hayas compartido siguen en los otros.</string>
+    <string name="standings_player">Jugador</string>
+    <string name="standings_points">Pts</string>
+    <string name="standings_record">G-E-P</string>
+
+    <!-- Result -->
+    <string name="result_who_won">¿Quién ha ganado?</string>
+    <string name="result_draw">Empate</string>
+    <string name="result_comment">Comentario (opcional)</string>
+    <string name="result_comment_hint">Ej.: 20 vidas a 0</string>
+    <string name="result_sentence">%1$s ganó %3$d a %4$d a %2$s</string>
+    <string name="result_draw_sentence">%1$s y %2$s empataron %3$d a %4$d</string>
+    <string name="result_resets_later">Al cambiar este resultado se borran las partidas que venían después.</string>
+    <string name="result_save">Guardar resultado</string>
+    <string name="result_clear">Borrar resultado</string>
+
+    <!-- Share -->
+    <string name="share_title">Llévalo a otro móvil</string>
+    <string name="share_qr_help">Escanéalo con la cámara del otro móvil. El torneo entero va dentro del código: no hace falta internet ni cuenta.</string>
+    <string name="share_send_link">Enviar enlace</string>
+    <string name="share_message">🏆 %1$s\n%2$s</string>
+    <string name="share_snapshot_note">Es una foto del momento: vuelve a compartir tras nuevos resultados. Quien abra un enlace más reciente recibe lo último.</string>
+
+    <!-- Stats -->
+    <string name="stats_title">Salón de la fama</string>
+    <string name="stats_all_games">Todos</string>
+    <plurals name="stats_tournaments">
+        <item quantity="one">%d torneo</item>
+        <item quantity="many">%d torneos</item>
+        <item quantity="other">%d torneos</item>
+    </plurals>
+    <string name="stats_line">Torneos: %1$d · Finales: %2$d · G-E-P: %3$d-%4$d-%5$d</string>
+    <string name="stats_win_rate">%d%% victorias</string>
+</resources>
