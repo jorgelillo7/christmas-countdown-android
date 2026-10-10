@@ -41,6 +41,10 @@ class WheelsViewModel(private val repository: StateRepository) : ViewModel() {
 
     fun setSound(enabled: Boolean) = update { it.copy(soundOn = enabled) }
 
+    fun toggleFavorite(wheelId: String) = update { it.toggleFavorite(wheelId) }
+
+    fun restorePresets(presets: List<Wheel>) = update { it.restorePresets(presets) }
+
     private fun update(transform: (AppState) -> AppState) {
         viewModelScope.launch { repository.update(transform) }
     }

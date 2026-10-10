@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExtendedFloatingActionButton
@@ -44,6 +45,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.jorgelillo.core.designsystem.TestTagsAsResourceIds
 import com.jorgelillo.decisionwheel.R
 import com.jorgelillo.decisionwheel.domain.AppState
 import com.jorgelillo.decisionwheel.domain.Wheel
@@ -58,6 +60,8 @@ fun HomeScreen(
     onAvoidRepeats: (Boolean) -> Unit,
     onSound: (Boolean) -> Unit,
     onAbout: () -> Unit,
+    onToggleFavorite: (Wheel) -> Unit,
+    onRestorePresets: () -> Unit,
 ) {
     var menu by remember { mutableStateOf(false) }
     Scaffold(
@@ -87,17 +91,22 @@ fun HomeScreen(
                         IconButton(onClick = { menu = true }, modifier = Modifier.testTag("more")) {
                             Icon(Icons.Filled.MoreVert, contentDescription = stringResource(R.string.action_more))
                         }
-                        DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
+                        DropdownMenu(expanded = menu, onDismissRequest = { menu = false }, modifier = TestTagsAsResourceIds) {
                             CheckItem(stringResource(R.string.settings_avoid_repeats), state.avoidRepeats) { onAvoidRepeats(!state.avoidRepeats) }
                             CheckItem(stringResource(R.string.settings_sound), state.soundOn) { onSound(!state.soundOn) }
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.restore_presets)) },
+                                onClick = { menu = false; onRestorePresets() },
+                                modifier = Modifier.testTag("restore_presets"),
+                            )
                             DropdownMenuItem(text = { Text(stringResource(R.string.action_about)) }, onClick = { menu = false; onAbout() })
                         }
                     }
                 }
                 Spacer(Modifier.height(20.dp))
             }
-            items(state.wheels, key = { it.id }) { wheel ->
-                WheelCard(wheel, onClick = { onOpen(wheel) })
+            items(state.sortedWheels, key = { it.id }) { wheel ->
+                WheelCard(wheel, onClick = { onOpen(wheel) }, onToggleFavorite = { onToggleFavorite(wheel) })
                 Spacer(Modifier.height(12.dp))
             }
         }
@@ -114,7 +123,7 @@ private fun CheckItem(label: String, checked: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-private fun WheelCard(wheel: Wheel, onClick: () -> Unit) {
+private fun WheelCard(wheel: Wheel, onClick: () -> Unit, onToggleFavorite: () -> Unit) {
     val colors = segmentColors(wheel.options.size)
     Row(
         modifier = Modifier
@@ -149,5 +158,18 @@ private fun WheelCard(wheel: Wheel, onClick: () -> Unit) {
                 color = WheelColors.Sun,
             )
         }
+        FavoriteButton(wheel, onToggleFavorite)
+    }
+}
+
+/** Star toggle: favourites go first and become launcher shortcuts. */
+@Composable
+fun FavoriteButton(wheel: Wheel, onToggle: () -> Unit) {
+    IconButton(onClick = onToggle, modifier = Modifier.testTag("favorite_${wheel.id}")) {
+        Icon(
+            Icons.Filled.Star,
+            contentDescription = stringResource(if (wheel.favorite) R.string.favorite_remove else R.string.favorite_add, wheel.name),
+            tint = if (wheel.favorite) WheelColors.Sun else WheelColors.Muted.copy(alpha = 0.45f),
+        )
     }
 }
