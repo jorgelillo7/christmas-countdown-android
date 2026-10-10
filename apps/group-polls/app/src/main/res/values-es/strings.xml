@@ -88,7 +88,7 @@
     <string name="settings_name_desc">Cambia en las encuestas y votos nuevos; los antiguos mantienen el que tenían.</string>
     <string name="settings_predictions">Tus predicciones</string>
     <string name="settings_predictions_none">Aún no ha cerrado ninguna encuesta</string>
-    <string name="settings_predictions_value">Aciertas a la mayoría el %1$d %% de las veces (%2$d encuestas)</string>
+    <string name="settings_predictions_value">Aciertas a la mayoría el %1$d %% de las veces (encuestas cerradas: %2$d)</string>
     <string name="settings_privacy">Política de privacidad</string>
     <string name="settings_rate">Valorar en Google Play</string>
     <string name="settings_delete">Borrar mis datos</string>

@@ -43,6 +43,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -558,7 +559,7 @@ internal fun Confetti(modifier: Modifier) {
             )
         }
     }
-    var time by remember { mutableStateOf(0f) }
+    var time by remember { mutableFloatStateOf(0f) }
     val fade = remember { Animatable(1f) }
     LaunchedEffect(Unit) {
         val start = withFrameNanos { it }
