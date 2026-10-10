@@ -87,7 +87,7 @@
     <string name="settings_name_desc">It changes on new polls and votes; old ones keep the name they had.</string>
     <string name="settings_predictions">Your predictions</string>
     <string name="settings_predictions_none">No closed polls yet</string>
-    <string name="settings_predictions_value">You guess the majority %1$d%% of the time (%2$d polls)</string>
+    <string name="settings_predictions_value">You guess the majority %1$d%% of the time (closed polls: %2$d)</string>
     <string name="settings_privacy">Privacy policy</string>
     <string name="settings_rate">Rate on Google Play</string>
     <string name="settings_delete">Delete my data</string>

@@ -50,6 +50,7 @@ dependencies {
     debugImplementation(libs.firebase.appcheck.debug)
     implementation(libs.kotlinx.coroutines.play.services)
     implementation(projects.core.designsystem)
+    implementation(projects.core.platform)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)

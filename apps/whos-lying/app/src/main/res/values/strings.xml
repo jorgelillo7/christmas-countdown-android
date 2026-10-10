@@ -224,9 +224,8 @@
         <item quantity="one">%d round left</item>
         <item quantity="other">%d rounds left</item>
     </plurals>
-    <string name="scores_rounds_free">No round limit · %1$d played</string>
+    <string name="scores_rounds_free">No round limit · played: %1$d</string>
     <string name="result_see_winner">🏆 See results</string>
-    <string name="podium_winner">%1$s wins the match!</string>
     <string name="podium_tie">It\'s a tie: %1$s!</string>
     <string name="podium_nobody">Nobody scored… rematch!</string>
     <string name="podium_new_match">New match</string>

@@ -1,6 +1,7 @@
 package com.jorgelillo.whoslying.ui
 
 import android.net.Uri
+import androidx.core.net.toUri
 
 /**
  * "Report this word" goes to a Google Form, opened prefilled in the browser: the player only taps
@@ -17,7 +18,7 @@ object WordReport {
     private const val COMMENT = "entry.1013901262"
 
     fun url(word: String, decoy: String?, pack: String, language: String, reasons: List<String>, comment: String): Uri =
-        Uri.parse(FORM_URL).buildUpon()
+        FORM_URL.toUri().buildUpon()
             .appendQueryParameter("usp", "pp_url")
             .appendQueryParameter(WORD, word)
             .appendQueryParameter(DECOY, decoy.orEmpty())

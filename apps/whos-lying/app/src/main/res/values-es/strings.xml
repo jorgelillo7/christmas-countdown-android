@@ -219,9 +219,8 @@
         <item quantity="many">Quedan %d rondas</item>
         <item quantity="other">Quedan %d rondas</item>
     </plurals>
-    <string name="scores_rounds_free">Sin límite de rondas · %1$d jugadas</string>
+    <string name="scores_rounds_free">Sin límite de rondas · jugadas: %1$d</string>
     <string name="result_see_winner">🏆 Ver resultados</string>
-    <string name="podium_winner">¡%1$s gana la partida!</string>
     <string name="podium_tie">¡Empate! %1$s</string>
     <string name="podium_nobody">Nadie ha puntuado… ¡revancha!</string>
     <string name="podium_new_match">Nueva partida</string>

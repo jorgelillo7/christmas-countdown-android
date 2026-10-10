@@ -1,19 +1,11 @@
 package com.jorgelillo.grouppolls
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.ui.Modifier
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.jorgelillo.core.designsystem.LilloTheme
-import com.jorgelillo.core.designsystem.TestTagsAsResourceIds
+import com.jorgelillo.core.designsystem.installLilloWindow
+import com.jorgelillo.core.designsystem.setLilloContent
 import com.jorgelillo.grouppolls.ui.GroupPollsApp
 import com.jorgelillo.grouppolls.ui.PollsViewModel
 import com.jorgelillo.grouppolls.ui.theme.PollsColorScheme
@@ -26,21 +18,11 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
-        // The design is light, so system bar icons are dark.
-        enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT),
-            navigationBarStyle = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT),
-        )
+        installLilloWindow(darkDesign = false)
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) handleLink(intent)
-        setContent {
-            LilloTheme(colorScheme = PollsColorScheme) {
-                // Test tags become resource ids so scripts/tap-text.sh can find buttons by tag.
-                Box(Modifier.fillMaxSize().then(TestTagsAsResourceIds)) {
-                    GroupPollsApp(vm)
-                }
-            }
+        setLilloContent(PollsColorScheme) {
+            GroupPollsApp(vm)
         }
     }
 

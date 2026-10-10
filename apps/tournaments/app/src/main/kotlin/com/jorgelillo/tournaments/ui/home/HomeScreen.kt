@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import com.jorgelillo.core.designsystem.TestTagsAsResourceIds
 import com.jorgelillo.core.designsystem.isShortScreen
+import com.jorgelillo.core.platform.LilloLinks
 import com.jorgelillo.tournaments.BuildConfig
 import com.jorgelillo.tournaments.R
 import com.jorgelillo.tournaments.domain.Format
@@ -203,4 +204,4 @@ fun AboutDialog(onDismiss: () -> Unit) {
     )
 }
 
-private const val PRIVACY_URL = "https://jorgelillo7.github.io/privacy/tournaments/"
+private val PRIVACY_URL = LilloLinks.privacyPolicy("tournaments")

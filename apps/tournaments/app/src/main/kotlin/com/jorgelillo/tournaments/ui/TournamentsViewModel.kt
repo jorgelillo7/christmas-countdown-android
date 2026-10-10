@@ -25,7 +25,7 @@ data class ImportEvent(val result: Library.ImportResult?, val id: String?)
 class TournamentsViewModel(private val repository: LibraryRepository) : ViewModel() {
 
     /** Null until the first read from disk, so screens don't flash empty. */
-    val library: StateFlow<Library?> = repository.library.stateIn(viewModelScope, SharingStarted.Eagerly, null)
+    val library: StateFlow<Library?> = repository.state.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     private val importEvents = Channel<ImportEvent>(Channel.BUFFERED)
     val imports: Flow<ImportEvent> = importEvents.receiveAsFlow()
@@ -50,7 +50,7 @@ class TournamentsViewModel(private val repository: LibraryRepository) : ViewMode
                 importEvents.send(ImportEvent(null, null))
                 return@launch
             }
-            val result = repository.update { it.import(tournament) }
+            val result = repository.updateAndGet { it.import(tournament) }
             importEvents.send(ImportEvent(result, tournament.id))
         }
     }
@@ -59,7 +59,7 @@ class TournamentsViewModel(private val repository: LibraryRepository) : ViewMode
         text.split(Regex("\\s+")).firstOrNull { "${Share.HOST}${Share.PATH}" in it } ?: text.trim()
 
     private fun launchUpdate(transform: (Library) -> Library) {
-        viewModelScope.launch { repository.update { transform(it) to Unit } }
+        viewModelScope.launch { repository.update(transform) }
     }
 
     companion object {

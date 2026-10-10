@@ -1,7 +1,6 @@
 package com.jorgelillo.whoslying.ui
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Paint
 import androidx.compose.runtime.mutableStateListOf
@@ -14,8 +13,9 @@ import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.toArgb
-import androidx.core.content.FileProvider
-import java.io.File
+import androidx.core.graphics.createBitmap
+import com.jorgelillo.core.platform.shareFile
+import com.jorgelillo.core.platform.sharedCacheFile
 
 /** One finger stroke. Points are relative to the canvas (0..1) so it redraws at any size. */
 class DrawStroke(val color: Color) {
@@ -62,7 +62,7 @@ private fun Offset.scaled(width: Float, height: Float) = Offset(x * width, y * h
 fun shareDrawing(context: Context, strokes: List<DrawStroke>, caption: String) {
     val width = 1080
     val height = 1350
-    val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    val bitmap = createBitmap(width, height)
     val canvas = android.graphics.Canvas(bitmap)
     canvas.drawColor(PaperColor.toArgb())
     val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -83,14 +83,7 @@ fun shareDrawing(context: Context, strokes: List<DrawStroke>, caption: String) {
             canvas.drawPath(path, paint)
         }
     }
-    val dir = File(context.cacheDir, "shared").apply { mkdirs() }
-    val file = File(dir, "drawing.png")
+    val file = context.sharedCacheFile("drawing.png")
     file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
-    val uri = FileProvider.getUriForFile(context, "${context.packageName}.files", file)
-    val send = Intent(Intent.ACTION_SEND)
-        .setType("image/png")
-        .putExtra(Intent.EXTRA_STREAM, uri)
-        .putExtra(Intent.EXTRA_TEXT, caption)
-        .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    context.startActivity(Intent.createChooser(send, null))
+    context.shareFile(file, "image/png", text = caption)
 }
