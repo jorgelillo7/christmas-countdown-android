@@ -14,6 +14,7 @@ Lines are pruned as items ship. What has **shipped** lives in `apps/<app>/releas
 
 | | What is missing | Waiting on |
 |---|---|---|
+| 👤 | New name "¿Ya es Navidad? Cuenta atrás" / "Is it Christmas yet? Countdown": paste the titles and feature graphics from `store/metadata` into the listing with the next release (the launcher name changes with that build) | Next release · the website already uses it |
 | ⏳ | Check v4 on a real phone after Play approval: the 3 new carols (transcribed from memory), share text in both modes, widget | Google's review of v4 |
 | 👤 | Review the 24 advent entries (EN + ES): content, tone, and facts flagged as shaky (day 8 snowflakes "all six arms", day 20 tinsel ~1610, day 22 NORAD founded 1958, CONAD in 1955) | You · entries in `app/src/main/res/values{,-es}/strings.xml` (`advent_entries`) |
 | 👤 | Spanish carols (Los peces en el río, Campana sobre campana, Fum fum fum, Marimorena) | Reliable public-domain scores from you · *El burrito sabanero* is copyrighted (1972), not allowed |
@@ -33,6 +34,8 @@ Lines are pruned as items ship. What has **shipped** lives in `apps/<app>/releas
 | 👤 | Internal test with 4–5 friends from Google Play: word pairs, flow, readability | You · Play Console internal testing |
 | ⏳ | Open-source license (GPL-3.0 was the candidate) | Your decision · not licensed for now |
 | ⏳ | Sharing packs between phones (QR or text) | Feedback after real use |
+| 👤 | New icon (a line-up, the liar in a fedora): upload `store/play-icon-512.png` and the feature graphics to the listing now; the launcher icon ships with versionCode 4 | You · Play Console → Main store listing |
+| ⏳ | Play Console suggests "Integrate Play Games Services" (shown because the app is in the Games category). Optional: sign-in, achievements, leaderboards. Little value for a one-phone party game with no account; decide whether to dismiss it or add a few achievements later | Your decision |
 
 ## group-polls (new app)
 
