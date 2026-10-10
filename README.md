@@ -34,12 +34,13 @@ build-logic/                       Gradle convention plugins: shared Android/Kot
 gradle/libs.versions.toml          Single source of truth for every dependency version
 core/
 └── designsystem/                  :core:designsystem — theme and Compose components shared by all apps
-apps/
-└── christmas-countdown/
-    ├── app/                       :apps:christmas-countdown:app — Android app (UI, widget, resources)
-    ├── domain/                    :apps:christmas-countdown:domain — pure Kotlin business logic
+apps/                              One folder per app (table above), all with the same layout:
+└── <app>/
+    ├── app/                       :apps:<app>:app — Android app (UI, resources)
+    ├── domain/                    :apps:<app>:domain — pure Kotlin business logic
     ├── store/                     Play Store listing: texts and images per language
     ├── tools/                     App-specific scripts (icon, store assets, smoke test)
+    ├── README.md                  What the app does and how it is built
     ├── OPERATIONS.md              Every command to run, test and release the app
     └── release-notes.md           Version history
 ```
