@@ -124,17 +124,24 @@ def feature_graphic(style, store, locale):
     title = locale["title"]
     size = 64
     f = font(size, HEAVY)
-    words = title.split()
-    # Wrap the title into at most two lines that fit the text column.
-    lines, line = [], ""
-    for word in words:
-        candidate = f"{line} {word}".strip()
-        if d.textlength(candidate, font=f) <= text_w:
-            line = candidate
-        else:
-            lines.append(line)
-            line = word
-    lines.append(line)
+    if "? " in title:
+        # "¿Question? What it is": the question on top, the keyword part in the highlight colour.
+        question, rest = title.split("? ", 1)
+        lines = [question + "?", rest]
+        while max(d.textlength(t, font=f) for t in lines) > text_w and size > 40:
+            size -= 2
+            f = font(size, HEAVY)
+    else:
+        # Wrap the title into at most two lines that fit the text column.
+        lines, line = [], ""
+        for word in title.split():
+            candidate = f"{line} {word}".strip()
+            if d.textlength(candidate, font=f) <= text_w:
+                line = candidate
+            else:
+                lines.append(line)
+                line = word
+        lines.append(line)
     y = 250 - (len(lines) * size * 1.1 + 56) / 2
     for i, text in enumerate(lines):
         d.text((text_x, y), text, font=f, fill=style.headline if i == 0 else style.highlight)

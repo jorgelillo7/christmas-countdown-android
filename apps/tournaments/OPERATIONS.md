@@ -15,6 +15,7 @@ Package: `com.jorgelillo.tournaments` (minSdk 24: navigation-compose needs it).
 | Install debug | `./gradlew :apps:tournaments:app:installDebug` |
 | Smoke test (release) | `apps/tournaments/tools/smoke_test.sh` |
 | Regenerate icons | `.venv/bin/python apps/tournaments/tools/generate_icon.py` |
+| Store screenshots | emulator running: `apps/tournaments/tools/capture_store_screenshots.sh`, check `store/raw/`, then `.venv/bin/python apps/tournaments/tools/generate_store_assets.py` |
 | Import a shared link on the emulator | `adb shell "am start -a android.intent.action.VIEW -d '<link>' com.jorgelillo.tournaments"` |
 
 UI test tags (`scripts/tap-text.sh`, dialogs included): `new`, `import`, `import_text`,
@@ -40,4 +41,4 @@ Play app signing key), like group-polls. Until then: share to the app, or Import
 
 | versionCode | Version | Notes |
 |---|---|---|
-| — | 1.0 | Not uploaded yet |
+| 1 | 1.0 | Not uploaded yet (needs the upload key) |

@@ -1,0 +1,4 @@
+Icono nuevo 🕵️ y pequeños arreglos
+- Nuevo icono: ¿cuál de los tres es el impostor?
+- Textos de rondas y puntuación más claros
+- Mejoras internas
